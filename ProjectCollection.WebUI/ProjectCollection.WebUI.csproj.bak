@@ -1,0 +1,485 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FA882A7E-88B5-464A-B9F9-65F3ED2252A5}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjectCollection.WebUI</RootNamespace>
+    <AssemblyName>ProjectCollection.WebUI</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Adapt.Logic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Adapt.Logic.dll</HintPath>
+    </Reference>
+    <Reference Include="Adapt.Validate, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Adapt.Validate.dll</HintPath>
+    </Reference>
+    <Reference Include="Adapt.WebUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Adapt.WebUI.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Printing.v15.2.Core, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.RichEdit.v15.2.Core, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.ASPxScheduler.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.ASPxThemes.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Web.v15.2, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraScheduler.v15.2.Core, Version=15.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\DataBase2.mdf" />
+    <Content Include="App_Data\DataBase2_log.ldf">
+      <DependentUpon>DataBase2.mdf</DependentUpon>
+    </Content>
+    <Content Include="bin\Adapt.Validate.dll" />
+    <Content Include="bin\DevExpress.Data.v15.2.dll" />
+    <Content Include="bin\DevExpress.DataAccess.v15.2.dll" />
+    <Content Include="bin\DevExpress.DataAccess.v15.2.UI.dll" />
+    <Content Include="bin\DevExpress.Web.ASPxGauges.v15.2.dll" />
+    <Content Include="bin\DevExpress.Web.ASPxHtmlEditor.v15.2.dll" />
+    <Content Include="bin\DevExpress.Web.ASPxPivotGrid.v15.2.dll" />
+    <Content Include="bin\DevExpress.Web.ASPxRichEdit.v15.2.dll" />
+    <Content Include="bin\DevExpress.Web.ASPxScheduler.v15.2.dll" />
+    <Content Include="bin\DevExpress.Web.ASPxSpellChecker.v15.2.dll" />
+    <Content Include="bin\DevExpress.Web.ASPxSpreadsheet.v15.2.dll" />
+    <Content Include="bin\DevExpress.Web.ASPxThemes.v15.2.dll" />
+    <Content Include="bin\DevExpress.Web.ASPxTreeList.v15.2.dll" />
+    <Content Include="bin\DevExpress.Web.v15.2.dll" />
+    <Content Include="bin\ProjectCollection.BLL.dll" />
+    <Content Include="bin\ProjectCollection.Common.dll" />
+    <Content Include="bin\ProjectCollection.DAL.dll" />
+    <Content Include="bin\ProjectCollection.WebUI.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Charts.Designer.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Dashboard.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Dashboard.v15.2.Web.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Dashboard.v15.2.Win.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Data.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.DataAccess.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.DataAccess.v15.2.UI.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Diagram.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.ExpressApp.HtmlPropertyEditor.Win.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.ExpressApp.PivotChart.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.ExpressApp.Reports.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.ExpressApp.Scheduler.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.ExpressApp.Scheduler.Web.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.ExpressApp.Security.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.ExpressApp.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.ExpressApp.Validation.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.ExpressApp.Web.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.ExpressApp.Win.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Map.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Office.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Pdf.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.PivotGrid.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Printing.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.RichEdit.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Snap.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Snap.v15.2.Extensions.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Snap.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Sparkline.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Spreadsheet.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Utils.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Utils.v15.2.UI.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Web.ASPxHtmlEditor.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Web.ASPxRichEdit.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Web.ASPxScheduler.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Web.ASPxSpellChecker.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Web.ASPxSpreadsheet.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Web.ASPxTreeList.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Web.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.Charts.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.Controls.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.Core.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.Docking.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.DocumentViewer.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.Gauges.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.Grid.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.LayoutControl.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.NavBar.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.PdfViewer.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.Printing.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.PropertyGrid.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.ReportDesigner.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.Ribbon.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.RichEdit.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.Scheduler.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.SpellChecker.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpf.Spreadsheet.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.Xpo.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraBars.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraCharts.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraCharts.v15.2.Wizard.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraEditors.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraGauges.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraGauges.v15.2.Presets.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraGrid.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraLayout.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraNavBar.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraPdfViewer.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraPivotGrid.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraPrinting.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraReports.v15.2.Extensions.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraReports.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraReports.v15.2.Web.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraRichEdit.v15.2.Extensions.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraRichEdit.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraScheduler.v15.2.Core.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraScheduler.v15.2.Extensions.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraScheduler.v15.2.Reporting.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraScheduler.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraSpellChecker.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraSpreadsheet.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraTreeList.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraVerticalGrid.v15.2.resources.dll" />
+    <Content Include="bin\zh-Hans\DevExpress.XtraWizard.v15.2.resources.dll" />
+    <Content Include="pages\amount.aspx" />
+    <Content Include="pages\BackUp\ProjectCreateEdit_backup.aspx" />
+    <Content Include="pages\CustomProjectListEmbed.aspx" />
+    <Content Include="pages\CustomProjectCreateEdit.aspx" />
+    <Content Include="pages\CustomProjectList.aspx" />
+    <Content Include="images\BtnSelect.gif" />
+    <Content Include="images\loginbg.png" />
+    <Content Include="images\loginbtn.gif" />
+    <Content Include="images\navibg.png" />
+    <Content Include="images\topbg.png" />
+    <Content Include="pages\common\Master.Master" />
+    <Content Include="App_Browsers\ie.browser" />
+    <Content Include="App_Browsers\firefox.browser" />
+    <Content Include="packages.config" />
+    <Content Include="pages\MyTask.aspx" />
+    <Content Include="pages\ProjectCreateEditEmbed.aspx" />
+    <Content Include="pages\ProjectListEmbed.aspx" />
+    <Content Include="pages\ProjectListFilter.aspx" />
+    <Content Include="pages\ProjectPlanListEmbed.aspx" />
+    <Content Include="InterFace\Main.asmx" />
+    <Content Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </Content>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <Content Include="InterFace\Main.ashx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Adapt.Database.dll" />
+    <Content Include="bin\Adapt.dll" />
+    <Content Include="bin\Adapt.Exception.dll" />
+    <Content Include="bin\Adapt.Log.dll" />
+    <Content Include="bin\Adapt.Logic.dll" />
+    <Content Include="bin\Adapt.WebUI.dll" />
+    <Content Include="Global.asax" />
+    <Content Include="pages\common\Site.css" />
+    <Content Include="pages\error.aspx" />
+    <Content Include="pages\index.aspx" />
+    <Content Include="pages\login.aspx" />
+    <Content Include="pages\ProjectCreateEdit.aspx" />
+    <Content Include="pages\ProjectList.aspx" />
+    <Content Include="pages\ProjectPlanCreateEdit.aspx" />
+    <Content Include="pages\ProjectPlanList.aspx" />
+    <Content Include="pages\ProjectPlanListMasterDetail.aspx" />
+    <Content Include="pages\RoleEdit\CaptureEdit.aspx" />
+    <Content Include="pages\LoginMain.aspx" />
+    <Content Include="script\common.js" />
+    <Content Include="script\jquery-1.10.2.js" />
+    <Content Include="script\jquery-1.4.1.min.js" />
+    <Content Include="script\jquery-1.8.2.min.js" />
+    <Content Include="script\jQuery-Timepicker-Addon\demos.css" />
+    <Content Include="script\jQuery-Timepicker-Addon\jquery-ui-timepicker-addon.css" />
+    <Content Include="script\jQuery-Timepicker-Addon\jquery-ui-timepicker-addon.js" />
+    <Content Include="script\jQuery-Timepicker-Addon\jquery-ui.css" />
+    <Content Include="script\jquery-ui-timepicker-addon.css" />
+    <Content Include="script\jquery-ui-timepicker-addon.js" />
+    <Content Include="script\jquery-ui.css" />
+    <Content Include="script\jquery-ui.js" />
+    <Content Include="script\jquery.datetimepicker.css" />
+    <Content Include="script\jquery.datetimepicker.js" />
+    <Content Include="script\jquery.js" />
+    <Content Include="script\js\jquery-ui-timepicker-zh-CN.js" />
+    <Content Include="script\js\jquery.ui.datepicker-zh-CN.js.js" />
+    <Content Include="script\UpLoadImg.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="pages\amount.aspx.cs">
+      <DependentUpon>amount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\amount.aspx.designer.cs">
+      <DependentUpon>amount.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\BackUp\ProjectCreateEdit_backup.aspx.cs">
+      <DependentUpon>ProjectCreateEdit_backup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\BackUp\ProjectCreateEdit_backup.aspx.designer.cs">
+      <DependentUpon>ProjectCreateEdit_backup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\CustomProjectListEmbed.aspx.cs">
+      <DependentUpon>CustomProjectListEmbed.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\CustomProjectListEmbed.aspx.designer.cs">
+      <DependentUpon>CustomProjectListEmbed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\CustomProjectCreateEdit.aspx.cs">
+      <DependentUpon>CustomProjectCreateEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\CustomProjectCreateEdit.aspx.designer.cs">
+      <DependentUpon>CustomProjectCreateEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\CustomProjectList.aspx.cs">
+      <DependentUpon>CustomProjectList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\CustomProjectList.aspx.designer.cs">
+      <DependentUpon>CustomProjectList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="pages\common\BasePage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\common\Master.Master.cs">
+      <DependentUpon>Master.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\common\Master.Master.designer.cs">
+      <DependentUpon>Master.Master</DependentUpon>
+    </Compile>
+    <Compile Include="pages\error.aspx.cs">
+      <DependentUpon>error.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\error.aspx.designer.cs">
+      <DependentUpon>error.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\index.aspx.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\index.aspx.designer.cs">
+      <DependentUpon>index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\MyTask.aspx.cs">
+      <DependentUpon>MyTask.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\MyTask.aspx.designer.cs">
+      <DependentUpon>MyTask.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\ProjectCreateEdit.aspx.cs">
+      <DependentUpon>ProjectCreateEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\ProjectCreateEdit.aspx.designer.cs">
+      <DependentUpon>ProjectCreateEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\ProjectCreateEditEmbed.aspx.cs">
+      <DependentUpon>ProjectCreateEditEmbed.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\ProjectCreateEditEmbed.aspx.designer.cs">
+      <DependentUpon>ProjectCreateEditEmbed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\ProjectList.aspx.cs">
+      <DependentUpon>ProjectList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\ProjectList.aspx.designer.cs">
+      <DependentUpon>ProjectList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\ProjectListEmbed.aspx.cs">
+      <DependentUpon>ProjectListEmbed.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\ProjectListEmbed.aspx.designer.cs">
+      <DependentUpon>ProjectListEmbed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\ProjectListFilter.aspx.cs">
+      <DependentUpon>ProjectListFilter.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\ProjectListFilter.aspx.designer.cs">
+      <DependentUpon>ProjectListFilter.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\ProjectPlanCreateEdit.aspx.cs">
+      <DependentUpon>ProjectPlanCreateEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\ProjectPlanCreateEdit.aspx.designer.cs">
+      <DependentUpon>ProjectPlanCreateEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\ProjectPlanList.aspx.cs">
+      <DependentUpon>ProjectPlanList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\ProjectPlanList.aspx.designer.cs">
+      <DependentUpon>ProjectPlanList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\ProjectPlanListEmbed.aspx.cs">
+      <DependentUpon>ProjectPlanListEmbed.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\ProjectPlanListEmbed.aspx.designer.cs">
+      <DependentUpon>ProjectPlanListEmbed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\ProjectPlanListMasterDetail.aspx.cs">
+      <DependentUpon>ProjectPlanListMasterDetail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\ProjectPlanListMasterDetail.aspx.designer.cs">
+      <DependentUpon>ProjectPlanListMasterDetail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\RoleEdit\CaptureEdit.aspx.cs">
+      <DependentUpon>CaptureEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\RoleEdit\CaptureEdit.aspx.designer.cs">
+      <DependentUpon>CaptureEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\LoginMain.aspx.cs">
+      <DependentUpon>LoginMain.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\LoginMain.aspx.designer.cs">
+      <DependentUpon>LoginMain.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="InterFace\Main.ashx.cs">
+      <DependentUpon>Main.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="InterFace\Main.asmx.cs">
+      <DependentUpon>Main.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="pages\RoleList\" />
+    <Folder Include="styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectCollection.BLL\ProjectCollection.BLL.csproj">
+      <Project>{d1222058-4028-4541-a3b5-fe202b818384}</Project>
+      <Name>ProjectCollection.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectCollection.Common\ProjectCollection.Common.csproj">
+      <Project>{36621ec4-6386-42fe-839d-e03a9a431a98}</Project>
+      <Name>ProjectCollection.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>6186</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:6186/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

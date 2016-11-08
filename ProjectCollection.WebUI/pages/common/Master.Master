@@ -1,0 +1,155 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Master.master.cs" Inherits="ProjectCollection.WebUI.pages.common.Master" %>
+
+<%@ Register Assembly="DevExpress.Web.v16.1, Version=16.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web" TagPrefix="dx" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="zh">
+<head id="Head1" runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><%: Page.Title %> </title>
+    <link href="../../pages/common/Site.css" rel="stylesheet" />
+    <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <script type="text/javascript" src="../../script/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="../../script/jquery-ui.js"></script>
+    <link type="text/css" href="../../script/jQuery-Timepicker-Addon/jquery-ui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../script/jQuery-Timepicker-Addon/jquery-ui-timepicker-addon.css" type="text/css" />
+    <script src="../../script/jQuery-Timepicker-Addon/jquery-ui-timepicker-addon.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../../script/js/jquery.ui.datepicker-zh-CN.js.js" charset="gb2312"></script>
+    <script src="../../script/js/jquery-ui-timepicker-zh-CN.js" type="text/javascript"></script>
+    <asp:PlaceHolder ID="PlaceHolder1" runat="server">
+        <script type="text/javascript" src="<%: ResolveUrl("~/Scripts/modernizr-2.6.2.js") %>"></script>
+    </asp:PlaceHolder>
+    <meta name="viewport" content="width=device-width" />
+    <asp:ContentPlaceHolder runat="server" ID="head" />
+    <style type="text/css">
+        #LoggedIn {
+            background: url("../../images/topbg.png") no-repeat;
+            height: 69px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 69px;
+        }
+
+        #btnCancel {
+            width: 40px;
+            height: 30px;
+            font-size: 12px;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <form id="Form1" runat="server">
+
+        <header>
+            <div class="content-wrapper">
+                <section id="login">
+                    <%--<asp:LoginView ID="LoginView1" runat="server" ViewStateMode="Disabled">
+                        <AnonymousTemplate>
+                            <ul>
+                                <li><a id="registerLink" runat="server" href="~/Account/Register">注册</a></li>
+                                <li><a id="loginLink" runat="server" href="../../pages/Login.aspx">登录</a></li>
+                            </ul>
+                        </AnonymousTemplate>
+                        <LoggedInTemplate>
+                            <p>
+                                Hello, <a id="A2" runat="server" class="username" href="~/Account/Manage" title="Manage your account">
+                                    <asp:LoginName ID="LoginName1" runat="server" CssClass="username" />
+                                </a>
+                                <asp:LoginStatus ID="LoginStatus1" runat="server" LogoutAction="Redirect" LogoutText="注销" LogoutPageUrl="~/" />
+                            </p>
+                        </LoggedInTemplate>
+                    </asp:LoginView>--%>
+                    <asp:Panel ID="Anonymous" runat="server" Visible="true">
+                        <ul>
+                            <li><a id="loginLink" runat="server" href="../../pages/Login.aspx">登录</a></li>
+                        </ul>
+                    </asp:Panel>
+                    <asp:Panel ID="LoggedIn" runat="server" Visible="false">
+                        <asp:Label ID="txtLogName" runat="server" Text=""></asp:Label>，已登陆
+                            <asp:Button ID="btnCancel" runat="server" Text="注销" OnClick="btnCancel_Click" />
+                    </asp:Panel>
+                </section>
+                <nav>
+                    <ul id="menu">
+                        <li><a id="A2" runat="server" href="~/pages/index.aspx">主页</a></li>
+                        <%--<li id="NavLi2" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink2" runat="server" NavigateUrl="~/pages/ProjectPlanList.aspx?mode=recond">拍摄管理</asp:HyperLink></li>--%>
+                        <li id="NavLi4" runat="server" visible="true">
+                            <asp:HyperLink ID="HyperLink4" runat="server" NavigateUrl="~/pages/MyTask.aspx">我的任务</asp:HyperLink></li>
+                        <li id="NavLi2" runat="server" visible="true">
+                            <asp:HyperLink ID="HyperLink2" runat="server" NavigateUrl="~/pages/ProjectPlanListMasterDetail.aspx?mode=browse">计划</asp:HyperLink></li>
+                        <li id="NavLi3" runat="server">
+                            <asp:HyperLink ID="HyperLink3" runat="server" NavigateUrl="~/pages/ProjectListFilter.aspx?mode=browse">工单</asp:HyperLink></li>
+                        <%--<li id="NavLi19" runat="server">
+                            <asp:HyperLink ID="HyperLink19" runat="server" NavigateUrl="~/pages/CustomProjectList.aspx?type=00000000-0000-0000-0000-000000000202&mode=browse">公开课浏览</asp:HyperLink></li>
+                         <li id="NavLi1" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl="~/pages/ProjectPlanListMasterDetail.aspx">任务计划管理</asp:HyperLink></li>--%>
+                         <%--<li id="NavLi18" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink18" runat="server" NavigateUrl="~/pages/ProjectListFilter.aspx?mode=copy">工单复制(修改\单改三)</asp:HyperLink></li>
+                        <li id="NavLi4" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink4" runat="server" NavigateUrl="~/pages/ProjectList.aspx?mode=capture">采集管理</asp:HyperLink></li>
+                        <li id="NavLi14" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink14" runat="server" NavigateUrl="~/pages/ProjectList.aspx?mode=capturecheck">制作预审</asp:HyperLink></li>
+                        <li id="NavLi15" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink15" runat="server" NavigateUrl="~/pages/ProjectList.aspx?mode=execution">派发制作</asp:HyperLink></li>
+                        <li id="NavLi5" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink5" runat="server" NavigateUrl="~/pages/ProjectList.aspx?mode=shorthand">速记管理</asp:HyperLink></li>
+                        <li id="NavLi6" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink6" runat="server" NavigateUrl="~/pages/ProjectList.aspx?mode=contentreceive">制作部接收</asp:HyperLink></li>
+                        <li id="NavLi7" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink7" runat="server" NavigateUrl="~/pages/ProjectList.aspx?mode=contentcheck">制作部审核</asp:HyperLink></li>
+                        <li id="NavLi16" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink16" runat="server" NavigateUrl="~/pages/ProjectList.aspx?mode=contentrecheck">制作部复审</asp:HyperLink></li>
+                        <li id="NavLi8" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink8" runat="server" NavigateUrl="~/pages/ProjectList.aspx?mode=contentfinish">制作部制作员操作</asp:HyperLink></li>
+                        <li id="NavLi9" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink9" runat="server" NavigateUrl="~/pages/ProjectList.aspx?mode=productionreceive">技术部接收</asp:HyperLink></li>
+                        <li id="NavLi10" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink10" runat="server" NavigateUrl="~/pages/ProjectList.aspx?mode=productioncheck">技术部审核</asp:HyperLink></li>
+                        <li id="NavLi11" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink11" runat="server" NavigateUrl="~/pages/ProjectList.aspx?mode=productionfinish">技术部制作员操作</asp:HyperLink></li>
+                        <li id="NavLi12" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink12" runat="server" NavigateUrl="~/pages/ProjectList.aspx?mode=publish">发布管理</asp:HyperLink></li>
+                        <li id="NavLi13" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink13" runat="server" NavigateUrl="~/pages/ProjectList.aspx?mode=check">审核管理</asp:HyperLink></li>--%>
+                    </ul>
+                    <%--<dx:ASPxMenu ID="MainNav" runat="server" AutoSeparators="RootOnly" CssClass="" ItemLinkMode="TextOnly" SeparatorCssClass="">
+                        <Items>
+                            <dx:MenuItem NavigateUrl="javascript:void(0)" Name="GroupOpenClass" Text="公开课" Visible="true">
+                                <Items>
+                                    <dx:MenuItem NavigateUrl="~/pages/CustomProjectList.aspx?type=00000000-0000-0000-0000-000000000202&mode=browse" Name="OpenClassBrowse" Text="浏览" Visible="true">
+                                    </dx:MenuItem>
+                                    <dx:MenuItem NavigateUrl="~/pages/CustomProjectList.aspx?type=00000000-0000-0000-0000-000000000202&mode=receive" Name="OpenClassReceive" Text="接收" Visible="false">
+                                    </dx:MenuItem>
+                                    <dx:MenuItem NavigateUrl="~/pages/CustomProjectList.aspx?type=00000000-0000-0000-0000-000000000202&mode=operation" Name="OpenClassOperation" Text="制作" Visible="false">
+                                    </dx:MenuItem>
+                                    <dx:MenuItem NavigateUrl="~/pages/CustomProjectList.aspx?type=00000000-0000-0000-0000-000000000202&mode=publish" Name="OpenClassPublish" Text="发布" Visible="false">
+                                    </dx:MenuItem>
+                                    <dx:MenuItem NavigateUrl="~/pages/CustomProjectList.aspx?type=00000000-0000-0000-0000-000000000202&mode=check" Name="OpenClassCheck" Text="审核" Visible="false">
+                                    </dx:MenuItem>
+                                </Items>
+                            </dx:MenuItem>
+                        </Items>
+                        <ItemStyle CssClass="" />
+                    </dx:ASPxMenu>--%>
+                </nav>
+            </div>
+        </header>
+        <div id="body">
+            <asp:ContentPlaceHolder runat="server" ID="FeaturedContent">
+            </asp:ContentPlaceHolder>
+            <section class="content-wrapper main-content clear-fix">
+                <asp:ContentPlaceHolder runat="server" ID="ContentPlaceHolder1" />
+            </section>
+        </div>
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>&copy; <%: DateTime.Now.Year %> </p>
+                </div>
+            </div>
+        </footer>
+    </form>
+</body>
+</html>

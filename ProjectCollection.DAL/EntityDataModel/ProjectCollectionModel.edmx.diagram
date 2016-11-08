@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="762c25296a774f829b2a1e82b578dd5e" Name="关系图1">
+        <EntityTypeShape EntityType="ProjectCollectionModel.data_dictionary" Width="1.5" PointX="0.75" PointY="25.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.Project" Width="1.5" PointX="7.5" PointY="13.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.ProjectPlan" Width="1.5" PointX="5.25" PointY="30.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.ProjectPlanRecord" Width="1.5" PointX="7.5" PointY="56.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.ProjectRecord" Width="1.5" PointX="9.75" PointY="31.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.ProjectTimeLimit" Width="1.5" PointX="9.75" PointY="34.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.user_authority" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.user_info" Width="1.5" PointX="3" PointY="37.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.WorkSchedual" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary1" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary10" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary11" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary12" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary13" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary14" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary15" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary16" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary17" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary18" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary19" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary2" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary20" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary21" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary22" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary23" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary24" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary25" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary26" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary27" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary28" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary29" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary3" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary30" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary31" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary32" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary33" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary34" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary35" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary36" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary37" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary38" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary39" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary4" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary40" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary41" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary42" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary43" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary44" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary45" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary46" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary47" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary48" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary49" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary5" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary50" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary51" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary53" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary6" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary7" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary8" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_data_dictionary9" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_ProjectPlan_data_dictionary" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_ProjectPlan_data_dictionary1" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_ProjectPlan_data_dictionary2" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FFK_Project_Project" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_ProjectPlan" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info_13" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info1" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info10" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info11" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info12" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info2" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info3" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info4" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info5" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info6" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info7" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info8" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_Project_user_info9" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_ProjectRecord_Project" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_ProjectTimeLimit_Project" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_ProjectPlan_user_info" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_ProjectPlan_user_info1" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_ProjectPlan_user_info2" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_ProjectPlanRecord_ProjectPlan" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.role_authority" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
