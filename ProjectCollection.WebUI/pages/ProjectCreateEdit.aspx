@@ -3,6 +3,7 @@
 <%@ PreviousPageType VirtualPath="~/pages/ProjectListEmbed.aspx" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">  
     <style type="text/css">
         .RadioButtonList {
         }
@@ -15,6 +16,7 @@
                 display: inline;
             }
     </style>
+    <script src="../script/jquery.cookie.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("#DeadLine").datetimepicker({
@@ -66,7 +68,36 @@
             });
 
             $("#ProductionEstimatedDate").val($("#hidProductionEstimatedDate").val());
+            //表单顺序
+            if (getQueryString("type") == "00000000-0000-0000-0000-000000000199") {
+                $("#ContentPlaceHolder1_PanelShorthand").hide();
+                $("#ContentPlaceHolder1_PanelCaptureCheck").after($("#ContentPlaceHolder1_PanelProductionReceive"));
+                $("#ContentPlaceHolder1_PanelProductionOperator").insertAfter($("#ContentPlaceHolder1_PanelProductionReceive"));
+                $("#ContentPlaceHolder1_PanelProductionCheck").insertAfter($("#ContentPlaceHolder1_PanelProductionOperator"));
+            }
         })
+        $.RedirectUrl = function (url,username,password) {
+            var JsonData = [];
+            var csrftoken = $.cookie('csrftoken');
+            $.ajax({
+                type: 'POST',
+                url: "http://newpms.cei.cn/JsonLogin",
+                data: JSON.stringify(JsonData),
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (data) {
+                },
+                dataType: "json"
+            });
+            window.location.href = url;
+        }
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        }
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="FeaturedContent" runat="server">
@@ -78,6 +109,17 @@
         <asp:Label ID="labelProjectNoType" runat="server" Text="派单序号："></asp:Label><asp:TextBox ID="txtProjectNo" runat="server" Text=""></asp:TextBox><br />
         派单时间：<asp:TextBox ID="txtSendingDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         记录单类型：<asp:DropDownList ID="ddlProjectType" runat="server"></asp:DropDownList><br />
+        课件集数：<asp:DropDownList ID="ddlEpisodeCount" runat="server">
+            <asp:ListItem>1</asp:ListItem>
+            <asp:ListItem>2</asp:ListItem>
+            <asp:ListItem>3</asp:ListItem>
+            <asp:ListItem>4</asp:ListItem>
+            <asp:ListItem>5</asp:ListItem>
+            <asp:ListItem>6</asp:ListItem>
+            <asp:ListItem>7</asp:ListItem>
+            <asp:ListItem>8</asp:ListItem>
+            <asp:ListItem>9</asp:ListItem>
+        </asp:DropDownList><br />
         <asp:Panel ID="PanelCustom" runat="server">
             是否需要制作部环节：<asp:DropDownList ID="ddlContentNeeds" runat="server"></asp:DropDownList><br />
         </asp:Panel>
@@ -108,7 +150,9 @@
         图文类标识：<asp:TextBox ID="txtTextCategory" runat="server" Text=""></asp:TextBox><br />
         备注：<asp:TextBox ID="txtCreateNote" runat="server" TextMode="MultiLine" Height="100px"></asp:TextBox><br />
         特殊要求：<asp:TextBox ID="txtExtraNote" runat="server" TextMode="MultiLine" Height="100px" ForeColor="Red"></asp:TextBox><br />
-        <asp:Label ID="labelPlanNote" runat="server" Text="任务备注："></asp:Label><asp:TextBox ID="txtPlanNote" runat="server" TextMode="MultiLine"></asp:TextBox>
+        <asp:Label ID="labelPlanNote" runat="server" Text="任务备注："></asp:Label><asp:TextBox ID="txtPlanNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
+        拍摄日期：<asp:TextBox ID="txtRecordingDate" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
+        <asp:Label ID="labelPlanNote2" runat="server" Text="拍摄备注："></asp:Label><asp:TextBox ID="txtRecordingNote" runat="server" TextMode="MultiLine"></asp:TextBox>
     </asp:Panel>
     <asp:Panel ID="PanelCapture" runat="server" Visible="false">
         <div class="PanelName">采集负责人填写:</div>
@@ -152,6 +196,7 @@
     </asp:Panel>
     <asp:Panel ID="PanelContentReceive" runat="server" Visible="false">
         <div class="PanelName">制作部负责人填写（接收）:</div>
+        <asp:HyperLink ID="ContentReceiveLink" Font-Size="14" ForeColor="#009900" runat="server" Target="_blank">上传资料</asp:HyperLink><br />
         制作部门负责人：<asp:TextBox ID="txtContentPersonInCharge" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         制作人：<asp:DropDownList ID="ddlContentOperator" runat="server"></asp:DropDownList><br />
         接收时间：<asp:TextBox ID="txtContentReceiveDate" runat="server" Visible="false"></asp:TextBox><br />
@@ -163,25 +208,9 @@
         <br />
         接收备注：<asp:TextBox ID="txtContentReceiveNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
     </asp:Panel>
-    <asp:Panel ID="PanelContentCheck" runat="server" Visible="false">
-        <div class="PanelName">制作部负责人填写（初审）:</div>
-        课程简介质量：<asp:DropDownList ID="ddlContentCourseIntroductionQuality" runat="server"></asp:DropDownList><br />
-        专家简历质量：<asp:DropDownList ID="ddlContentResumeQuality" runat="server"></asp:DropDownList><br />
-        PPT质量：<asp:DropDownList ID="ddlContentPPTQuality" runat="server"></asp:DropDownList><br />
-        考题质量：<asp:DropDownList ID="ddlContentExercisesQuality" runat="server"></asp:DropDownList><br />
-        文稿整理质量：<asp:DropDownList ID="ddlContentTextQuality" runat="server"></asp:DropDownList><br />
-        是否及时：<asp:DropDownList ID="ddlContentIsTimely" runat="server"></asp:DropDownList><br />
-        审核时间：<asp:TextBox ID="txtContentCheckDate" runat="server" Text="自动填充"></asp:TextBox><br />
-        备注：<asp:TextBox ID="txtContentCheckNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
-    </asp:Panel>
-    <asp:Panel ID="PanelContentRecheck" runat="server" Visible="false">
-        <div class="PanelName">制作部复审员填写:</div>
-        复审审核人：<asp:TextBox ID="txtContentRecheckPersonInCharge" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
-        审核时间：<asp:TextBox ID="txtContentRecheckDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
-        复审意见：<asp:TextBox ID="txtContentRecheckNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
-    </asp:Panel>
     <asp:Panel ID="PanelContentOperator" runat="server" Visible="false">
         <div class="PanelName">制作部制作人员填写:</div>
+        <asp:HyperLink ID="ContentOperatLink" Font-Size="14" ForeColor="#009900" runat="server" Target="_blank">制作课件</asp:HyperLink><br />
         实际完成时间：<asp:TextBox ID="txtContentFinishDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         未按时完成原因：<asp:TextBox ID="txtContentDelayNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
         课程名称确认：<asp:DropDownList ID="ddlContentCourseNameConfirm" runat="server"></asp:DropDownList><br />
@@ -199,6 +228,25 @@
         考题：<asp:DropDownList ID="ddlContentExercisesNeeds" runat="server"></asp:DropDownList><br />
         文稿整理：<asp:DropDownList ID="ddlContentTextEditNeeds" runat="server"></asp:DropDownList><br />
         制作部制作员备注：<asp:TextBox ID="txtContentOperateNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
+    </asp:Panel>
+    <asp:Panel ID="PanelContentCheck" runat="server" Visible="false">
+        <div class="PanelName">制作部负责人填写（初审）:</div>
+        <asp:HyperLink ID="ContentCheckLink" Font-Size="14" ForeColor="#009900" runat="server" Target="_blank">审核课件</asp:HyperLink><br />
+        课程简介质量：<asp:DropDownList ID="ddlContentCourseIntroductionQuality" runat="server"></asp:DropDownList><br />
+        专家简历质量：<asp:DropDownList ID="ddlContentResumeQuality" runat="server"></asp:DropDownList><br />
+        PPT质量：<asp:DropDownList ID="ddlContentPPTQuality" runat="server"></asp:DropDownList><br />
+        考题质量：<asp:DropDownList ID="ddlContentExercisesQuality" runat="server"></asp:DropDownList><br />
+        文稿整理质量：<asp:DropDownList ID="ddlContentTextQuality" runat="server"></asp:DropDownList><br />
+        是否及时：<asp:DropDownList ID="ddlContentIsTimely" runat="server"></asp:DropDownList><br />
+        审核时间：<asp:TextBox ID="txtContentCheckDate" runat="server" Text="自动填充"></asp:TextBox><br />
+        备注：<asp:TextBox ID="txtContentCheckNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
+    </asp:Panel>
+    <asp:Panel ID="PanelContentRecheck" runat="server" Visible="false">
+        <div class="PanelName">制作部复审员填写:</div>
+         <asp:HyperLink ID="ContentReCheckLink" Font-Size="14" ForeColor="#009900" runat="server" Target="_blank">审核课件</asp:HyperLink><br />
+        复审审核人：<asp:TextBox ID="txtContentRecheckPersonInCharge" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
+        审核时间：<asp:TextBox ID="txtContentRecheckDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
+        复审意见：<asp:TextBox ID="txtContentRecheckNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
     </asp:Panel>
     <asp:Panel ID="PanelProductionReceive" runat="server" Visible="false">
         <div class="PanelName">技术部负责人填写（接收）:</div>
@@ -219,6 +267,9 @@
     </asp:Panel>
     <asp:Panel ID="PanelProductionCheck" runat="server" Visible="false">
         <div class="PanelName">技术部负责人填写（审核）:</div>
+         <!--NewPMS-->
+        <asp:HyperLink ID="PlayVideoLink" Font-Size="14" ForeColor="#009900" Target="_blank" runat="server">播放视频</asp:HyperLink><br />
+        <!--NewPMS-->
         画面编辑：<asp:DropDownList ID="ddlProductionVideoEditCheck" runat="server"></asp:DropDownList><br />
         声音编辑：<asp:DropDownList ID="ddlProductionAudioEditCheck" runat="server"></asp:DropDownList><br />
         合成评价：<asp:DropDownList ID="ddlProductionProductCheck" runat="server"></asp:DropDownList><br />
@@ -228,6 +279,11 @@
     </asp:Panel>
     <asp:Panel ID="PanelProductionOperator" runat="server" Visible="false">
         <div class="PanelName">技术部制作员填写:</div>
+        <!--NewPMS-->
+        <asp:HyperLink ID="UploadVideoLink" Font-Size="14" ForeColor="#009900" Target="_blank" runat="server">确认完成上传视频</asp:HyperLink><br />
+        <%--<<button onclick="$.RedirectUrl('<%= RedirectUrl%>','<%= UserName%>','<%= PassWord%>');">上传视频</button><br />
+        asp:Button ID="BtnUploadVideo" runat="server" Text="上传视频" OnClick="BtnUploadVideo_Click" />--%>
+        <!--NewPMS-->
         画面质量：<asp:DropDownList ID="ddlProductionVideoQuality" runat="server"></asp:DropDownList><br />
         声音质量：<asp:DropDownList ID="ddlProductionAudioQuality" runat="server"></asp:DropDownList><br />
         备份：<asp:DropDownList ID="ddlProductionFileBackUp" runat="server"></asp:DropDownList><br />
@@ -238,6 +294,7 @@
     </asp:Panel>
     <asp:Panel ID="PanelPublish" runat="server" Visible="false">
         <div class="PanelName">发布人员填写:</div>
+        <asp:HyperLink ID="PublishCheckLink" Font-Size="14" ForeColor="#009900" runat="server" Target="_blank">发布课件</asp:HyperLink><br />
         发布人：<asp:TextBox ID="txtPublishOperator" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         接收技术部资料时间：<asp:TextBox ID="txtPublishReceiveContentDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         接收制作部资料时间：<asp:TextBox ID="txtPublishReceiveProductionDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
@@ -254,6 +311,7 @@
     </asp:Panel>
     <asp:Panel ID="PanelCheck" runat="server" Visible="false">
         <div class="PanelName">审核人员填写:</div>
+        <asp:HyperLink ID="PublishCheckLink2" Font-Size="14" ForeColor="#009900" runat="server" Target="_blank">审核课件</asp:HyperLink><br />
         发布审核人：<asp:TextBox ID="txtCheckPersonInCharge" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         课程审核时间：<asp:TextBox ID="txtCheckTaskCheckDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         <%--取消推荐时间：<asp:TextBox ID="txtCheckTaskCancelCommendDate" runat="server"></asp:TextBox><br />--%>

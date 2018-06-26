@@ -265,7 +265,9 @@ namespace ProjectCollection.WebUI.pages
             {
                 btnRecond.Visible = false;
             }
-            if (projectPlan.progress.ToString() == "00000000-0000-0000-0000-000000000102" && (LoginUserInfo.role_identity == new Guid("00000000-0000-0000-0000-000000000003") || LoginUserInfo.role_identity == new Guid("00000000-0000-0000-0000-000000000015")))
+            if (projectPlan.progress.ToString() == "00000000-0000-0000-0000-000000000102" 
+                && LoginUserInfo.Authority.Contains("CreateProject")
+                   )
             {
                 btnProject.Visible = true;
             }

@@ -2,12 +2,20 @@
 using ProjectCollection.WebUI.pages.common;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Net;
+using System.Text;
+using System.Web;
+using System.Linq;
 
 namespace ProjectCollection.WebUI.pages
 {
     public partial class ProjectCreateEdit : BasePage
     {
-
+        public string UserName = "";
+        public string PassWord = "";
+        public string RedirectUrl = "";
         #region 事件
         //
         protected void Page_Load(object sender, EventArgs e)
@@ -38,7 +46,8 @@ namespace ProjectCollection.WebUI.pages
             if (!IsPostBack)
             {
                 InitDropDownList();
-            }         
+            }
+            //
             #region create
             if (this.Request["mode"] == "create")
             {
@@ -310,6 +319,60 @@ namespace ProjectCollection.WebUI.pages
                     }
                 }
             }
+            else if (this.Request["mode"] == "capturebatchhandle")
+            {
+                if (!this.IsPostBack)
+                {
+                    List<Guid> BatchProjectId = new List<Guid>();
+                    //BatchProjectId = this.PreviousPage.BatchProjectId;
+                    //hidBatchProjectId.Value = ProjectCollection.Common.SerializeObj.Serialize(BatchProjectId);
+
+                    //hidBatchProjectId.Value = this.Request["BatchId"].Replace(' ', '+'); 
+                    hidBatchProjectId.Value = Session["BatchId"].ToString();
+                    BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
+                    this.hidProjectId.Value = BatchProjectId[0].ToString();
+                }
+                this.PanelCapture.Visible = true;
+                this.btnOk.ValidationGroup = "capture";
+                this.btnReceive.ValidationGroup = "capture";
+                this.InitBrowseData();
+                BLL.Project Project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
+                if (Project.progress.ToString() == "00000000-0000-0000-0000-000000000105")//初次接收 
+                {
+                    this.btnReceive.Visible = true;
+                    this.btnSentBack.Visible = true;
+                    this.btnSentBack.Text = "延迟接收";
+                }
+                else if (Project.progress.ToString() == "00000000-0000-0000-0000-000000000131")//延迟接收 
+                {
+                    this.btnReceive.Visible = true;
+                    if (!IsPostBack)
+                    {
+                        try
+                        {
+                            InitDropDownListCapture();
+                            this.InitCaptureData();
+                        }
+                        catch
+                        {
+
+                        }
+                        finally
+                        {
+
+                        }
+                    }
+                }
+                else
+                {
+                    this.btnOk.Text = "采集完成";
+                    this.btnOk.Visible = true;
+                    if (!IsPostBack)
+                    {
+                        InitDropDownListCapture();
+                    }
+                }
+            }
             #endregion
             #region capturecheck
             else if (this.Request["mode"] == "capturecheck")
@@ -356,6 +419,24 @@ namespace ProjectCollection.WebUI.pages
                     InitDropDownListShorthand();
                 }
             }
+            else if (this.Request["mode"] == "shorthandbatchhandle")
+            {
+                if (!this.IsPostBack)
+                {
+                    List<Guid> BatchProjectId = new List<Guid>();
+                    hidBatchProjectId.Value = Session["BatchId"].ToString();
+                    BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
+                    this.hidProjectId.Value = BatchProjectId[0].ToString();
+                }
+                this.btnOk.Text = "批量完成";
+                this.btnOk.Visible = true;
+                this.PanelShorthand.Visible = true;
+                this.InitBrowseData();
+                if (!IsPostBack)
+                {
+                    InitDropDownListShorthand();
+                }
+            }
             #endregion shorthand
             #region contentreceive
             else if (this.Request["mode"] == "contentreceive")
@@ -369,6 +450,10 @@ namespace ProjectCollection.WebUI.pages
                 {
                     InitDropDownListContentReceive();
                 }
+                BLL.Project project = BLL.Project.GetProject(projectId);
+                this.ContentReceiveLink.NavigateUrl = @"http://newpms.cei.cn/SrtUpload?ProjectNo="
+                + HttpUtility.UrlEncode(project.ProjectNo)
+                + "&mode=slide";
             }
             #endregion
             #region contentreceivebatchhandle
@@ -393,7 +478,7 @@ namespace ProjectCollection.WebUI.pages
                 }
             }
             #endregion contentreceivebatchhandle
-            #region
+            #region contentfinish
             else if (this.Request["mode"] == "contentfinish")
             {
                 Guid projectId = new Guid(this.Request["ProjectId"]);
@@ -407,6 +492,25 @@ namespace ProjectCollection.WebUI.pages
                 if (!IsPostBack)
                 {
                     InitDropDownListContentFinish();
+                    //
+                    this.ddlContentCourseRecommend.SelectedValue = "00000000-0000-0000-0000-000000000043";
+                    this.ddlContentPPTAdvice.SelectedValue = "00000000-0000-0000-0000-000000000043";
+                    this.ddlContentCourseIntroNeeds.SelectedValue = "00000000-0000-0000-0000-000000000043";
+                    this.ddlContentLecturerResumeNeeds.SelectedValue = "00000000-0000-0000-0000-000000000043";
+                    this.ddlContentExercisesNeeds.SelectedValue = "00000000-0000-0000-0000-000000000043";
+                    this.ddlContentTextEditNeeds.SelectedValue = "00000000-0000-0000-0000-000000000043";
+                    //
+                    UserName = LoginUserInfo.LoginName;
+                    PassWord = LoginUserInfo.Password;
+                    byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                    string str = Convert.ToBase64String(bytes);
+                    BLL.Project project = BLL.Project.GetProject(projectId);
+                    this.ContentOperatLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
+                    + HttpUtility.UrlEncode(project.ProjectNo)
+                    + "&type=a"
+                    + "&link="
+                    + str;
+                    //
                     try
                     {
                         this.InitContentCheckData();
@@ -434,7 +538,7 @@ namespace ProjectCollection.WebUI.pages
                 }
             }
             #endregion
-            #region
+            #region contentcheck
             else if (this.Request["mode"] == "contentcheck")
             {
                 Guid projectId = new Guid(this.Request["ProjectId"]);
@@ -446,6 +550,18 @@ namespace ProjectCollection.WebUI.pages
                 this.PanelContentCheck.Visible = true;
                 this.PanelContentRecheck.Visible = true;
                 this.InitBrowseData();
+                //
+                UserName = LoginUserInfo.LoginName;
+                PassWord = LoginUserInfo.Password;
+                byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                string str = Convert.ToBase64String(bytes);
+                BLL.Project project = BLL.Project.GetProject(projectId);
+                this.ContentCheckLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
+                + HttpUtility.UrlEncode(project.ProjectNo)
+                + "&type=a"
+                + "&link="
+                + str;
+                //
                 if (!IsPostBack)
                 {
                     InitDropDownListContentCheck();
@@ -465,7 +581,7 @@ namespace ProjectCollection.WebUI.pages
                 }
 
             }
-            #endregion
+            #endregion contentcheck
             #region contentcheckbatchsave
             else if (this.Request["mode"] == "contentcheckbatchsave")
             {
@@ -555,6 +671,18 @@ namespace ProjectCollection.WebUI.pages
                 this.PanelContentRecheck.Visible = true;
                 this.InitBrowseData();
                 this.InitContentCheckData();
+                //
+                UserName = LoginUserInfo.LoginName;
+                PassWord = LoginUserInfo.Password;
+                byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                string str = Convert.ToBase64String(bytes);
+                BLL.Project project = BLL.Project.GetProject(projectId);
+                this.ContentReCheckLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
+                + HttpUtility.UrlEncode(project.ProjectNo)
+                + "&type=a"
+                + "&link="
+                + str;
+                //
             }
             #endregion contentrecheck
             #region productionreceive
@@ -563,7 +691,20 @@ namespace ProjectCollection.WebUI.pages
                 Guid projectId = new Guid(this.Request["ProjectId"]);
                 this.hidProjectId.Value = projectId.ToString();
                 BLL.Project Project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
-                LoadProductionReceivePageDate();
+                LoadProductionReceivePageDate(Project);
+                try
+                {
+                    this.PanelCaptureCheck.Visible = true;
+                    this.InitCaptureCheckData();
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+
+                }
                 if (Project.ProductionProgress.ToString() == "00000000-0000-0000-0000-000000000106")//初次接收 
                 {
                     this.btnSentBack.Visible = true;
@@ -599,22 +740,57 @@ namespace ProjectCollection.WebUI.pages
                     //BatchProjectId = this.PreviousPage.BatchProjectId;
                     //hidBatchProjectId.Value = ProjectCollection.Common.SerializeObj.Serialize(BatchProjectId);
 
-                    hidBatchProjectId.Value = this.Request["BatchId"].Replace(' ', '+'); 
+                    //hidBatchProjectId.Value = this.Request["BatchId"].Replace(' ', '+'); 
+                    hidBatchProjectId.Value = Session["BatchId"].ToString();
                     BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
                     this.hidProjectId.Value = BatchProjectId[0].ToString();
                 }
                 this.btnReceive.Text = "批量接收";
-                LoadProductionReceivePageDate();
+                this.btnSentBack.Visible = true;
+                this.btnSentBack.Text = "批量延迟";
+                BLL.Project Project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
+                LoadProductionReceivePageDate(Project);
             }
             #endregion productionreceivebatchhandle
             #region productionfinish
             else if (this.Request["mode"] == "productionfinish")
             {
                 Guid projectId = new Guid(this.Request["ProjectId"]);
+                BLL.Project project = BLL.Project.GetProject(projectId);
                 this.hidProjectId.Value = projectId.ToString();
+                this.btnSentBack.Visible = true;
+                this.btnSentBack.Text = "退回";
                 this.btnOk.Visible = true;
                 this.btnOk.Text = "制作完成";
-                LoadProductionFinishPageDate();
+                LoadProductionFinishPageDate(project);
+                try
+                {
+                    this.PanelCaptureCheck.Visible = true;
+                    this.InitCaptureCheckData();
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+
+                }
+                //NewPms
+                //string FileNo = project.ProjectNo.Replace("-","").Replace("—", "").Replace("_","");
+                UserName = LoginUserInfo.LoginName;
+                PassWord = LoginUserInfo.Password;
+                byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                string str = Convert.ToBase64String(bytes);
+                UploadVideoLink.NavigateUrl = @"http://newpms.cei.cn/FTPVideoUpload?ProjectNo=" 
+                    + HttpUtility.UrlEncode(project.ProjectNo)
+                    + "&title="
+                    + HttpUtility.UrlEncode(project.CourseName)
+                    + "&lecturer="
+                    + HttpUtility.UrlEncode(project.lecturer)
+                    + "&type=a"
+                    + "&link="
+                    + str;
             }
             #endregion productionfinish
             #region productionfinishbatchhandle
@@ -626,13 +802,15 @@ namespace ProjectCollection.WebUI.pages
                     //BatchProjectId = this.PreviousPage.BatchProjectId;
                     //hidBatchProjectId.Value = ProjectCollection.Common.SerializeObj.Serialize(BatchProjectId);
 
-                    hidBatchProjectId.Value = this.Request["BatchId"].Replace(' ', '+');
+                    //hidBatchProjectId.Value = this.Request["BatchId"].Replace(' ', '+');
+                    hidBatchProjectId.Value = Session["BatchId"].ToString();
                     BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
                     this.hidProjectId.Value = BatchProjectId[0].ToString();
                 }
                 this.btnOk.Visible = true;
                 this.btnOk.Text = "批量制作完成";
-                LoadProductionFinishPageDate();
+                BLL.Project Project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
+                LoadProductionFinishPageDate(Project);
             }
             #endregion productionfinishbatchhandle
 
@@ -665,7 +843,31 @@ namespace ProjectCollection.WebUI.pages
                     {
 
                     }
+                    try
+                    {
+                        this.PanelCaptureCheck.Visible = true;
+                        this.InitCaptureCheckData();
+                    }
+                    catch
+                    {
+
+                    }
+                    finally
+                    {
+
+                    }
                 }
+                //NewPms
+                UserName = LoginUserInfo.LoginName;
+                PassWord = LoginUserInfo.Password;
+                byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                string str = Convert.ToBase64String(bytes);
+                BLL.Project project = BLL.Project.GetProject(projectId);
+                this.PlayVideoLink.NavigateUrl = "http://newpms.cei.cn/PlayVideo?ProjectNo="
+                +HttpUtility.UrlEncode(project.ProjectNo)
+                + "&type=a"
+                + "&link="
+                + str;
             }
             #endregion productioncheck
 
@@ -677,7 +879,8 @@ namespace ProjectCollection.WebUI.pages
                     List<Guid> BatchProjectId = new List<Guid>();
                     //BatchProjectId = this.PreviousPage.BatchProjectId;
                     //hidBatchProjectId.Value = ProjectCollection.Common.SerializeObj.Serialize(BatchProjectId);
-                    hidBatchProjectId.Value = this.Request["BatchId"].Replace(' ', '+');
+                    //hidBatchProjectId.Value = this.Request["BatchId"].Replace(' ', '+');
+                    hidBatchProjectId.Value = Session["BatchId"].ToString();
                     BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
                     this.hidProjectId.Value = BatchProjectId[0].ToString();
                 }
@@ -716,7 +919,8 @@ namespace ProjectCollection.WebUI.pages
                     List<Guid> BatchProjectId = new List<Guid>();
                     //BatchProjectId = this.PreviousPage.BatchProjectId;
                     //hidBatchProjectId.Value = ProjectCollection.Common.SerializeObj.Serialize(BatchProjectId);
-                    hidBatchProjectId.Value = this.Request["BatchId"].Replace(' ', '+');
+                    //hidBatchProjectId.Value = this.Request["BatchId"].Replace(' ', '+');
+                    hidBatchProjectId.Value = Session["BatchId"].ToString();
                     BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
                     this.hidProjectId.Value = BatchProjectId[0].ToString();
                 }
@@ -747,7 +951,7 @@ namespace ProjectCollection.WebUI.pages
                 }
             }
             #endregion productioncheckbatchhandle
-            #region
+            #region publish check
             else if (this.Request["mode"] == "publish")
             {
                 Guid projectId = new Guid(this.Request["ProjectId"]);
@@ -756,6 +960,18 @@ namespace ProjectCollection.WebUI.pages
                 this.btnOk.Text = "发布";
                 this.PanelPublish.Visible = true;
                 this.InitBrowseData();
+                //
+                UserName = LoginUserInfo.LoginName;
+                PassWord = LoginUserInfo.Password;
+                byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                string str = Convert.ToBase64String(bytes);
+                BLL.Project project = BLL.Project.GetProject(projectId);
+                this.PublishCheckLink.NavigateUrl = @"http://newpms.cei.cn/CourseUpload?ProjectNo="
+                + HttpUtility.UrlEncode(project.ProjectNo)
+                + "&type=a"
+                + "&link="
+                + str;
+                //
                 if (!IsPostBack)
                 {
                     InitDropDownListPublish();
@@ -769,6 +985,18 @@ namespace ProjectCollection.WebUI.pages
                 this.btnOk.Text = "审核";
                 this.PanelCheck.Visible = true;
                 this.InitBrowseData();
+                //
+                UserName = LoginUserInfo.LoginName;
+                PassWord = LoginUserInfo.Password;
+                byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                string str = Convert.ToBase64String(bytes);
+                BLL.Project project = BLL.Project.GetProject(projectId);
+                this.PublishCheckLink2.NavigateUrl = @"http://newpms.cei.cn/CourseUpload?ProjectNo="
+                + HttpUtility.UrlEncode(project.ProjectNo)
+                + "&type=a"
+                + "&link="
+                + str;
+                //
                 if (!IsPostBack)
                 {
                     InitDropDownListCheck();
@@ -778,7 +1006,7 @@ namespace ProjectCollection.WebUI.pages
             {
 
             }
-            #endregion
+            #endregion publish check
         }
         //
         protected void btnCancel_Click(object sender, EventArgs e)
@@ -824,6 +1052,7 @@ namespace ProjectCollection.WebUI.pages
                 project.ContentNeeds = new Guid(this.ddlContentNeeds.SelectedValue);
                 project.PublishNeeds = new Guid(this.ddlPublishNeeds.SelectedValue);
                 project.CanBeSold = new Guid(this.rblCanBeSold.SelectedValue);
+                project.EpisodeCount = Convert.ToInt32(this.ddlEpisodeCount.SelectedValue);
                 if (project.IsCaptureNeeds() == false)
                 {
                     project.progress = new Guid("00000000-0000-0000-0000-000000000120");
@@ -871,6 +1100,40 @@ namespace ProjectCollection.WebUI.pages
                 //}
                 project.progress = new Guid("00000000-0000-0000-0000-000000000120");
                 BLL.Project.UpdateCaptureFinish(project);
+                this.Redirect("~/pages/MyTask.aspx?mode=capture");
+            }
+            else if (this.Request["mode"] == "capturebatchhandle")
+            {
+                List<Guid> BatchProjectId = new List<Guid>();
+                BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
+                for (int i = 0; i < BatchProjectId.Count; i++)
+                {
+                    BLL.Project project = BLL.Project.GetProject(BatchProjectId[i]);
+                    project.CaptureDuration = Convert.ToInt16(this.txtCaptureDuration.Text.ToString());
+                    project.CaptureFinishDate = DateTime.Now;
+                    project.CaptureVideoNeeds = new Guid(this.ddlCaptureVideoNeeds.SelectedValue);
+                    project.CaptureAudioNeeds = new Guid(this.ddlCaptureAudioNeeds.SelectedValue);
+                    project.CaptureVideoVideoQuality = new Guid(this.ddlCaptureVideoVideoQuality.SelectedValue);
+                    project.CaptureVideoAudioQuality = new Guid(this.ddlCaptureVideoAudioQuality.SelectedValue);
+                    project.CaptureAudioQuality = new Guid(this.ddlCaptureAudioQuality.SelectedValue);
+                    project.CaptureSoundTrack = new Guid(this.ddlCaptureSoundTrack.SelectedValue);
+                    project.CaptureFilePath = this.txtCaptureFilePath.Text.ToString();
+                    project.CaptureNote = this.txtCaptureNote.Text.ToString();
+                    //单视频三分屏工作开始分支
+                    //if (//单视频
+                    //       project.WorkType == new Guid("00000000-0000-0000-0000-000000000017")
+                    //       || project.WorkType == new Guid("00000000-0000-0000-0000-000000000019")
+                    //       )
+                    //{
+                    //    project.progress = new Guid("00000000-0000-0000-0000-000000000106");
+                    //}
+                    //else
+                    //{
+                    //    project.progress = new Guid("00000000-0000-0000-0000-000000000109");
+                    //}
+                    project.progress = new Guid("00000000-0000-0000-0000-000000000120");
+                    BLL.Project.UpdateCaptureFinish(project);
+                }
                 this.Redirect("~/pages/MyTask.aspx?mode=capture");
             }
             #endregion
@@ -949,13 +1212,19 @@ namespace ProjectCollection.WebUI.pages
                         project.ContentProgress = new Guid("00000000-0000-0000-0000-000000000107");
                         project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000129");
                     }
-                }
+                }              
                 else { }
+                if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))//STT
+                {
+                    project.progress = new Guid("00000000-0000-0000-0000-000000000106");
+                    project.ContentProgress = new Guid("00000000-0000-0000-0000-000000000130");
+                    project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000106");
+                }
                 BLL.Project.UpdateExecution(project);
                 this.Redirect("~/pages/MyTask.aspx?mode=execution");
             }
             #endregion execution
-            #region
+            #region shorthand
             else if (this.Request["mode"] == "shorthand")//有速记必有制作部，牛雷确认
             {
                 BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
@@ -970,7 +1239,26 @@ namespace ProjectCollection.WebUI.pages
                 BLL.Project.UpdateShorthandFinish(project);
                 this.Redirect("~/pages/MyTask.aspx?mode=shorthand");
             }
-            #endregion
+            else if (this.Request["mode"] == "shorthandbatchhandle")
+            {
+                List<Guid> BatchProjectId = new List<Guid>();
+                BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
+                for (int i = 0; i < BatchProjectId.Count; i++)
+                {
+                    BLL.Project project = BLL.Project.GetProject(BatchProjectId[i]);
+                    project.ShorthandPersonInCharge = this.LoginUserInfo.Identity;
+                    project.ShorthandFinishDate = DateTime.Now;
+                    project.ShorthandAudioReceiveDate = Convert.ToDateTime(this.hidShorthandAudioReceiveDate.Value);
+                    project.ShorthandPurveyor = this.txtShorthandPurveyor.Text.ToString();
+                    project.ShorthandQuality = new Guid(this.ddlShorthandQuality.SelectedValue);
+                    project.ShorthandNote = this.txtShorthandNote.Text.ToString();
+                    project.progress = new Guid("00000000-0000-0000-0000-000000000107");
+                    project.ContentProgress = new Guid("00000000-0000-0000-0000-000000000107");
+                    BLL.Project.UpdateShorthandFinish(project);
+                }   
+                this.Redirect("~/pages/MyTask.aspx?mode=shorthand");
+            }
+            #endregion shorthand
             #region
             else if (this.Request["mode"] == "contentfinish")
             {
@@ -980,7 +1268,7 @@ namespace ProjectCollection.WebUI.pages
                 project.ContentCourseNameConfirm = new Guid(this.ddlContentCourseNameConfirm.SelectedValue);
                 project.ContentChangedCourseName = this.txtContentChangedCourseName.Text.ToString();
                 project.ContentCourseRecommend = new Guid(this.ddlContentCourseRecommend.SelectedValue);
-                project.ContentPPTAdvice = new Guid(this.ddlContentCourseRecommend.SelectedValue);
+                project.ContentPPTAdvice = new Guid(this.ddlContentPPTAdvice.SelectedValue);
                 project.ContentExercises = Convert.ToInt16(this.txtContentExercises.Text.ToString());
                 project.ContentPPTNeeds = new Guid(this.ddlContentPPTNeeds.SelectedValue);
                 project.ContentCourseIntroNeeds = new Guid(this.ddlContentCourseIntroNeeds.SelectedValue);
@@ -1020,12 +1308,13 @@ namespace ProjectCollection.WebUI.pages
                     project.ContentCheckNote = this.txtContentCheckNote.Text.ToString();
                     project.progress = project.progress;
                     project.ContentProgress = project.ContentProgress;
+                    project.ContentCheckPersonInCharge = this.LoginUserInfo.Identity;
                     BLL.Project.UpdateContentCheck(project);
                 }
                 this.Redirect("~/pages/MyTask.aspx?mode=contentcheck");
             }
             #endregion
-            #region
+            #region contentcheckbatchhandle
             else if (this.Request["mode"] == "contentcheckbatchhandle")
             {
                 List<Guid> BatchProjectId = new List<Guid>();
@@ -1037,8 +1326,8 @@ namespace ProjectCollection.WebUI.pages
                 }
                 this.Redirect("~/pages/MyTask.aspx?mode=contentcheck");
             }
-            #endregion
-            #region
+            #endregion contentcheckbatchhandle
+            #region contentrecheck
             else if (this.Request["mode"] == "contentrecheck")
             {
                 BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
@@ -1060,6 +1349,10 @@ namespace ProjectCollection.WebUI.pages
                     {
                         project.progress = new Guid("00000000-0000-0000-0000-000000000113");
                     }
+                }
+                else if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))//STT
+                {
+                    project.progress = new Guid("00000000-0000-0000-0000-000000000117");
                 }
                 else
                 {
@@ -1184,6 +1477,20 @@ namespace ProjectCollection.WebUI.pages
                 BLL.Project.UpdateCaptureReceive(Project);
                 this.Redirect("~/pages/MyTask.aspx?mode=capture");
             }
+            else if (this.Request["mode"] == "capturebatchhandle")
+            {
+                List<Guid> BatchProjectId = new List<Guid>();
+                BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
+                for (int i = 0; i < BatchProjectId.Count; i++)
+                {
+                    BLL.Project Project = BLL.Project.GetProject(BatchProjectId[i]);
+                    Project.CapturePersonInCharge = this.LoginUserInfo.Identity;
+                    Project.CaptureReceiveDate = DateTime.Now;
+                    Project.progress = new Guid("00000000-0000-0000-0000-000000000108");
+                    BLL.Project.UpdateCaptureReceive(Project);
+                }
+                this.Redirect("~/pages/MyTask.aspx?mode=capture");
+            }
             #endregion
             #region
             else if (this.Request["mode"] == "contentreceive")
@@ -1299,16 +1606,50 @@ namespace ProjectCollection.WebUI.pages
                 BLL.Project.UpdateCaptureDelayReceive(project);
                 this.Redirect("~/pages/MyTask.aspx?mode=capturereceive");
             }
+            else if (this.Request["mode"] == "capturebatchhandle")//批量采集延时接收
+            {
+                List<Guid> BatchProjectId = new List<Guid>();
+                BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
+                for (int i = 0; i < BatchProjectId.Count; i++)
+                {
+                    BLL.Project project = BLL.Project.GetProject(BatchProjectId[i]);
+                    project.progress = new Guid("00000000-0000-0000-0000-000000000131");
+                    project.CapturePersonInCharge = this.LoginUserInfo.Identity;
+                    project.CaptureReceiveDelayDate = DateTime.Now;
+                    project.CaptureReceiveDelayNote = this.txtCaptureReceiveDelayNote.Text.ToString();
+                    BLL.Project.UpdateCaptureDelayReceive(project);
+                }
+                this.Redirect("~/pages/MyTask.aspx?mode=capturereceive");
+            }
             else if (this.Request["mode"] == "productionreceive")//技术部延时接收
             {
                 BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
-                project.progress = new Guid("00000000-0000-0000-0000-000000000132");
-                project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000132");
-                project.ProductionPersonInCharge = this.LoginUserInfo.Identity;
-                project.ProductionReceiveDelayDate = DateTime.Now;
-                project.ProductionReceiveDelayNote = this.txtProductionReceiveDelayNote.Text.ToString();
-                BLL.Project.UpdateProductionDelayReceive(project);
+                UpdateProductionDelayReceive(project);
                 this.Redirect("~/pages/MyTask.aspx?mode=productionreceive");
+            }
+            else if (this.Request["mode"] == "productionreceivebatchhandle")//批量技术部延时接收
+            {
+                List<Guid> BatchProjectId = new List<Guid>();
+                BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
+                for (int i = 0; i < BatchProjectId.Count; i++)
+                {
+                    BLL.Project project = BLL.Project.GetProject(BatchProjectId[i]);
+                    UpdateProductionDelayReceive(project);
+                }
+                this.Redirect("~/pages/MyTask.aspx?mode=productionreceive");
+            }
+            else if (this.Request["mode"] == "productionfinish")//技术部接收退回 
+            {
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                          where p.ProjectId.ToString() == this.hidProjectId.Value.ToString()
+                                                                          select p).First();
+                    ThisProject.progress = new Guid("00000000-0000-0000-0000-000000000106");
+                    ThisProject.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000106");
+                    ProjectModel.SaveChanges();
+                }
+                this.Redirect("~/pages/MyTask.aspx?mode=manufacture&range=now");
             }
             else { }
         }
@@ -1326,6 +1667,22 @@ namespace ProjectCollection.WebUI.pages
         }
         protected void rblDeadLineSelectSetChanged(object sender, EventArgs e)
         { }
+
+        //protected void BtnUploadVideo_Click(object sender, EventArgs e)
+        //{
+        //    string url = "http://newpms.cei.cn/JsonLogin";
+        //    Encoding encoding = Encoding.GetEncoding("utf-8");
+        //    IDictionary<string, string> parameters = new Dictionary<string, string>();
+        //    parameters.Add("UserName", "cc");
+        //    parameters.Add("PassWord", "abc123");
+        //    parameters.Add("X-CSRFToken", HttpContext.Current.Request.Cookies["csrftoken"].Value);
+        //    HttpWebResponse response = ProjectCollection.Common.PostRequest.CreatePostHttpResponse(url, parameters, encoding);
+        //    //打印返回值  
+        //    Stream stream = response.GetResponseStream();   //获取响应的字符串流  
+        //    StreamReader sr = new StreamReader(stream); //创建一个stream读取流  
+        //    string request = sr.ReadToEnd();   //从头读到尾，放到字符串html
+        //    LabelUploadVideo.Text = request;
+        //}
 
         #endregion 事件
 
@@ -1455,6 +1812,7 @@ namespace ProjectCollection.WebUI.pages
             this.ddlContentTextEditNeeds.DataTextField = "text";
             this.ddlContentTextEditNeeds.DataValueField = "dictionary_identity";
             this.ddlContentTextEditNeeds.DataBind();
+            //
         }
         private void InitDropDownListContentCheck()
         {
@@ -1490,7 +1848,17 @@ namespace ProjectCollection.WebUI.pages
         }
         private void InitDropDownListProductionReceive()
         {
-            this.ddlProductionOperator.DataSource = BLL.UserInfo.GetDataByID();
+            //this.ddlProductionOperator.DataSource = BLL.UserInfo.GetDataByRole(new Guid("00000000-0000-0000-0000-000000000009"));
+            //
+            DataTable dt1= BLL.UserInfo.GetDataByRole(new Guid("00000000-0000-0000-0000-000000000009"));
+            DataTable dt2 = BLL.UserInfo.GetDataByRole(new Guid("00000000-0000-0000-0000-000000000002"));
+            DataTable newDataTable = dt1.Copy();
+            foreach (DataRow dr in dt2.Rows)
+            {
+                newDataTable.ImportRow(dr);
+            }
+            this.ddlProductionOperator.DataSource = newDataTable;
+            //
             this.ddlProductionOperator.DataTextField = "real_name";
             this.ddlProductionOperator.DataValueField = "user_Identity";
             this.ddlProductionOperator.DataBind();
@@ -1593,6 +1961,13 @@ namespace ProjectCollection.WebUI.pages
             this.ddlContentNeeds.SelectedValue = project.ContentNeeds.ToString();
             this.ddlPublishNeeds.SelectedValue = project.PublishNeeds.ToString();
             this.txtPlanNote.Text = ProjectPlan.Note.ToString();
+            this.ddlEpisodeCount.SelectedValue = project.EpisodeCount.ToString();
+            this.txtRecordingDate.Text= ProjectPlan.RecordingDate.ToString("yyyy-MM-dd");
+            if (ProjectPlan.RecordingNote != null)
+            {
+                this.txtRecordingNote.Text = ProjectPlan.RecordingNote.ToString();
+            }
+            else { }
             this.rblCanBeSold.SelectedValue = project.CanBeSold.ToString();
         }
         private void InitCaptureData()
@@ -1651,6 +2026,8 @@ namespace ProjectCollection.WebUI.pages
             this.txtContentReceiveDate.Text = project.ContentReceiveDate.ToString("yyyy-MM-dd HH:mm");
             this.txtContentAssignmentDate.Text = project.ContentAssignmentDate.ToString("yyyy-MM-dd HH:mm");
             this.hidContentEstimatedDate.Value = project.ContentEstimatedDate.ToString("yyyy-MM-dd HH:mm");
+            //
+            
         }
         private void InitContentFinishData()
         {
@@ -1668,6 +2045,7 @@ namespace ProjectCollection.WebUI.pages
             this.ddlContentExercisesNeeds.SelectedValue = project.ContentExercisesNeeds.ToString();
             this.ddlContentTextEditNeeds.SelectedValue = project.ContentTextEditNeeds.ToString();
             this.txtContentOperateNote.Text = project.ContentOperateNote;
+            //
         }
         private void InitContentCheckData()
         {
@@ -1760,15 +2138,12 @@ namespace ProjectCollection.WebUI.pages
             this.txtCheckTaskNote.Text = project.CheckTaskNote;
         }
         //
-        private void LoadProductionReceivePageDate()
+        private void LoadProductionReceivePageDate(BLL.Project project)
         {
             this.btnReceive.ValidationGroup = "ProductionReceive";
             this.btnReceive.Visible = true;
             this.PanelProductionReceive.Visible = true;
             this.PanelCapture.Visible = true;
-            this.PanelContentReceive.Visible = true;
-            this.PanelContentCheck.Visible = true;
-            this.PanelContentRecheck.Visible = true;
             this.InitBrowseData();
             if (!IsPostBack)
             {
@@ -1788,52 +2163,61 @@ namespace ProjectCollection.WebUI.pages
             {
 
             }
-            try
-            {
-                InitDropDownListContentReceive();
-                this.InitContentReceiveData();
-            }
-            catch
+            //新三分屏
+            if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
             {
 
             }
-            finally
+            else
             {
+                this.PanelContentReceive.Visible = true;
+                this.PanelContentCheck.Visible = true;
+                this.PanelContentRecheck.Visible = true;
+                try
+                {
+                    InitDropDownListContentReceive();
+                    this.InitContentReceiveData();
+                }
+                catch
+                {
 
-            }
-            try
-            {
-                this.InitContentCheckData();
-            }
-            catch
-            {
+                }
+                finally
+                {
 
-            }
-            finally
-            {
+                }
+                try
+                {
+                    this.InitContentCheckData();
+                }
+                catch
+                {
 
-            }
-            try
-            {
-                this.InitContentRecheckData();
-            }
-            catch
-            {
+                }
+                finally
+                {
 
-            }
-            finally
-            {
+                }
+                try
+                {
+                    this.InitContentRecheckData();
+                }
+                catch
+                {
 
+                }
+                finally
+                {
+
+                }
             }
         }
-        private void LoadProductionFinishPageDate()
+        private void LoadProductionFinishPageDate(BLL.Project project)
         {
             this.PanelProductionOperator.Visible = true;
             this.PanelCapture.Visible = true;
             this.PanelProductionReceive.Visible = true;
-            this.PanelProductionCheck.Visible = true;
-            this.PanelContentCheck.Visible = true;
-            this.PanelContentRecheck.Visible = true;
+            //this.PanelProductionCheck.Visible = true;
             if (!IsPostBack)
             {
                 InitDropDownListProductionFinish();
@@ -1864,30 +2248,40 @@ namespace ProjectCollection.WebUI.pages
             finally
             {
 
-            }
-            try
-            {
-                this.InitContentCheckData();
-            }
-            catch
+            }          
+            //新三分屏
+            if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
             {
 
             }
-            finally
+            else
             {
+                this.PanelContentCheck.Visible = true;
+                this.PanelContentRecheck.Visible = true;
+                try
+                {
+                    this.InitContentCheckData();
+                }
+                catch
+                {
 
-            }
-            try
-            {
-                this.InitContentRecheckData();
-            }
-            catch
-            {
+                }
+                finally
+                {
 
-            }
-            finally
-            {
+                }
+                try
+                {
+                    this.InitContentRecheckData();
+                }
+                catch
+                {
 
+                }
+                finally
+                {
+
+                }
             }
         }
         //
@@ -1901,6 +2295,7 @@ namespace ProjectCollection.WebUI.pages
             project.ContentIsTimely = new Guid(this.ddlContentIsTimely.SelectedValue);
             project.ContentCheckDate = DateTime.Now;
             project.ContentCheckNote = this.txtContentCheckNote.Text.ToString();
+            project.ContentCheckPersonInCharge= this.LoginUserInfo.Identity;
             if (//单视频
                        project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017")
                        || project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000019")
@@ -1935,6 +2330,15 @@ namespace ProjectCollection.WebUI.pages
             project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000114");
             BLL.Project.UpdateProductionReceive(project);
         }
+        private void UpdateProductionDelayReceive(Project project)
+        {
+            project.progress = new Guid("00000000-0000-0000-0000-000000000132");
+            project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000132");
+            project.ProductionPersonInCharge = this.LoginUserInfo.Identity;
+            project.ProductionReceiveDelayDate = DateTime.Now;
+            project.ProductionReceiveDelayNote = this.txtProductionReceiveDelayNote.Text.ToString();
+            BLL.Project.UpdateProductionDelayReceive(project);
+        }
         private void UpdateProductionCheck(Project project)
         {
             project.ProductionVideoEditCheck = new Guid(this.ddlProductionVideoEditCheck.SelectedValue);
@@ -1956,6 +2360,11 @@ namespace ProjectCollection.WebUI.pages
                 {
                     project.progress = new Guid("00000000-0000-0000-0000-000000000116");
                 }
+            }
+            else if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))//STT
+            {
+                project.progress = new Guid("00000000-0000-0000-0000-000000000197");
+                //project.ContentProgress= new Guid("00000000-0000-0000-0000-000000000107"); 
             }
             else
             {
@@ -1983,8 +2392,15 @@ namespace ProjectCollection.WebUI.pages
             project.ProductionAudioQuality = new Guid(this.ddlProductionAudioQuality.SelectedValue);
             project.ProductionFileBackUp = new Guid(this.ddlProductionFileBackUp.SelectedValue);
             project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000115");
+            if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))//sTT
+            {
+                project.progress = new Guid("00000000-0000-0000-0000-000000000198");
+                project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000198");
+            }
             BLL.Project.UpdateProductionFinish(project);
         }
         #endregion 方法
+
+        
     }
 }

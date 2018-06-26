@@ -14,6 +14,29 @@ namespace ProjectCollection.DAL
 
         #region SELECT
         //
+        private const string SELECT_00 = @"select 
+ProjectId
+,Project.ProjectPlanId
+,ProjectTypeId
+,ProjectNo
+,SendingDate
+,emergency
+,WorkType
+,CourseName
+,lecture
+,Project.lecturer
+,Project.LecturerJob
+,Project.progress
+,ShorthandProgress
+,ContentProgress
+,ProductionProgress
+,EpisodeCount
+,dd1.text as WorkTypeText,dd2.text as ProgressText,pl.title as ProjectPlanName,pl.ProjectPlanTypeId as PlanTypeId 
+,ROW_NUMBER() OVER (order by ProjectNo) as RowNo
+from Project 
+left join data_dictionary as dd1 on dd1.dictionary_identity=Project.WorkType 
+left join data_dictionary as dd2 on dd2.dictionary_identity=Project.progress 
+left join ProjectPlan as pl on pl.ProjectPlanId=Project.ProjectPlanId";
         private const string SELECT_01 = @"select
 ProjectId
 ,Project.ProjectPlanId
@@ -155,6 +178,7 @@ ProjectId
 ,Project.ExtraNote
 ,ProductionReceiveNote
 ,CanBeSold
+,EpisodeCount
 ,dd1.text as WorkTypeText,dd2.text as ProgressText,pl.title as ProjectPlanName,pl.ProjectPlanTypeId as PlanTypeId 
 ,ROW_NUMBER() OVER (order by ProjectNo) as RowNo
 from Project 
@@ -164,14 +188,14 @@ left join data_dictionary as dd1 on dd1.dictionary_identity=Project.WorkType lef
         private const string SELECT_01_PlanId = SELECT_01 + " where Project.ProjectPlanId=@ProjectPlanId order by ProjectNo";
         //
         private const string SELECT_02 = SELECT_01 + " where ProjectId=@ProjectId";
-        private const string SELECT_03 = SELECT_01 + " where dd2.category=@category order by ProjectNo";
+        private const string SELECT_03 = SELECT_01 + " where dd2.category=@category order by Project.progress asc, ProjectNo asc";
         private const string SELECT_04 = SELECT_01 + " where dd2.dictionary_identity=@dictionary_identity";
         private const string SELECT_04_Order = SELECT_01 + " where dd2.dictionary_identity=@dictionary_identity order by ProjectNo";
         private const string SELECT_05 = SELECT_04 + " or dd2.dictionary_identity=@dictionary_identity2 order by ProjectNo Desc";
-        private const string SELECT_05_person = SELECT_09 + " where (dd2.dictionary_identity=@dictionary_identity or dd2.dictionary_identity=@dictionary_identity2) and ContentOperator=@person_id order by ProjectNo";
+        private const string SELECT_05_person = SELECT_09 + " where (dd2.dictionary_identity=@dictionary_identity or dd2.dictionary_identity=@dictionary_identity2) and (ContentOperator=@person_id or  Project.ExtraNote='制作人员练习') order by ProjectNo";
         private const string SELECT_05_person2 = SELECT_10 + " where (dd2.dictionary_identity=@dictionary_identity or dd2.dictionary_identity=@dictionary_identity2) and ProductionOperator=@person_id order by ProjectNo";
         private const string SELECT_05_noperson = SELECT_09 + " where (dd2.dictionary_identity=@dictionary_identity or dd2.dictionary_identity=@dictionary_identity2) order by ProjectNo";
-        private const string SELECT_05_noperson2 = SELECT_10 + " where (dd2.dictionary_identity=@dictionary_identity or dd2.dictionary_identity=@dictionary_identity2) order by ProjectNo";
+        private const string SELECT_05_noperson2 = SELECT_10 + " where (dd2.dictionary_identity=@dictionary_identity or dd2.dictionary_identity=@dictionary_identity2) order by emergency desc,ProjectNo asc";
         private const string SELECT_06 = @"select *,dd1.text as WorkTypeText,dd2.text as ProgressText,pl.title as ProjectPlanName from Project 
 left join ProjectPlan as pl on pl.ProjectPlanId=Project.ProjectPlanId left join data_dictionary as dd1 on dd1.dictionary_identity=Project.WorkType left join data_dictionary as dd2";
         private const string SELECT_07 = SELECT_06 + " on dd2.dictionary_identity=ContentProgress where dd2.dictionary_identity=@dictionary_identity order by ProjectNo";
@@ -181,6 +205,7 @@ left join ProjectPlan as pl on pl.ProjectPlanId=Project.ProjectPlanId left join 
         //
         private const string SELECT_Where_PlanTypeId = " PlanTypeId=@PlanTypeId";
         private const string SELECT_Order_No = " order by ProjectNo";
+        private const string SELECT_Order_Date = " order by SendingDate desc";
         //
         private const string SELECT_Total = "select count(ProjectId) from Project";
         private const string SELECT_Total_Today = "select count(ProjectId) from Project where CONVERT(varchar(10),SendingDate,120) = CONVERT(varchar(10),getDate(),120)";
@@ -205,10 +230,10 @@ where ContentAssignmentDate between @DateBegin and @DateEnd
 and ContentPersonInCharge=@ContentPersonInCharge";
         private const string Select_AmountContentCheck = @"select count(ProjectId) from Project
 where ContentCheckDate between @DateBegin and @DateEnd
-and ContentPersonInCharge=@ContentPersonInCharge";
+and ContentCheckPersonInCharge=@ContentPersonInCharge and ProjectNo like @ProjectType";
         private const string Select_AmountContentRecheck = @"select count(ProjectId) from Project
 where ContentRecheckDate between @DateBegin and @DateEnd
-and ContentRecheckPersonInCharge=@ContentRecheckPersonInCharge";
+and ContentRecheckPersonInCharge=@ContentRecheckPersonInCharge and ProjectNo like 'A%'";
         private const string Select_AmountContentFinish = @"select count(ProjectId) from Project
 where (ContentFinishDate between @DateBegin and @DateEnd)
 and (ContentOperator=@ContentOperator)";
@@ -233,7 +258,43 @@ where PublishPublishDate between @DateBegin and @DateEnd
 and PublishOperator=@PublishOperator";
         private const string Select_AmountCheck = @"select count(ProjectId) from Project
 where CheckTaskCheckDate between @DateBegin and @DateEnd
-and CheckPersonInCharge=@ShorthandPersonInCharge";
+and CheckPersonInCharge=@CheckPersonInCharge";
+
+        private const string Select_AmountManHours = @"Select Title, COUNT(Title) as Count From(
+SELECT
+(case 
+when dbo.WorkDay(SendingDate, ProductionCheckDate) <= 5 then '1'
+when(dbo.WorkDay(SendingDate, ProductionCheckDate) > 5) and(dbo.WorkDay(SendingDate, ProductionCheckDate) <= 10)  then '2'
+when(dbo.WorkDay(SendingDate, ProductionCheckDate) > 10) and(dbo.WorkDay(SendingDate, ProductionCheckDate) <= 15)  then '3'
+when(dbo.WorkDay(SendingDate, ProductionCheckDate) > 15) and(dbo.WorkDay(SendingDate, ProductionCheckDate) <= 20)  then '4'
+when dbo.WorkDay(SendingDate, ProductionCheckDate) > 20 then '5'
+else '0'
+end
+) as Title
+  FROM Project
+  where ProductionCheckDate is not Null
+  and ProjectNo like @ProjectType
+  and (ProductionCheckDate between @DateBegin and @DateEnd)
+) as a
+Group By Title
+order by Title";
+        private const string Select_AmountManHoursCalendarDay = @"Select Title, COUNT(Title) as Count From(
+SELECT
+(case 
+when DATEDIFF(DAY,SendingDate, ProductionCheckDate) <= 15 then '1'
+when(DATEDIFF(DAY,SendingDate, ProductionCheckDate) > 15) and(DATEDIFF(DAY,SendingDate, ProductionCheckDate) <= 20)  then '2'
+when(DATEDIFF(DAY,SendingDate, ProductionCheckDate) > 20) and(DATEDIFF(DAY,SendingDate, ProductionCheckDate) <= 25)  then '3'
+when DATEDIFF(DAY,SendingDate, ProductionCheckDate) > 25 then '4'
+else '0'
+end
+) as Title
+  FROM Project
+  where ProductionCheckDate is not Null
+  and ProjectNo like @ProjectType
+  and (ProductionCheckDate between @DateBegin and @DateEnd)
+) as a
+Group By Title
+order by Title";
         #endregion Amount
 
         #endregion SELECT
@@ -261,6 +322,7 @@ ProjectId
 ,PublishNeeds
 ,SourceProjectId
 ,CanBeSold
+,EpisodeCount
 ) values(
 @ProjectId       
 ,@ProjectPlanId                 
@@ -283,6 +345,7 @@ ProjectId
 ,@PublishNeeds
 ,@SourceProjectId
 ,@CanBeSold
+,@EpisodeCount
 )";
         # endregion
 
@@ -305,6 +368,7 @@ ProjectTypeId=@ProjectTypeId
 ,CreateNote=@CreateNote
 ,ExtraNote=@ExtraNote
 ,ExecutionDate=@ExecutionDate
+,EpisodeCount=@EpisodeCount
 where ProjectId=@ProjectId";
         private const string UPDATE_CaptureReceive = @"update Project set 
 progress=@progress
@@ -395,6 +459,7 @@ progress=@progress
 ,ContentIsTimely=@ContentIsTimely
 ,ContentCheckDate=@ContentCheckDate
 ,ContentCheckNote=@ContentCheckNote
+,ContentCheckPersonInCharge=@ContentCheckPersonInCharge
 where ProjectId=@ProjectId";
         private const string UPDATE_ContentRecheckFinish = @"update Project set 
 progress=@progress
@@ -435,6 +500,7 @@ where ProjectId=@ProjectId";
         private const string UPDATE_ProductionCheck = @"update Project set 
 progress=@progress
 ,ProductionProgress=@ProductionProgress
+,ContentProgress=@ContentProgress
 ,ProductionVideoEditCheck=@ProductionVideoEditCheck
 ,ProductionAudioEditCheck=@ProductionAudioEditCheck
 ,ProductionProductCheck=@ProductionProductCheck
@@ -482,9 +548,9 @@ where ProjectId=@ProjectId";
             DataTable table = this.SelectOperate.Select(Project.SELECT_ALLPage,parameters);
             return table;
         }
-        public DataTable SelectAll(Guid PlanTypeId, Guid progress)
+        public DataTable SelectAll(Guid PlanTypeId, Guid progress,string Date)
         {
-            string sql = Project.SELECT_01;
+            string sql = Project.SELECT_00;
             if (PlanTypeId == new Guid("00000000-0000-0000-0000-000000000000")) { sql = sql + " where 1=1"; }
             else if (PlanTypeId == new Guid("00000000-0000-0000-0000-000000000020")) { sql = sql + " where (ProjectPlanTypeId='00000000-0000-0000-0000-000000000020' or ProjectPlanTypeId='00000000-0000-0000-0000-000000000015')"; }
             else if (PlanTypeId == new Guid("00000000-0000-0000-0000-000000000016")) { sql = sql + " where ProjectPlanTypeId='00000000-0000-0000-0000-000000000016'"; }
@@ -496,7 +562,18 @@ where ProjectId=@ProjectId";
             else if (progress == new Guid("00000000-0000-0000-0000-000000000119")) { sql = sql + " and Project.progress='" + progress.ToString() + "'"; }
             else if (progress == new Guid("00000000-0000-0000-0000-000000000128")) { sql = sql + " and Project.progress='" + progress.ToString() + "'"; }    
             else { }
-            DataTable table = this.SelectOperate.Select(sql + SELECT_Order_No);
+            if (Date == "3m")
+            {
+                string FilterDate = DateTime.Now.AddMonths(-3).ToString("yyyy-MM-dd");
+                sql = sql + " and SendingDate >='"+ FilterDate+"' " + SELECT_Order_Date;
+            }
+            else if (Date == "12m")
+            {
+                string FilterDate = DateTime.Now.AddMonths(-12).ToString("yyyy-MM-dd");
+                sql = sql + " and SendingDate >='" + FilterDate + "' " + SELECT_Order_Date;
+            }
+            else { sql = sql + SELECT_Order_Date; }
+            DataTable table = this.SelectOperate.Select(sql);
             return table;
         }
         public DataTable SelectByPlanId(Guid ProjectPlanId)
@@ -666,12 +743,13 @@ where ProjectId=@ProjectId";
             int count = Convert.ToInt32(table.Rows[0][0]);
             return count;
         }
-        public int SelectContentCheckAmount(Guid ContentPersonInCharge, string DateBegin, string DateEnd)
+        public int SelectContentCheckAmount(Guid ContentPersonInCharge, string ProjectType, string DateBegin, string DateEnd)
         {
-            DbParameter[] parameters = new DbParameter[3];
+            DbParameter[] parameters = new DbParameter[4];
             parameters[0] = Manager.CreateParameter("ContentPersonInCharge", ContentPersonInCharge);
-            parameters[1] = Manager.CreateParameter("DateBegin", DateBegin);
-            parameters[2] = Manager.CreateParameter("DateEnd", DateEnd);
+            parameters[1] = Manager.CreateParameter("ProjectType", ProjectType+'%');
+            parameters[2] = Manager.CreateParameter("DateBegin", DateBegin);
+            parameters[3] = Manager.CreateParameter("DateEnd", DateEnd);
             DataTable table = this.SelectOperate.Select(Project.Select_AmountContentCheck, parameters);
             int count = Convert.ToInt32(table.Rows[0][0]);
             return count;
@@ -767,6 +845,25 @@ where ProjectId=@ProjectId";
             return count;
         }
 
+        public DataTable SelectManHoursAmount(string ProjectType, string DateBegin, string DateEnd)
+        {
+            DbParameter[] parameters = new DbParameter[3];
+            parameters[0] = Manager.CreateParameter("ProjectType", ProjectType);
+            parameters[1] = Manager.CreateParameter("DateBegin", DateBegin);
+            parameters[2] = Manager.CreateParameter("DateEnd", DateEnd);
+            DataTable table = this.SelectOperate.Select(Project.Select_AmountManHours, parameters);
+            return table;
+        }
+
+        public DataTable SelectManHoursCalendarDayAmount(string ProjectType, string DateBegin, string DateEnd)
+        {
+            DbParameter[] parameters = new DbParameter[3];
+            parameters[0] = Manager.CreateParameter("ProjectType", ProjectType);
+            parameters[1] = Manager.CreateParameter("DateBegin", DateBegin);
+            parameters[2] = Manager.CreateParameter("DateEnd", DateEnd);
+            DataTable table = this.SelectOperate.Select(Project.Select_AmountManHoursCalendarDay, parameters);
+            return table;
+        }
         #endregion Amount
 
         #endregion select
@@ -784,16 +881,16 @@ where ProjectId=@ProjectId";
         /// <param name="progress"></param>
         /// <param name="creatorId"></param>
         /// <returns></returns>
-        public int Insert(Guid ProjectId, Guid ProjectPlanId, Guid ProjectTypeId, string ProjectNo, Guid emergency, Guid WorkType, string CourseName, Guid notice, Guid headline, string TextCategory, string lecturer, string LecturerJob, Guid progress, Guid InCharge, string CreateNote, string ExtraNote, Guid ContentNeeds, Guid PublishNeeds, Guid SourceProjectId, Guid CanBeSold)
+        public int Insert(Guid ProjectId, Guid ProjectPlanId, Guid ProjectTypeId, string ProjectNo, Guid emergency, Guid WorkType, string CourseName, Guid notice, Guid headline, string TextCategory, string lecturer, string LecturerJob, Guid progress, Guid InCharge, string CreateNote, string ExtraNote, Guid ContentNeeds, Guid PublishNeeds, Guid SourceProjectId, Guid CanBeSold,int EpisodeCount)
         {
             int count = 0;
             DbTransaction transaction = this.BeginTransaction();
             try
             {
-                count = this.Insert(transaction, ProjectId, ProjectPlanId, ProjectTypeId, ProjectNo, emergency, WorkType, CourseName, notice, headline, TextCategory, lecturer, LecturerJob, progress, InCharge, CreateNote, ExtraNote, ContentNeeds, PublishNeeds, SourceProjectId, CanBeSold);
+                count = this.Insert(transaction, ProjectId, ProjectPlanId, ProjectTypeId, ProjectNo, emergency, WorkType, CourseName, notice, headline, TextCategory, lecturer, LecturerJob, progress, InCharge, CreateNote, ExtraNote, ContentNeeds, PublishNeeds, SourceProjectId, CanBeSold, EpisodeCount);
                 transaction.Commit();
             }
-            catch
+            catch (Exception ex)
             {
                 transaction.Rollback();
             }
@@ -817,9 +914,9 @@ where ProjectId=@ProjectId";
         /// <param name="creatorId"></param>
         /// <returns></returns>
         public int Insert(DbTransaction transaction,
-            Guid ProjectId, Guid ProjectPlanId, Guid ProjectTypeId, string ProjectNo, Guid emergency, Guid WorkType, string CourseName, Guid notice, Guid headline, string TextCategory, string lecturer, string LecturerJob, Guid progress, Guid InCharge, string CreateNote, string ExtraNote, Guid ContentNeeds, Guid PublishNeeds, Guid SourceProjectId, Guid CanBeSold)
+            Guid ProjectId, Guid ProjectPlanId, Guid ProjectTypeId, string ProjectNo, Guid emergency, Guid WorkType, string CourseName, Guid notice, Guid headline, string TextCategory, string lecturer, string LecturerJob, Guid progress, Guid InCharge, string CreateNote, string ExtraNote, Guid ContentNeeds, Guid PublishNeeds, Guid SourceProjectId, Guid CanBeSold,int EpisodeCount)
         {
-            DbParameter[] parameters = new DbParameter[21];
+            DbParameter[] parameters = new DbParameter[22];
             parameters[0] = Manager.CreateParameter("ProjectId", ProjectId);
             parameters[1] = Manager.CreateParameter("ProjectPlanId", ProjectPlanId);
             parameters[2] = Manager.CreateParameter("ProjectTypeId", ProjectTypeId);
@@ -841,6 +938,7 @@ where ProjectId=@ProjectId";
             parameters[18] = Manager.CreateParameter("PublishNeeds", PublishNeeds);
             parameters[19] = Manager.CreateParameter("SourceProjectId", SourceProjectId);
             parameters[20] = Manager.CreateParameter("CanBeSold", CanBeSold);
+            parameters[21] = Manager.CreateParameter("EpisodeCount", EpisodeCount);
             int count = this.ModifyOperate.Modify(transaction, Project.INSERT_01, parameters);
             return count;
         }
@@ -849,13 +947,13 @@ where ProjectId=@ProjectId";
 
         #region update
 
-        public int UpdateExecution(Guid ProjectId, Guid ProjectTypeId, string ProjectNo, Guid emergency, Guid WorkType, string CourseName, Guid notice, Guid headline, string TextCategory, string lecturer, string LecturerJob, Guid progress, Guid ContentProgress, Guid ProductionProgress, string CreateNote, string ExtraNote,DateTime ExecutionDate)
+        public int UpdateExecution(Guid ProjectId, Guid ProjectTypeId, string ProjectNo, Guid emergency, Guid WorkType, string CourseName, Guid notice, Guid headline, string TextCategory, string lecturer, string LecturerJob, Guid progress, Guid ContentProgress, Guid ProductionProgress, string CreateNote, string ExtraNote,DateTime ExecutionDate,int EpisodeCount)
         {
             int count = 0;
             DbTransaction transaction = this.BeginTransaction();
             try
             {
-                count = this.UpdateExecution(transaction, ProjectId, ProjectTypeId, ProjectNo, emergency, WorkType, CourseName, notice, headline, TextCategory, lecturer, LecturerJob, progress, ContentProgress, ProductionProgress, CreateNote, ExtraNote, ExecutionDate);
+                count = this.UpdateExecution(transaction, ProjectId, ProjectTypeId, ProjectNo, emergency, WorkType, CourseName, notice, headline, TextCategory, lecturer, LecturerJob, progress, ContentProgress, ProductionProgress, CreateNote, ExtraNote, ExecutionDate, EpisodeCount);
                 transaction.Commit();
             }
             catch
@@ -882,9 +980,9 @@ where ProjectId=@ProjectId";
         /// <param name="creatorId"></param>
         /// <returns></returns>
         public int UpdateExecution(DbTransaction transaction,
-            Guid ProjectId, Guid ProjectTypeId, string ProjectNo, Guid emergency, Guid WorkType, string CourseName, Guid notice, Guid headline, string TextCategory, string lecturer, string LecturerJob, Guid progress, Guid ContentProgress, Guid ProductionProgress, string CreateNote, string ExtraNote,DateTime ExecutionDate)
+            Guid ProjectId, Guid ProjectTypeId, string ProjectNo, Guid emergency, Guid WorkType, string CourseName, Guid notice, Guid headline, string TextCategory, string lecturer, string LecturerJob, Guid progress, Guid ContentProgress, Guid ProductionProgress, string CreateNote, string ExtraNote,DateTime ExecutionDate, int EpisodeCount)
         {
-            DbParameter[] parameters = new DbParameter[17];
+            DbParameter[] parameters = new DbParameter[18];
             parameters[0] = Manager.CreateParameter("ProjectId", ProjectId);
             parameters[1] = Manager.CreateParameter("ProjectTypeId", ProjectTypeId);
             parameters[2] = Manager.CreateParameter("ProjectNo", ProjectNo);
@@ -902,6 +1000,7 @@ where ProjectId=@ProjectId";
             parameters[14] = Manager.CreateParameter("CreateNote", CreateNote);
             parameters[15] = Manager.CreateParameter("ExtraNote", ExtraNote);
             parameters[16] = Manager.CreateParameter("ExecutionDate", ExecutionDate);
+            parameters[17] = Manager.CreateParameter("EpisodeCount", EpisodeCount);
             int count = this.ModifyOperate.Modify(transaction, Project.UPDATE_Execution, parameters);
             return count;
         }
@@ -1150,13 +1249,13 @@ where ProjectId=@ProjectId";
 
         public int UpdateContentCheck(Guid ProjectId, Guid progress, Guid ContentProgress, Guid ContentCourseIntroductionQuality, Guid ContentResumeQuality,
             Guid ContentPPTQuality, Guid ContentExercisesQuality, Guid ContentTextQuality, Guid ContentIsTimely, DateTime ContentCheckDate,
-            string ContentCheckNote)
+            string ContentCheckNote,Guid ContentCheckPersonInCharge)
         {
             int count = 0;
             DbTransaction transaction = this.BeginTransaction();
             try
             {
-                count = this.UpdateContentCheck(transaction, ProjectId, progress, ContentProgress, ContentCourseIntroductionQuality, ContentResumeQuality, ContentPPTQuality, ContentExercisesQuality, ContentTextQuality, ContentIsTimely, ContentCheckDate, ContentCheckNote);
+                count = this.UpdateContentCheck(transaction, ProjectId, progress, ContentProgress, ContentCourseIntroductionQuality, ContentResumeQuality, ContentPPTQuality, ContentExercisesQuality, ContentTextQuality, ContentIsTimely, ContentCheckDate, ContentCheckNote, ContentCheckPersonInCharge);
                 transaction.Commit();
             }
             catch
@@ -1173,9 +1272,9 @@ where ProjectId=@ProjectId";
         public int UpdateContentCheck(DbTransaction transaction,
             Guid ProjectId, Guid progress, Guid ContentProgress, Guid ContentCourseIntroductionQuality, Guid ContentResumeQuality,
             Guid ContentPPTQuality, Guid ContentExercisesQuality, Guid ContentTextQuality, Guid ContentIsTimely, DateTime ContentCheckDate,
-            string ContentCheckNote)
+            string ContentCheckNote,Guid ContentCheckPersonInCharge)
         {
-            DbParameter[] parameters = new DbParameter[11];
+            DbParameter[] parameters = new DbParameter[12];
             parameters[0] = Manager.CreateParameter("ProjectId", ProjectId);
             parameters[1] = Manager.CreateParameter("progress", progress);
             parameters[2] = Manager.CreateParameter("ContentProgress", ContentProgress);
@@ -1187,6 +1286,7 @@ where ProjectId=@ProjectId";
             parameters[8] = Manager.CreateParameter("ContentIsTimely", ContentIsTimely);
             parameters[9] = Manager.CreateParameter("ContentCheckDate", ContentCheckDate);
             parameters[10] = Manager.CreateParameter("ContentCheckNote", ContentCheckNote);
+            parameters[11] = Manager.CreateParameter("ContentCheckPersonInCharge", ContentCheckPersonInCharge);
             int count = this.ModifyOperate.Modify(transaction, Project.UPDATE_ContentCheck, parameters);
             return count;
         }
@@ -1301,7 +1401,7 @@ where ProjectId=@ProjectId";
             int count = this.ModifyOperate.Modify(transaction, Project.UPDATE_ProductionFinish, parameters);
             return count;
         }
-        public int UpdateProductionCheck(Guid ProjectId, Guid progress, Guid ProductionProgress,
+        public int UpdateProductionCheck(Guid ProjectId, Guid progress, Guid ProductionProgress,Guid ContentProgress,
             Guid ProductionVideoEditCheck, Guid ProductionAudioEditCheck, Guid ProductionProductCheck, Guid ProductionIsTimely
             , DateTime ProductionCheckDate, string ProductionCheckNote)
         {
@@ -1309,7 +1409,7 @@ where ProjectId=@ProjectId";
             DbTransaction transaction = this.BeginTransaction();
             try
             {
-                count = this.UpdateProductionCheck(transaction, ProjectId, progress, ProductionProgress,
+                count = this.UpdateProductionCheck(transaction, ProjectId, progress, ProductionProgress, ContentProgress,
                     ProductionVideoEditCheck, ProductionAudioEditCheck, ProductionProductCheck, ProductionIsTimely, ProductionCheckDate, ProductionCheckNote);
                 transaction.Commit();
             }
@@ -1325,20 +1425,21 @@ where ProjectId=@ProjectId";
         }
 
         public int UpdateProductionCheck(DbTransaction transaction,
-            Guid ProjectId, Guid progress, Guid ProductionProgress,
+            Guid ProjectId, Guid progress, Guid ProductionProgress,Guid ContentProgress,
             Guid ProductionVideoEditCheck, Guid ProductionAudioEditCheck, Guid ProductionProductCheck, Guid ProductionIsTimely
             , DateTime ProductionCheckDate, string ProductionCheckNote)
         {
-            DbParameter[] parameters = new DbParameter[9];
+            DbParameter[] parameters = new DbParameter[10];
             parameters[0] = Manager.CreateParameter("ProjectId", ProjectId);
             parameters[1] = Manager.CreateParameter("progress", progress);
             parameters[2] = Manager.CreateParameter("ProductionProgress", ProductionProgress);
-            parameters[3] = Manager.CreateParameter("ProductionVideoEditCheck", ProductionVideoEditCheck);
-            parameters[4] = Manager.CreateParameter("ProductionAudioEditCheck", ProductionAudioEditCheck);
-            parameters[5] = Manager.CreateParameter("ProductionProductCheck", ProductionProductCheck);
-            parameters[6] = Manager.CreateParameter("ProductionIsTimely", ProductionIsTimely);
-            parameters[7] = Manager.CreateParameter("ProductionCheckDate", ProductionCheckDate);
-            parameters[8] = Manager.CreateParameter("ProductionCheckNote", ProductionCheckNote);
+            parameters[3] = Manager.CreateParameter("ContentProgress", ContentProgress);
+            parameters[4] = Manager.CreateParameter("ProductionVideoEditCheck", ProductionVideoEditCheck);
+            parameters[5] = Manager.CreateParameter("ProductionAudioEditCheck", ProductionAudioEditCheck);
+            parameters[6] = Manager.CreateParameter("ProductionProductCheck", ProductionProductCheck);
+            parameters[7] = Manager.CreateParameter("ProductionIsTimely", ProductionIsTimely);
+            parameters[8] = Manager.CreateParameter("ProductionCheckDate", ProductionCheckDate);
+            parameters[9] = Manager.CreateParameter("ProductionCheckNote", ProductionCheckNote);
             int count = this.ModifyOperate.Modify(transaction, Project.UPDATE_ProductionCheck, parameters);
             return count;
         }

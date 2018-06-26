@@ -124,6 +124,22 @@ namespace ProjectCollection.WebUI.pages
                 //
                 try
                 {
+                    this.PanelSTT.Visible = true;
+                    BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
+                    this.txtSTTFinDate.Text = project.ShorthandFinishDate.ToString();
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+
+                }
+
+                //
+                try
+                {
                     this.PanelContentReceive.Visible = true;
                     InitDropDownListContentReceive();
                     this.InitContentReceiveData();
@@ -594,6 +610,8 @@ namespace ProjectCollection.WebUI.pages
                     this.hidProjectId.Value = BatchProjectId[0].ToString();
                 }
                 this.btnReceive.Text = "批量接收";
+                this.btnSentBack.Visible = true;
+                this.btnSentBack.Text = "批量延迟";
                 LoadProductionReceivePageDate();
             }
             #endregion productionreceivebatchhandle
@@ -807,6 +825,7 @@ namespace ProjectCollection.WebUI.pages
                 project.ContentNeeds = new Guid(this.ddlContentNeeds.SelectedValue);
                 project.PublishNeeds = new Guid(this.ddlPublishNeeds.SelectedValue);
                 project.CanBeSold = new Guid(this.rblCanBeSold.SelectedValue);
+                project.EpisodeCount = Convert.ToInt32(this.ddlEpisodeCount.SelectedValue);
                 if (project.IsCaptureNeeds() == false)
                 {
                     project.progress = new Guid("00000000-0000-0000-0000-000000000120");
@@ -1278,12 +1297,18 @@ namespace ProjectCollection.WebUI.pages
             else if (this.Request["mode"] == "productionreceive")//技术部延时接收
             {
                 BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
-                project.progress = new Guid("00000000-0000-0000-0000-000000000132");
-                project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000132");
-                project.ProductionPersonInCharge = this.LoginUserInfo.Identity;
-                project.ProductionReceiveDelayDate = DateTime.Now;
-                project.ProductionReceiveDelayNote = this.txtProductionReceiveDelayNote.Text.ToString();
-                BLL.Project.UpdateProductionDelayReceive(project);
+                UpdateProductionDelayReceive(project);
+                this.Redirect("~/pages/ProjectList.aspx?mode=productionreceive");
+            }
+            else if (this.Request["mode"] == "productionreceivebatchhandle")//批量技术部延时接收
+            {
+                List<Guid> BatchProjectId = new List<Guid>();
+                BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
+                for (int i = 0; i < BatchProjectId.Count; i++)
+                {
+                    BLL.Project project = BLL.Project.GetProject(BatchProjectId[i]);
+                    UpdateProductionDelayReceive(project);
+                }
                 this.Redirect("~/pages/ProjectList.aspx?mode=productionreceive");
             }
             else { }
@@ -1570,6 +1595,8 @@ namespace ProjectCollection.WebUI.pages
             this.ddlPublishNeeds.SelectedValue = project.PublishNeeds.ToString();
             this.txtPlanNote.Text = ProjectPlan.Note.ToString();
             this.rblCanBeSold.SelectedValue = project.CanBeSold.ToString();
+            this.ddlEpisodeCount.SelectedValue = project.EpisodeCount.ToString();
+            this.txtRecordingDate.Text = ProjectPlan.RecordingDate.ToString("yyyy-MM-dd");
         }
         private void InitCaptureData()
         {
@@ -1896,6 +1923,15 @@ namespace ProjectCollection.WebUI.pages
             project.progress = new Guid("00000000-0000-0000-0000-000000000114");
             project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000114");
             BLL.Project.UpdateProductionReceive(project);
+        }
+        private void UpdateProductionDelayReceive(Project project)
+        {
+            project.progress = new Guid("00000000-0000-0000-0000-000000000132");
+            project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000132");
+            project.ProductionPersonInCharge = this.LoginUserInfo.Identity;
+            project.ProductionReceiveDelayDate = DateTime.Now;
+            project.ProductionReceiveDelayNote = this.txtProductionReceiveDelayNote.Text.ToString();
+            BLL.Project.UpdateProductionDelayReceive(project);
         }
         private void UpdateProductionCheck(Project project)
         {

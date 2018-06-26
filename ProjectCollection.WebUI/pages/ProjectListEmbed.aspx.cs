@@ -47,6 +47,16 @@ namespace ProjectCollection.WebUI.pages
                 this.gvProject.Columns[7].Visible = false;
                 this.gvProject.Columns[8].Visible = true;
             }
+            else if (this.Request["mode"] == "capture")
+            {
+                aBatchHandle.Visible = true;
+                aBatchHandle.Text = "批量处理";
+            }
+            else if (this.Request["mode"] == "shorthand")
+            {
+                aBatchHandle.Visible = true;
+                aBatchHandle.Text = "批量完成";
+            }
             else if (this.Request["mode"] == "contentreceive")
             {
                 //    btnBatchHandle.Visible = true;
@@ -72,7 +82,7 @@ namespace ProjectCollection.WebUI.pages
                 //    btnBatchHandle.Text = "批量接收";
                 //    btnBatchHandle.PostBackUrl = "~/pages/ProjectCreateEdit.aspx?mode=productionreceivebatchhandle";
                 aBatchHandle.Visible = true;
-                aBatchHandle.Text = "批量接收";
+                aBatchHandle.Text = "批量处理";
             }
             else if (this.Request["mode"] == "productionfinish")
             {
@@ -200,8 +210,19 @@ namespace ProjectCollection.WebUI.pages
             }
             else if (this.Request["mode"] == "productionreceive")
             {
-                this.gvProject.DataSource = BLL.Project.GetDictionaryProductionIdProject(new Guid("00000000-0000-0000-0000-000000000106"), new Guid("00000000-0000-0000-0000-000000000132"));
+                List<Project> Projects = BLL.Project.GetDictionaryProductionIdProject(new Guid("00000000-0000-0000-0000-000000000106"), new Guid("00000000-0000-0000-0000-000000000132"));
+                this.gvProject.DataSource = Projects;
                 this.gvProject.DataBind();
+                int count = gvProject.Rows.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    if (Projects[i+(gvProject.PageSize*gvProject.PageIndex)].emergency.ToString() == "00000000-0000-0000-0000-000000000030")
+                    { }
+                    else
+                    {
+                        gvProject.Rows[i].ForeColor = System.Drawing.Color.OrangeRed;
+                    }
+                }
             }
             else if (this.Request["mode"] == "productionfinish")
             {
@@ -277,8 +298,51 @@ namespace ProjectCollection.WebUI.pages
                 }
             }
             hidBatchId.Value = SerializeObj.Serialize(BatchProjectId);
+            Session["BatchId"] = hidBatchId.Value;
+
             if (BatchProjectId.Count > 0)
             {
+                if (this.Request["mode"] == "capture")
+                {
+                    tips.Text = "";
+                    string CurrentProgress="";
+                    bool check = true;
+                    for (int i = 0; i < gvProject.Rows.Count; i++)
+                    {
+                        GridViewRow row = gvProject.Rows[i];
+                        bool isChecked = ((CheckBox)row.FindControl("SelectCheckBox")).Checked;
+                        if (isChecked)
+                        {
+                            CurrentProgress = gvProject.Rows[i].Cells[5].Text;
+                            break;
+                        }
+                     }
+                     for (int i = 0; i < gvProject.Rows.Count; i++)
+                     {
+                            GridViewRow row = gvProject.Rows[i];
+                            bool isChecked = ((CheckBox)row.FindControl("SelectCheckBox")).Checked;
+                            if (isChecked)
+                            {
+                                if (gvProject.Rows[i].Cells[5].Text == CurrentProgress)
+                                { }
+                                else
+                                {
+                                    check = false;
+                                    break;
+                                }
+
+                            }
+                     }
+                    if (check)
+                    {
+                        aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=capturebatchhandle&BatchId=" + hidBatchId.Value;
+                    }
+                    else
+                    {
+                        tips.ForeColor = System.Drawing.Color.Red;
+                        tips.Text = "只能多选状态相同的工单！";
+                    }
+                }
                 if (this.Request["mode"] == "contentreceive")
                 {
                     aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=contentreceivebatchhandle&BatchId=" + hidBatchId.Value;
@@ -290,16 +354,20 @@ namespace ProjectCollection.WebUI.pages
                 }
                 if (this.Request["mode"] == "productionreceive")
                 {
-                    aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=productionreceivebatchhandle&BatchId=" + hidBatchId.Value;
+                    aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=productionreceivebatchhandle";
                 }
                 else if (this.Request["mode"] == "productionfinish")
                 {
-                    aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=productionfinishbatchhandle&BatchId=" + hidBatchId.Value;
+                    aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=productionfinishbatchhandle";
                 }
                 else if (this.Request["mode"] == "productioncheck")
                 {
-                    aBatchSave.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=productioncheckbatchsave&BatchId=" + hidBatchId.Value;
-                    aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=productioncheckbatchhandle&BatchId=" + hidBatchId.Value;
+                    aBatchSave.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=productioncheckbatchsave";
+                    aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=productioncheckbatchhandle";
+                }
+                else if (this.Request["mode"] == "shorthand")
+                {
+                    aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=shorthandbatchhandle";
                 }
             }
             else

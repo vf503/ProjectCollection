@@ -438,6 +438,13 @@ namespace ProjectCollection.BLL
         [TableAttribute.Column("CanBeSold")]
         public Guid CanBeSold { get; set; }
 
+        [TableAttribute.Column("ContentCheckPersonInCharge")]
+        public Guid ContentCheckPersonInCharge { get; set; }
+
+        [TableAttribute.Column("EpisodeCount")]
+        public int EpisodeCount { get; set; }
+        
+
         //Select
         [TableAttribute.Column("WorkTypeText")]
         public string WorkTypeText { get; set; }
@@ -494,6 +501,160 @@ namespace ProjectCollection.BLL
             }
         }
 
+        public string ProgressContentText
+        {
+            get
+            {
+                string ThisValue = "";
+                switch (this.ContentProgress.ToString())
+                {
+                    case "00000000-0000-0000-0000-000000000107":
+                        {
+                            ThisValue = "等待制作部接收";
+                            break;
+                        }
+                    case "00000000-0000-0000-0000-000000000111":
+                        {
+                            ThisValue ="制作部已接收，正在制作";
+                            break;
+                        }
+                    case "00000000-0000-0000-0000-000000000112":
+                        {
+                            ThisValue ="制作部已制作，等待初审";
+                            break;
+                        }
+                    case "00000000-0000-0000-0000-000000000113":
+                        {
+                            ThisValue ="制作部复审通过";
+                            break;
+                        }
+                    case "00000000-0000-0000-0000-000000000122":
+                        {
+                            ThisValue ="制作部初审通过，等待复审";
+                            break;
+                        }
+                    case "00000000-0000-0000-0000-000000000123":
+                        {
+                            ThisValue ="制作部复审退回，正在申请修改";
+                            break;
+                        }
+                    case "00000000-0000-0000-0000-000000000124":
+                        {
+                            ThisValue ="审核未通过，等待修改";
+                            break;
+                        }
+                    case "00000000-0000-0000-0000-000000000130":
+                        {
+                            ThisValue ="制作部未接收";
+                            break;
+                        }
+                    default:
+                        {
+                            ThisValue = "制作部未接收";
+                            break;
+                        }         
+                };
+                return ThisValue;
+            }
+            set
+            {
+                ProgressContentText = value;
+            }
+        }
+
+        public string ProgressProductionText
+        {
+            get
+            {
+                string ThisValue = "";
+                switch (this.ProductionProgress.ToString())
+                {
+                    case "00000000-0000-0000-0000-000000000106":
+                        {
+                            ThisValue ="等待技术部接收";
+                            break;
+                        }
+                    case "00000000-0000-0000-0000-000000000114":
+                        {
+                            ThisValue ="技术部已接收，正在制作";
+                            break;
+                        }
+                    case "00000000-0000-0000-0000-000000000115":
+                        {
+                            ThisValue ="技术部已制作，等待审核";
+                            break;
+                        }
+                    case "00000000-0000-0000-0000-000000000116":
+                        {
+                            ThisValue ="技术部已审核";
+                            break;
+                        }
+                    case "00000000-0000-0000-0000-000000000125":
+                        {
+                            ThisValue ="审核未通过，等待修改";
+                            break;
+                        }
+                    case "00000000-0000-0000-0000-000000000129":
+                        {
+                            ThisValue ="技术部未接收";
+                            break;
+                        }
+                    case "00000000-0000-0000-0000-000000000132":
+                        {
+                            ThisValue ="技术部延迟接收";
+                            break;
+                        }
+                    default:
+                        {
+                            ThisValue = "技术部未接收";
+                            break;
+                        }
+                };
+                return ThisValue;
+            }
+            set
+            {
+                ProgressProductionText = value;
+            }
+        }
+
+        public string ProgressTotalText
+        {
+            get
+            {
+                if (this.IsSingleScreen())
+                {
+                    if(this.ContentNeeds.ToString() == "00000000-0000-0000-0000-000000000042")
+                    {
+                        if (this.ContentProgress.ToString() == "00000000-0000-0000-0000-000000000000" && this.ProductionProgress.ToString() == "00000000-0000-0000-0000-000000000000")
+                        {
+                            return ProgressText;
+                        }
+                        else if (this.ContentProgress.ToString() == "00000000-0000-0000-0000-000000000113" && this.ProductionProgress.ToString() == "00000000-0000-0000-0000-000000000116")
+                        {
+                            return ProgressText;
+                        }
+                        else
+                        {
+                            return ProgressContentText + "；" + ProgressProductionText;
+                        }
+                    }
+                    else
+                    {
+                        return ProgressText;
+                    }
+                }
+                else
+                {
+                    return ProgressText;
+                }
+            }
+            set
+            {
+                ProgressTotalText = value;
+            }
+        }
+
         #endregion 扩展
 
         #endregion 属性
@@ -522,9 +683,9 @@ namespace ProjectCollection.BLL
             return value;
         }
 
-        public static List<Project> GetAllProject(Guid PlanTypeId, Guid progress)
+        public static List<Project> GetAllProject(Guid PlanTypeId, Guid progress,string date)
         {
-            DataTable dt = new DAL.Project().SelectAll(PlanTypeId, progress);
+            DataTable dt = new DAL.Project().SelectAll(PlanTypeId, progress, date);
             List<Project> value = new List<Project>();
             Adapt.Convert.ConvertDataTableToObjectList<Project>(dt, value);
             return value;
@@ -674,9 +835,9 @@ namespace ProjectCollection.BLL
             int count = new DAL.Project().SelectContentReceiveAmount(UserId, DateBegin, DateEnd);
             return count;
         }
-        public static int GetContentCheckAmount(Guid UserId, string DateBegin, string DateEnd)
+        public static int GetContentCheckAmount(Guid UserId,string ProjectType, string DateBegin, string DateEnd)
         {
-            int count = new DAL.Project().SelectContentCheckAmount(UserId, DateBegin, DateEnd);
+            int count = new DAL.Project().SelectContentCheckAmount(UserId, ProjectType, DateBegin, DateEnd);
             return count;
         }
         public static int GetContentRecheckAmount(Guid UserId, string DateBegin, string DateEnd)
@@ -722,6 +883,18 @@ namespace ProjectCollection.BLL
         public static int GetCheckAmount(Guid UserId, string DateBegin, string DateEnd)
         {
             int count = new DAL.Project().SelectCheckAmount(UserId, DateBegin, DateEnd);
+            return count;
+        }
+
+        public static DataTable GetManHoursAmount(string ProjectType, string DateBegin, string DateEnd)
+        {
+            DataTable count = new DAL.Project().SelectManHoursAmount(ProjectType, DateBegin, DateEnd);
+            return count;
+        }
+
+        public static DataTable GetManHoursCalendarDayAmount(string ProjectType, string DateBegin, string DateEnd)
+        {
+            DataTable count = new DAL.Project().SelectManHoursCalendarDayAmount(ProjectType, DateBegin, DateEnd);
             return count;
         }
         #endregion Amount
@@ -797,7 +970,7 @@ namespace ProjectCollection.BLL
         public static int Insert(Project project)
         {
             int count = 0;
-            count = new DAL.Project().Insert(project.ProjectId, project.ProjectPlanId, project.ProjectTypeId, project.ProjectNo, project.emergency, project.WorkType, project.CourseName, project.notice, project.headline, project.TextCategory, project.lecturer, project.LecturerJob, project.progress, project.InCharge, project.CreateNote, project.ExtraNote, project.ContentNeeds, project.PublishNeeds, project.SourceProjectId, project.CanBeSold);
+            count = new DAL.Project().Insert(project.ProjectId, project.ProjectPlanId, project.ProjectTypeId, project.ProjectNo, project.emergency, project.WorkType, project.CourseName, project.notice, project.headline, project.TextCategory, project.lecturer, project.LecturerJob, project.progress, project.InCharge, project.CreateNote, project.ExtraNote, project.ContentNeeds, project.PublishNeeds, project.SourceProjectId, project.CanBeSold,project.EpisodeCount);
             return count;
         }
         #endregion Insert
@@ -806,7 +979,7 @@ namespace ProjectCollection.BLL
         public static int UpdateExecution(Project project)
         {
             int count = 0;
-            count = new DAL.Project().UpdateExecution(project.ProjectId, project.ProjectTypeId, project.ProjectNo, project.emergency, project.WorkType, project.CourseName, project.notice, project.headline, project.TextCategory, project.lecturer, project.LecturerJob, project.progress, project.ContentProgress, project.ProductionProgress, project.CreateNote, project.ExtraNote, project.ExecutionDate);
+            count = new DAL.Project().UpdateExecution(project.ProjectId, project.ProjectTypeId, project.ProjectNo, project.emergency, project.WorkType, project.CourseName, project.notice, project.headline, project.TextCategory, project.lecturer, project.LecturerJob, project.progress, project.ContentProgress, project.ProductionProgress, project.CreateNote, project.ExtraNote, project.ExecutionDate,project.EpisodeCount);
             return count;
         }
 
@@ -855,7 +1028,7 @@ namespace ProjectCollection.BLL
         public static int UpdateContentCheck(Project project)
         {
             int count = 0;
-            count = new DAL.Project().UpdateContentCheck(project.ProjectId, project.progress, project.ContentProgress, project.ContentCourseIntroductionQuality, project.ContentResumeQuality, project.ContentPPTQuality, project.ContentExercisesQuality, project.ContentTextQuality, project.ContentIsTimely, project.ContentCheckDate, project.ContentCheckNote);
+            count = new DAL.Project().UpdateContentCheck(project.ProjectId, project.progress, project.ContentProgress, project.ContentCourseIntroductionQuality, project.ContentResumeQuality, project.ContentPPTQuality, project.ContentExercisesQuality, project.ContentTextQuality, project.ContentIsTimely, project.ContentCheckDate, project.ContentCheckNote,project.ContentCheckPersonInCharge);
             return count;
         }
 
@@ -880,7 +1053,7 @@ namespace ProjectCollection.BLL
         public static int UpdateProductionCheck(Project project)
         {
             int count = 0;
-            count = new DAL.Project().UpdateProductionCheck(project.ProjectId, project.progress, project.ProductionProgress, project.ProductionVideoEditCheck, project.ProductionAudioEditCheck, project.ProductionProductCheck, project.ProductionIsTimely, project.ProductionCheckDate, project.ProductionCheckNote);
+            count = new DAL.Project().UpdateProductionCheck(project.ProjectId, project.progress, project.ProductionProgress,project.ContentProgress, project.ProductionVideoEditCheck, project.ProductionAudioEditCheck, project.ProductionProductCheck, project.ProductionIsTimely, project.ProductionCheckDate, project.ProductionCheckNote);
             return count;
         }
         public static int UpdatePublish(Project project)

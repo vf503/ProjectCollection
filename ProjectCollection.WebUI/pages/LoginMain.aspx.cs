@@ -31,14 +31,14 @@ namespace ProjectCollection.WebUI.pages
             if (Login(this.txtLoginUserName.Text, this.txtLoginPassword.Text, out userInfo))
             {
                 // 登录成功
-                if (LoginUserInfo.Authority.Contains("manage"))
-                {
+                //if (LoginUserInfo.Authority.Contains("manage"))
+                //{
                     this.Redirect("~/pages/index.aspx");
-                }
-                else
-                {
+                //}
+                //else
+                //{
                     this.Redirect("~/pages/MyTask.aspx?mode=manufacture&range=now");
-                }
+                //}
             }
             else
             {

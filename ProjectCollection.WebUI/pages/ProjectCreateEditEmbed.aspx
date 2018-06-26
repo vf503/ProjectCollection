@@ -97,7 +97,20 @@
             });
 
             $("#ProductionEstimatedDate").val($("#hidProductionEstimatedDate").val());
+            //表单顺序
+            if (getQueryString("type") == "00000000-0000-0000-0000-000000000199") {
+                $("#PanelShorthand").hide();
+                $("#PanelCaptureCheck").after($("#PanelProductionReceive"));
+                $("#PanelProductionOperator").insertAfter($("#PanelProductionReceive"));
+                $("#PanelProductionCheck").insertAfter($("#PanelProductionOperator"));
+            }
         })
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        } 
     </script>
 </head>
 <body>
@@ -108,6 +121,17 @@
         <asp:Label ID="labelProjectNoType" runat="server" Text="派单序号："></asp:Label><asp:TextBox ID="txtProjectNo" runat="server" Text=""></asp:TextBox><br />
         派单时间：<asp:TextBox ID="txtSendingDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         记录单类型：<asp:DropDownList ID="ddlProjectType" runat="server"></asp:DropDownList><br />
+        课件集数：<asp:DropDownList ID="ddlEpisodeCount" runat="server">
+            <asp:ListItem>1</asp:ListItem>
+            <asp:ListItem>2</asp:ListItem>
+            <asp:ListItem>3</asp:ListItem>
+            <asp:ListItem>4</asp:ListItem>
+            <asp:ListItem>5</asp:ListItem>
+            <asp:ListItem>6</asp:ListItem>
+            <asp:ListItem>7</asp:ListItem>
+            <asp:ListItem>8</asp:ListItem>
+            <asp:ListItem>9</asp:ListItem>
+        </asp:DropDownList><br />
         <asp:Panel ID="PanelCustom" runat="server">
             是否需要制作部环节：<asp:DropDownList ID="ddlContentNeeds" runat="server"></asp:DropDownList><br />
         </asp:Panel>
@@ -138,6 +162,7 @@
         图文类标识：<asp:TextBox ID="txtTextCategory" runat="server" Text=""></asp:TextBox><br />
         备注：<asp:TextBox ID="txtCreateNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
         特殊要求：<asp:TextBox ID="txtExtraNote" runat="server" TextMode="MultiLine" ForeColor="Red"></asp:TextBox><br />
+        拍摄日期：<asp:TextBox ID="txtRecordingDate" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
         <asp:Label ID="labelPlanNote" runat="server" Text="任务备注："></asp:Label><asp:TextBox ID="txtPlanNote" runat="server" TextMode="MultiLine"></asp:TextBox>
     </asp:Panel>
     <asp:Panel ID="PanelCapture" runat="server" Visible="false">
@@ -180,6 +205,10 @@
         速记质量评价：<asp:DropDownList ID="ddlShorthandQuality" runat="server"></asp:DropDownList><br />
         速记备注：<asp:TextBox ID="txtShorthandNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
     </asp:Panel>
+     <asp:Panel ID="PanelSTT" runat="server" Visible="false">
+        <div class="PanelName">第三方字幕:</div>
+        完成时间：<asp:TextBox ID="txtSTTFinDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
+    </asp:Panel>
     <asp:Panel ID="PanelContentReceive" runat="server" Visible="false">
         <div class="PanelName">制作部负责人填写（接收）:</div>
         制作部门负责人：<asp:TextBox ID="txtContentPersonInCharge" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
@@ -192,23 +221,6 @@
         <asp:RequiredFieldValidator ID="RequiredFieldValidator4" Style="color: red" runat="server" ErrorMessage="RequiredFieldValidator" ControlToValidate="ContentEstimatedDate">请选择日期</asp:RequiredFieldValidator>
         <br />
         接收备注：<asp:TextBox ID="txtContentReceiveNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
-    </asp:Panel>
-    <asp:Panel ID="PanelContentCheck" runat="server" Visible="false">
-        <div class="PanelName">制作部负责人填写（初审）:</div>
-        课程简介质量：<asp:DropDownList ID="ddlContentCourseIntroductionQuality" runat="server"></asp:DropDownList><br />
-        专家简历质量：<asp:DropDownList ID="ddlContentResumeQuality" runat="server"></asp:DropDownList><br />
-        PPT质量：<asp:DropDownList ID="ddlContentPPTQuality" runat="server"></asp:DropDownList><br />
-        考题质量：<asp:DropDownList ID="ddlContentExercisesQuality" runat="server"></asp:DropDownList><br />
-        文稿整理质量：<asp:DropDownList ID="ddlContentTextQuality" runat="server"></asp:DropDownList><br />
-        是否及时：<asp:DropDownList ID="ddlContentIsTimely" runat="server"></asp:DropDownList><br />
-        审核时间：<asp:TextBox ID="txtContentCheckDate" runat="server" Text="自动填充"></asp:TextBox><br />
-        备注：<asp:TextBox ID="txtContentCheckNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
-    </asp:Panel>
-    <asp:Panel ID="PanelContentRecheck" runat="server" Visible="false">
-        <div class="PanelName">制作部复审员填写:</div>
-        复审审核人：<asp:TextBox ID="txtContentRecheckPersonInCharge" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
-        审核时间：<asp:TextBox ID="txtContentRecheckDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
-        复审意见：<asp:TextBox ID="txtContentRecheckNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
     </asp:Panel>
     <asp:Panel ID="PanelContentOperator" runat="server" Visible="false">
         <div class="PanelName">制作部制作人员填写:</div>
@@ -229,6 +241,23 @@
         考题：<asp:DropDownList ID="ddlContentExercisesNeeds" runat="server"></asp:DropDownList><br />
         文稿整理：<asp:DropDownList ID="ddlContentTextEditNeeds" runat="server"></asp:DropDownList><br />
         制作部制作员备注：<asp:TextBox ID="txtContentOperateNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
+    </asp:Panel>
+    <asp:Panel ID="PanelContentCheck" runat="server" Visible="false">
+        <div class="PanelName">制作部负责人填写（初审）:</div>
+        课程简介质量：<asp:DropDownList ID="ddlContentCourseIntroductionQuality" runat="server"></asp:DropDownList><br />
+        专家简历质量：<asp:DropDownList ID="ddlContentResumeQuality" runat="server"></asp:DropDownList><br />
+        PPT质量：<asp:DropDownList ID="ddlContentPPTQuality" runat="server"></asp:DropDownList><br />
+        考题质量：<asp:DropDownList ID="ddlContentExercisesQuality" runat="server"></asp:DropDownList><br />
+        文稿整理质量：<asp:DropDownList ID="ddlContentTextQuality" runat="server"></asp:DropDownList><br />
+        是否及时：<asp:DropDownList ID="ddlContentIsTimely" runat="server"></asp:DropDownList><br />
+        审核时间：<asp:TextBox ID="txtContentCheckDate" runat="server" Text="自动填充"></asp:TextBox><br />
+        备注：<asp:TextBox ID="txtContentCheckNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
+    </asp:Panel>
+    <asp:Panel ID="PanelContentRecheck" runat="server" Visible="false">
+        <div class="PanelName">制作部复审员填写:</div>
+        复审审核人：<asp:TextBox ID="txtContentRecheckPersonInCharge" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
+        审核时间：<asp:TextBox ID="txtContentRecheckDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
+        复审意见：<asp:TextBox ID="txtContentRecheckNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
     </asp:Panel>
     <asp:Panel ID="PanelProductionReceive" runat="server" Visible="false">
         <div class="PanelName">技术部负责人填写（接收）:</div>

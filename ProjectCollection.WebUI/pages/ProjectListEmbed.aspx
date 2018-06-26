@@ -107,6 +107,7 @@
                 </asp:GridView>
                 <asp:HyperLink ID="aBatchSave" runat="server" Target="_parent" CssClass="LinkBtn" Visible="false">批量保存</asp:HyperLink>
                 <asp:HyperLink ID="aBatchHandle" runat="server" Target="_parent" CssClass="LinkBtn" Visible="false">批量处理</asp:HyperLink>
+                <asp:Label ID="tips" runat="server"></asp:Label>
         <asp:HiddenField ID="hidBatchId" runat="server"/>
             </ContentTemplate>
         </asp:UpdatePanel>

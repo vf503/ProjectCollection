@@ -135,6 +135,11 @@ namespace ProjectCollection.BLL
             return dt;
         }
 
+        public static DataTable GetDataByRole(Guid RoleID)
+        {
+            DataTable dt = new DAL.UserInfo().SelectListByRole(RoleID);
+            return dt;
+        }
         //ID
         public static string GetRealNameByID(Guid Id)
         {

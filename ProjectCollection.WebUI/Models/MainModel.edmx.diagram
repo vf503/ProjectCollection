@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9db6c4410fb24e439b38c1f975b89bb3" Name="Diagram1">
+        <EntityTypeShape EntityType="ProjectCollectionModel.CustomProject" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.data_dictionary" Width="1.5" PointX="0.625" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.ProjectPlan" Width="1.5" PointX="5.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.user_info" Width="1.5" PointX="0.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.role_authority" Width="1.5" PointX="11.875" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.user_authority" Width="1.5" PointX="11.75" PointY="2.625" IsExpanded="true" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_CustomProject_To_data_dictionary" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_CustomProject_To_ProjectPlan" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_CustomProject_To_user_info" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_CustomProject_To_user_info2" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_CustomProject_To_user_info3" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_CustomProject_To_user_info4" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.Project" Width="1.5" PointX="7.875" PointY="0.625" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.ProjectPlanRecord" Width="1.5" PointX="10.375" PointY="9.75" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.ProjectRecord" Width="1.5" PointX="12.375" PointY="9.75" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.BatchProject" Width="1.5" PointX="2.75" PointY="10.5" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info1" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info2" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info3" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info4" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info5" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

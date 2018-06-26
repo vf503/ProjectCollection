@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.UI.WebControls;
+using System.Linq;
 
 namespace ProjectCollection.WebUI.pages
 {
@@ -208,6 +209,17 @@ namespace ProjectCollection.WebUI.pages
             {
                 this.ContentReceiveDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ExecutionDate) + ")";
             }
+            //新三分屏
+            else if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
+            {
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                          where p.ProjectId.ToString() == project.ProjectId.ToString()
+                                                                          select p).First();
+                    this.ContentReceiveDuration.Text = "(" + DateTimeHandle.DateDiffDay(DateTime.Now, Convert.ToDateTime(ThisProject.ShorthandFinishDate)) + ")";
+                }
+            }
             else
             { this.ContentReceiveDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ShorthandFinishDate) + ")"; }
         }
@@ -223,18 +235,44 @@ namespace ProjectCollection.WebUI.pages
             {
                 this.ContentReceiveDuration.Text = "(" + DateTimeHandle.DateDiffDay(project.ContentAssignmentDate, project.ExecutionDate) + ")";
             }
+            //新三分屏
+            else if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
+            {
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                          where p.ProjectId.ToString() == project.ProjectId.ToString()
+                                                                          select p).First();
+                    this.ContentReceiveDuration.Text = "(" + DateTimeHandle.DateDiffDay(Convert.ToDateTime(ThisProject.ContentAssignmentDate), Convert.ToDateTime(ThisProject.ShorthandFinishDate)) + ")";
+                }
+            }
             else
             { this.ContentReceiveDuration.Text = "(" + DateTimeHandle.DateDiffDay(project.ContentAssignmentDate, project.ShorthandFinishDate) + ")"; }
         }
-        protected void ShowProductionReceiveDurationUnfinish(Project project)
+        protected void ShowProductionReceiveDurationUnfinish(Project project, string Message, string color)
         {
             if (//单视频(必无速记)
                 project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017")
                 || project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000019")
                 )
-            { this.ProductionReceiveDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ExecutionDate) + ")"; }
+            {
+                this.ProductionReceiveState.Text = Message;
+                ProgressProductionReceive.BackColor = System.Drawing.ColorTranslator.FromHtml(color);
+                this.ProductionReceiveDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ExecutionDate) + ")";
+            }
+            //新三分屏(无速记)
+            else if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
+            {
+                this.ProgressProductionReceive.Visible = false;
+                this.NewProgressProductionReceive.Visible = true;
+                this.NewProductionReceiveState.Text = Message;
+                NewProgressProductionReceive.BackColor = System.Drawing.ColorTranslator.FromHtml(color);
+                this.NewProductionReceiveDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ExecutionDate) + ")";
+            }
             else//三分屏
             {
+                this.ProductionReceiveState.Text = Message;
+                ProgressProductionReceive.BackColor = System.Drawing.ColorTranslator.FromHtml(color);
                 if (//无速记
                     project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017")
                     || project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000019")
@@ -255,15 +293,30 @@ namespace ProjectCollection.WebUI.pages
             }
 
         }
-        protected void ShowProductionReceiveDurationFinish(Project project)
+        protected void ShowProductionReceiveDurationFinish(Project project, string Message, string color)
         {
             if (//单视频(必无速记)
                 project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017")
                 || project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000019")
                 )
-            { this.ProductionReceiveDuration.Text = DateTimeHandle.DateDiffDay(project.ProductionReceiveDate, project.ExecutionDate); }
+            {
+                this.ProductionReceiveState.Text = Message;
+                ProgressProductionReceive.BackColor = System.Drawing.ColorTranslator.FromHtml(color);
+                this.ProductionReceiveDuration.Text = DateTimeHandle.DateDiffDay(project.ProductionReceiveDate, project.ExecutionDate);
+            }
+            //新三分屏
+            else if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
+            {
+                this.ProgressProductionReceive.Visible = false;
+                this.NewProgressProductionReceive.Visible = true;
+                this.NewProductionReceiveState.Text = Message;
+                NewProgressProductionReceive.BackColor = System.Drawing.ColorTranslator.FromHtml(color);
+                this.NewProductionReceiveDuration.Text = DateTimeHandle.DateDiffDay(project.ProductionReceiveDate, project.ExecutionDate);
+            }
             else//三分屏
             {
+                this.ProductionReceiveState.Text = Message;
+                ProgressProductionReceive.BackColor = System.Drawing.ColorTranslator.FromHtml(color);
                 if (//无速记
                     project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017")
                     || project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000019")
@@ -391,12 +444,41 @@ namespace ProjectCollection.WebUI.pages
             ProgressCheck.BackColor = System.Drawing.ColorTranslator.FromHtml("#e3f0f6");
             CheckDuration.Text = "";
             CheckState.Text = "";
+            //新流程
+            this.NewProgressProductionReceive.Visible = false;
+            NewProgressProductionReceive.BackColor = System.Drawing.ColorTranslator.FromHtml("#e3f0f6");
+            ProductionReceiveDuration.Text = "";
+            ProductionReceiveState.Text = "";
+            this.NewProgressProductionOperator.Visible = false;
+            NewProgressProductionOperator.BackColor = System.Drawing.ColorTranslator.FromHtml("#e3f0f6");
+            ProductionOperatorDuration.Text = "";
+            ProductionOperatorState.Text = "";
+            this.NewProgressProductionCheck.Visible = false;
+            NewProgressProductionCheck.BackColor = System.Drawing.ColorTranslator.FromHtml("#e3f0f6");
+            ProductionCheckDuration.Text = "";
+            ProductionCheckState.Text = "";
+            this.NewProgressSTT.Visible = false;
+            NewProgressSTT.BackColor = System.Drawing.ColorTranslator.FromHtml("#e3f0f6");
+            NewProgressSTTDuration.Text = "";
+            NewProgressSTTState.Text = "";
             #endregion
             BLL.Project project = BLL.Project.GetProject(ProjectId);
             this.ProgressNo.Text = "编号：" + project.ProjectNo.ToString();
             this.ProgressDate.Text = "派单时间：" + project.SendingDate.ToString("yy-MM-dd HH:mm");
             this.ProgressTitle.Text = project.CourseName.ToString();
             this.ProgressLecturer.Text = project.lecturer.ToString();
+            #region 新流程
+            if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
+            {
+                ProgressProductionReceive.Visible = false;
+                NewProgressProductionReceive.Visible = true;
+                ProgressProductionOperator.Visible = false;
+                NewProgressProductionOperator.Visible = true;
+                ProgressProductionCheck.Visible = false;
+                NewProgressProductionCheck.Visible = true;
+                NewProgressSTT.Visible = true;
+            }
+            #endregion 新流程
             #region 采集
             if (//无采集
             project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000019")
@@ -471,6 +553,8 @@ namespace ProjectCollection.WebUI.pages
             || project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000021")
             || project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000037")
             || project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000038")
+            //新三分屏无速记 
+            || project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199")
                 )
             {
                 this.ProgressShorthand.Visible = false;
@@ -580,52 +664,102 @@ namespace ProjectCollection.WebUI.pages
             //接收
             if (project.ProductionProgress == new Guid("00000000-0000-0000-0000-000000000106"))
             {
-                this.ProductionReceiveState.Text = "等待接收";
-                ProgressProductionReceive.BackColor = System.Drawing.ColorTranslator.FromHtml("#e29e4b");
-                ShowProductionReceiveDurationUnfinish(project);
+                ShowProductionReceiveDurationUnfinish(project, "等待接收", "#e29e4b");
             }
             else if (project.progress == new Guid("00000000-0000-0000-0000-000000000132"))
             {
-                this.ProductionReceiveState.Text = "延迟接收";
-                ProgressProductionReceive.BackColor = System.Drawing.ColorTranslator.FromHtml("#f55066");
-                ShowProductionReceiveDurationUnfinish(project);
+                ShowProductionReceiveDurationUnfinish(project, "延迟接收", "#f55066");
             }
             else if (project.ProductionReceiveDate != new DateTime(0001, 1, 1, 00, 00, 00))
             {
-                this.ProductionReceiveState.Text = "√";
-                ProgressProductionReceive.BackColor = System.Drawing.ColorTranslator.FromHtml("#02f1e4");
-                ShowProductionReceiveDurationFinish(project);
+                ShowProductionReceiveDurationFinish(project, "√", "#02f1e4");
             }
             else { }
             //制作
             if (project.ProductionProgress == new Guid("00000000-0000-0000-0000-000000000114"))
             {
-                this.ProductionOperatorState.Text = "正在制作";
-                ProgressProductionOperator.BackColor = System.Drawing.ColorTranslator.FromHtml("#b7d28d");
-                this.ProductionOperatorDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ProductionReceiveDate) + ")";
+                if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
+                {
+                    this.NewProductionOperatorState.Text = "正在制作";
+                    NewProgressProductionOperator.BackColor = System.Drawing.ColorTranslator.FromHtml("#b7d28d");
+                    this.NewProductionOperatorDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ProductionReceiveDate) + ")";
+                }
+                else
+                {
+                    this.ProductionOperatorState.Text = "正在制作";
+                    ProgressProductionOperator.BackColor = System.Drawing.ColorTranslator.FromHtml("#b7d28d");
+                    this.ProductionOperatorDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ProductionReceiveDate) + ")";
+                }
             }
             else if (project.ProductionFinishDate != new DateTime(0001, 1, 1, 00, 00, 00))
             {
-                this.ProductionOperatorState.Text = "√";
-                ProgressProductionOperator.BackColor = System.Drawing.ColorTranslator.FromHtml("#02f1e4");
-                this.ProductionOperatorDuration.Text = "(" + DateTimeHandle.DateDiffDay(project.ProductionFinishDate, project.ProductionReceiveDate) + ")";
+                if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
+                {
+                    this.NewProductionOperatorState.Text = "√";
+                    NewProgressProductionOperator.BackColor = System.Drawing.ColorTranslator.FromHtml("#02f1e4");
+                    this.NewProductionOperatorDuration.Text = "(" + DateTimeHandle.DateDiffDay(project.ProductionFinishDate, project.ProductionReceiveDate) + ")";
+                }
+                else
+                {
+                    this.ProductionOperatorState.Text = "√";
+                    ProgressProductionOperator.BackColor = System.Drawing.ColorTranslator.FromHtml("#02f1e4");
+                    this.ProductionOperatorDuration.Text = "(" + DateTimeHandle.DateDiffDay(project.ProductionFinishDate, project.ProductionReceiveDate) + ")";
+                }
             }
             else { }
             //审核
             if (project.ProductionProgress == new Guid("00000000-0000-0000-0000-000000000115"))
             {
-                this.ProductionCheckState.Text = "等待审核";
-                ProgressProductionCheck.BackColor = System.Drawing.ColorTranslator.FromHtml("#e29e4b");
-                this.ProductionCheckDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ProductionFinishDate) + ")";
+                if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
+                {
+                    this.NewProductionCheckState.Text = "等待审核";
+                    NewProgressProductionCheck.BackColor = System.Drawing.ColorTranslator.FromHtml("#e29e4b");
+                    this.NewProductionCheckDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ProductionFinishDate) + ")";
+                }
+                else
+                {
+                    this.ProductionCheckState.Text = "等待审核";
+                    ProgressProductionCheck.BackColor = System.Drawing.ColorTranslator.FromHtml("#e29e4b");
+                    this.ProductionCheckDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ProductionFinishDate) + ")";
+                }
             }
             else if (project.ProductionCheckDate != new DateTime(0001, 1, 1, 00, 00, 00))
             {
-                this.ProductionCheckState.Text = "√";
-                ProgressProductionCheck.BackColor = System.Drawing.ColorTranslator.FromHtml("#02f1e4");
-                this.ProductionCheckDuration.Text = "(" + DateTimeHandle.DateDiffDay(project.ProductionCheckDate, project.ProductionFinishDate) + ")";
+                if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
+                {
+                    this.NewProductionCheckState.Text = "√";
+                    NewProgressProductionCheck.BackColor = System.Drawing.ColorTranslator.FromHtml("#02f1e4");
+                    using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                    {
+                        ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                              where p.ProjectId.ToString() == project.ProjectId.ToString()
+                                                                              select p).First();
+                        this.NewProductionCheckDuration.Text = "(" + DateTimeHandle.DateDiffDay(Convert.ToDateTime(ThisProject.ProductionCheckDate), Convert.ToDateTime(ThisProject.VideoEncodeFinishDate)) + ")";
+                    }
+                }
+                else
+                {
+                    this.ProductionCheckState.Text = "√";
+                    ProgressProductionCheck.BackColor = System.Drawing.ColorTranslator.FromHtml("#02f1e4");
+                    this.ProductionCheckDuration.Text = "(" + DateTimeHandle.DateDiffDay(project.ProductionCheckDate, project.ProductionFinishDate) + ")";
+                }
             }
             else { }
             #endregion
+            #region STT
+            if (project.progress == new Guid("00000000-0000-0000-0000-000000000197"))
+            {
+                this.NewProgressSTTState.Text = "等待制作";
+                NewProgressSTT.BackColor = System.Drawing.ColorTranslator.FromHtml("#e29e4b");
+                this.NewProgressSTTDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ProductionCheckDate) + ")";
+            }
+            else if (project.ShorthandFinishDate != new DateTime(0001, 1, 1, 00, 00, 00))
+            {
+                this.NewProgressSTTState.Text = "√";
+                NewProgressSTT.BackColor = System.Drawing.ColorTranslator.FromHtml("#02f1e4");
+                this.NewProgressSTTDuration.Text = "(" + DateTimeHandle.DateDiffDay(project.ShorthandFinishDate, project.ProductionCheckDate) + ")";
+            }
+            #endregion STT
             #region 发布审核
             if (project.PublishNeeds == new Guid("00000000-0000-0000-0000-000000000043")) //无发布
             {

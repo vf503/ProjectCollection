@@ -77,10 +77,17 @@
                             <asp:HyperLink ID="HyperLink2" runat="server" NavigateUrl="~/pages/ProjectPlanList.aspx?mode=recond">拍摄管理</asp:HyperLink></li>--%>
                         <li id="NavLi4" runat="server" visible="true">
                             <asp:HyperLink ID="HyperLink4" runat="server" NavigateUrl="~/pages/MyTask.aspx">我的任务</asp:HyperLink></li>
+                        <li id="NavLi6" runat="server" visible="false">
+                            <asp:HyperLink ID="HyperLink6" runat="server" NavigateUrl="~/pages/MyTask.aspx?mode=manage&range=now">管理</asp:HyperLink></li>
                         <li id="NavLi2" runat="server" visible="true">
                             <asp:HyperLink ID="HyperLink2" runat="server" NavigateUrl="~/pages/ProjectPlanListMasterDetail.aspx?mode=browse">计划</asp:HyperLink></li>
                         <li id="NavLi3" runat="server">
                             <asp:HyperLink ID="HyperLink3" runat="server" NavigateUrl="~/pages/ProjectListFilter.aspx?mode=browse">工单</asp:HyperLink></li>
+                        <li id="NavLi5" runat="server">
+                            <asp:HyperLink ID="HyperLink5" runat="server" NavigateUrl="~/pages/amount.aspx">图表分析(试运行)</asp:HyperLink></li>
+                        <li id="NaviLi7" runat="server">
+                            <asp:HyperLink ID="HyperLink1" runat="server" Target="_blank">课件</asp:HyperLink></li>
+
                         <%--<li id="NavLi19" runat="server">
                             <asp:HyperLink ID="HyperLink19" runat="server" NavigateUrl="~/pages/CustomProjectList.aspx?type=00000000-0000-0000-0000-000000000202&mode=browse">公开课浏览</asp:HyperLink></li>
                          <li id="NavLi1" runat="server" visible="false">

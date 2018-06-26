@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -47,6 +48,10 @@ namespace ProjectCollection.WebUI.pages.common
             //    NavLi18.Visible = true;
             //}
             //else { }
+            string encode = string.Empty;
+            byte[] bytes = Encoding.UTF8.GetBytes(this.LoginUserInfo.LoginName + "_" + this.LoginUserInfo.Password);
+            encode = HttpUtility.UrlEncode(Convert.ToBase64String(bytes), Encoding.UTF8);
+            HyperLink1.NavigateUrl = "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=dispatch&login=" + encode;
             if (LoginUserInfo.Authority.Contains("PlanManage"))
             {
                 HyperLink2.NavigateUrl = "~/pages/ProjectPlanListMasterDetail.aspx";
@@ -56,6 +61,11 @@ namespace ProjectCollection.WebUI.pages.common
             {
                 HyperLink4.Text = "管理";
                 HyperLink4.NavigateUrl = "~/pages/MyTask.aspx?mode=manage&range=now";
+            }
+            else if (LoginUserInfo.Authority.Contains("cross"))
+            {
+                NavLi6.Visible = true;
+                HyperLink4.NavigateUrl = "~/pages/MyTask.aspx?mode=manufacture&range=now";
             }
             else 
             {

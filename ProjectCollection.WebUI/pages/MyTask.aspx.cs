@@ -240,6 +240,40 @@ namespace ProjectCollection.WebUI.pages
                         else { }
                         //HidPanelFilterGrid(CurrentAuthority);
                     }
+                    else if (CurrentAuthority == "CustomCheck")
+                    {
+                        CurrentPage.FindControl("Panel" + CurrentAuthority).Visible = true;
+                        if (ModeRange == "now")
+                        {
+                            IframeCustomCheck.Visible = true;
+                            IframeCustomCheck.Attributes["src"] = "~/pages/CustomTaskList.aspx?mode=check";
+                        }
+                        else if (ModeRange == "all")
+                        {
+                            //ShowAmountData(CurrentAuthority);
+                        }
+                        else { }
+                        //HidPanelFilterGrid(CurrentAuthority);
+                    }
+                    else if (CurrentAuthority == "CustomExecute")
+                    {
+                        CurrentPage.FindControl("Panel" + CurrentAuthority).Visible = true;
+                        if (ModeRange == "now")
+                        {
+                            IframeCustomExecute.Visible = true;
+                            IframeCustomExecute.Attributes["src"] = "~/pages/CustomTaskList.aspx?mode=execute";
+                        }
+                        else if (ModeRange == "all")
+                        {
+                            //ShowAmountData(CurrentAuthority);
+                        }
+                        else { }
+                        //HidPanelFilterGrid(CurrentAuthority);
+                    }
+                    else if (CurrentAuthority == "cross"|| CurrentAuthority == "CreateProject")
+                    {
+
+                    }
                     else
                     {
                         Panel CurrentPanel = (Panel)CurrentPage.FindControl("Panel" + CurrentAuthority);
@@ -335,13 +369,22 @@ namespace ProjectCollection.WebUI.pages
                 case "contentcheck":
                     {
                         LabelAmountcontentcheck.Visible = true;
-                        LabelAmountcontentcheck.Text = BLL.Project.GetContentCheckAmount(CurrentUserInfo.Identity, deStart.Date.ToString(), deEnd.Date.ToString()).ToString();
+                        int TypeA = BLL.Project.GetContentCheckAmount(CurrentUserInfo.Identity, "A", deStart.Date.ToString(), deEnd.Date.ToString());
+                        int TypeB = BLL.Project.GetContentCheckAmount(CurrentUserInfo.Identity, "B", deStart.Date.ToString(), deEnd.Date.ToString());
+                        int TypeS = BLL.Project.GetContentCheckAmount(CurrentUserInfo.Identity, "C", deStart.Date.ToString(), deEnd.Date.ToString());
+                        LabelAmountcontentcheck.Text = "自筹：" + TypeA.ToString()+ " ; 会议：" + TypeB.ToString() + " ; 单改三：" + TypeS.ToString();
                         break;
                     }
                 case "contentrecheck":
                     {
                         LabelAmountcontentrecheck.Visible = true;
-                        LabelAmountcontentrecheck.Text = BLL.Project.GetContentRecheckAmount(CurrentUserInfo.Identity, deStart.Date.ToString(), deEnd.Date.ToString()).ToString();
+                        int TypeA2 = BLL.Project.GetContentRecheckAmount(CurrentUserInfo.Identity, deStart.Date.ToString(), deEnd.Date.ToString());
+                        LabelAmountcontentrecheck.Text = "自筹：" + TypeA2.ToString();
+                        LabelAmountcontentcheckTotal.Visible = true;
+                        int TypeA1 = BLL.Project.GetContentCheckAmount(CurrentUserInfo.Identity, "A", deStart.Date.ToString(), deEnd.Date.ToString());
+                        int TypeB1 = BLL.Project.GetContentCheckAmount(CurrentUserInfo.Identity, "B", deStart.Date.ToString(), deEnd.Date.ToString());
+                        int TypeS1 = BLL.Project.GetContentCheckAmount(CurrentUserInfo.Identity, "C", deStart.Date.ToString(), deEnd.Date.ToString());
+                        LabelAmountcontentcheckTotal.Text = "审核合计：" + (TypeA2 + TypeA1 + TypeB1 + TypeS1).ToString();
                         break;
                     }
                 case "contentfinish":

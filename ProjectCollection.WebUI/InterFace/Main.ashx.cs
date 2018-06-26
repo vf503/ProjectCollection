@@ -460,7 +460,24 @@ namespace ProjectCollection.WebUI.WebService
                 context.Response.ContentType = "text/plain";
                 context.Response.Write(rss.ToString());
             }
-            #endregion Project
+            else if (HttpContext.Current.Request["method"] == "UpdateContentProgress")
+            {
+                string id = HttpContext.Current.Request["id"];
+                string value = HttpContext.Current.Request["progress"];
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                           where p.ProjectNo == id
+                                           select p).First();
+                    ThisProject.progress = new Guid(value);
+                    ThisProject.ContentProgress = new Guid(value);
+                    ThisProject.ShorthandFinishDate = DateTime.Now;
+                    ProjectModel.SaveChanges();
+                }
+                context.Response.ContentType = "text/plain";
+                context.Response.Write("success");
+            }
+        #endregion Project
             else { }
         }
 

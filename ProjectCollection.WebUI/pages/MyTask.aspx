@@ -169,6 +169,8 @@
             <asp:Label ID="Labelcontentrecheck" runat="server" Text="内容部复审"></asp:Label>
             <iframe id="Iframecontentrecheck" runat="server"></iframe>
             <asp:Label ID="LabelAmountcontentrecheck" runat="server" Visible="false" Text=""></asp:Label>
+            <br />
+            <asp:Label ID="LabelAmountcontentcheckTotal" runat="server" Visible="false" Text=""></asp:Label>
         </asp:Panel>
         <asp:Panel ID="Panelproductionreceive" runat="server" Visible="false">
             <asp:Label ID="Labelproductionreceive" runat="server" Text="技术部接收"></asp:Label>
@@ -214,6 +216,16 @@
             <asp:Label ID="LabelOpenClassCheck" runat="server" Text="公开课审核"></asp:Label>
             <iframe id="IframeOpenClassCheck" runat="server"></iframe>
             <asp:Label ID="LabelAmountOpenClassCheck" runat="server" Visible="false" Text=""></asp:Label>
+        </asp:Panel>
+        <asp:Panel ID="PanelCustomCheck" runat="server" Visible="false">
+            <asp:Label ID="LabelCustomCheck" runat="server" Text="定制任务审核"></asp:Label>
+            <iframe id="IframeCustomCheck" runat="server"></iframe>
+            <asp:Label ID="LabelAmountCustomCheck" runat="server" Visible="false" Text=""></asp:Label>
+        </asp:Panel>
+        <asp:Panel ID="PanelCustomExecute" runat="server" Visible="false">
+            <asp:Label ID="LabelCustomExecute" runat="server" Text="定制任务执行"></asp:Label>
+            <iframe id="IframeCustomExecute" runat="server"></iframe>
+            <asp:Label ID="LabelAmountCustomExecute" runat="server" Visible="false" Text=""></asp:Label>
         </asp:Panel>
     </div>
 </asp:Content>

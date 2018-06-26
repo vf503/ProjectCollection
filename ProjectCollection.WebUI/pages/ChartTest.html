@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8" />
+    <script src="../script/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="../script/Chart.js"></script>
+    <script>
+        var BarOptions = {
+            tooltips: {
+                enabled:true,
+                intersect: true,
+                mode: 'nearest',
+            },
+            //showAllTooltips: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            hover: {
+                animationDuration: 0
+            },
+            animation: {
+                onComplete: function () {
+                    this.chart.controller.draw();
+                    drawValue(this, 1);
+                },
+                onProgress: function (state) {
+                    var animation = state.animationObject;
+                    drawValue(this, animation.currentStep / animation.numSteps);
+                }
+            }
+        };
+        var BarData = {
+            labels: ["<%=ChartLabels%>"],
+            datasets: [
+                {
+                label: '工单数',
+                data: ['<%=ChartCount%>'],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+                }
+            ]
+        };
+        var SubData = ['<%=ChartRate%>'];
+        //Main
+        $(document).ready(function () {
+            var ctx = $("#BarChart");
+            var BarChart = new Chart(ctx, {
+                type: 'bar',
+                data:BarData,
+                options: BarOptions,
+            });
+        });
+        //
+        //Begin Show tooltips always even the stats are zero
+        Chart.pluginService.register({
+            beforeRender: function (chart) {
+                if (chart.config.options.showAllTooltips) {
+                    // create an array of tooltips
+                    // we can't use the chart tooltip because there is only one tooltip per chart
+                    chart.pluginTooltips = [];
+                    chart.config.data.datasets.forEach(function (dataset, i) {
+                        chart.getDatasetMeta(i).data.forEach(function (sector, j) {
+                            chart.pluginTooltips.push(new Chart.Tooltip({
+                                _chart: chart.chart,
+                                _chartInstance: chart,
+                                _data: chart.data,
+                                _options: chart.options.tooltips,
+                                _active: [sector]
+                            }, chart));
+                        });
+                    });
+
+                    // turn off normal tooltips
+                    chart.options.tooltips.enabled = false;
+                }
+            },
+            afterDraw: function (chart, easing) {
+                if (chart.config.options.showAllTooltips) {
+                    // we don't want the permanent tooltips to animate, so don't do anything till the animation runs atleast once
+                    if (!chart.allTooltipsOnce) {
+                        if (easing !== 1)
+                            return;
+                        chart.allTooltipsOnce = true;
+                    }
+
+                    // turn on tooltips
+                    chart.options.tooltips.enabled = true;
+                    Chart.helpers.each(chart.pluginTooltips, function (tooltip) {
+                        tooltip.initialize();
+                        tooltip.update();
+                        // we don't actually need this since we are not animating tooltips
+                        tooltip.pivot();
+                        tooltip.transition(easing).draw();
+                    });
+                    chart.options.tooltips.enabled = false;
+                }
+            }
+        });
+        //End Show tooltips always even the stats are zero 
+
+        //Begin ShowText
+        // Font color for values inside the bar
+        var insideFontColor = '255,255,255';
+        // Font color for values above the bar
+        var outsideFontColor = '0,0,0';
+        // How close to the top edge bar can be before the value is put inside it
+        var topThreshold = 20;
+
+        var modifyCtx = function (ctx) {
+            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, 'normal', Chart.defaults.global.defaultFontFamily);
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            return ctx;
+        };
+
+        var fadeIn = function (ctx, obj, x, y, black, step) {
+            var ctx = modifyCtx(ctx);
+            var alpha = 0;
+            ctx.fillStyle = black ? 'rgba(' + outsideFontColor + ',' + step + ')' : 'rgba(' + insideFontColor + ',' + step + ')';
+            ctx.fillText(obj, x, y);
+        };
+
+        var drawValue = function (context, step) {
+            var ctx = context.chart.ctx;
+
+            context.data.datasets.forEach(function (dataset) {
+                for (var i = 0; i < dataset.data.length; i++) {
+                    var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model;
+                    var textY = (model.y > topThreshold) ? model.y - 3 : model.y + 20;
+                    fadeIn(ctx, dataset.data[i] + SubData[i], model.x, textY, model.y > topThreshold, step);
+                }
+            });
+        };
+        //End ShowText
+    </script>
+</head>
+<body>
+    <canvas id="BarChart" width="400" height="400"></canvas>
+</body>
+</html>

@@ -28,6 +28,7 @@
             position: fixed;
             bottom: 0;
             opacity: 0.80;
+            z-index:99;
             _position: absolute;
             _bottom: auto;
             _top: expression(eval(document.documentElement.scrollTop));
@@ -90,6 +91,36 @@
             <br />
             <asp:Label ID="ShorthandState" runat="server" Text=""></asp:Label>
         </asp:Panel>
+        <!--新流程OP-->
+        <asp:Panel ID="NewProgressProductionReceive" runat="server" BackColor="#e3f0f6" CssClass="ProgressBox">
+            <asp:Label ID="NewProductionReceiveInfo" runat="server" Text="技术部接收"></asp:Label>
+            <br />
+            <asp:Label ID="NewProductionReceiveDuration" runat="server" Text=""></asp:Label>
+            <br />
+            <asp:Label ID="NewProductionReceiveState" runat="server" Text=""></asp:Label>
+        </asp:Panel>
+        <asp:Panel ID="NewProgressProductionOperator" runat="server" BackColor="#e3f0f6" CssClass="ProgressBox">
+            <asp:Label ID="NewProductionOperatorInfo" runat="server" Text="技术部制作"></asp:Label>
+            <br />
+            <asp:Label ID="NewProductionOperatorDuration" runat="server" Text=""></asp:Label>
+            <br />
+            <asp:Label ID="NewProductionOperatorState" runat="server" Text=""></asp:Label>
+        </asp:Panel>
+        <asp:Panel ID="NewProgressProductionCheck" runat="server" BackColor="#e3f0f6" CssClass="ProgressBox">
+            <asp:Label ID="NewProductionCheckInfo" runat="server" Text="技术部审核"></asp:Label>
+            <br />
+            <asp:Label ID="NewProductionCheckDuration" runat="server" Text=""></asp:Label>
+            <br />
+            <asp:Label ID="NewProductionCheckState" runat="server" Text=""></asp:Label>
+        </asp:Panel>
+        <asp:Panel ID="NewProgressSTT" runat="server" BackColor="#e3f0f6" CssClass="ProgressBox">
+            <asp:Label ID="NewProgressSTTInfo" runat="server" Text="字幕制作"></asp:Label>
+            <br />
+            <asp:Label ID="NewProgressSTTDuration" runat="server" Text=""></asp:Label>
+            <br />
+            <asp:Label ID="NewProgressSTTState" runat="server" Text=""></asp:Label>
+        </asp:Panel>
+        <!--新流程ED-->
         <asp:Panel ID="ProgressContentReceive" runat="server" BackColor="#e3f0f6" CssClass="ProgressBox">
             <asp:Label ID="ContentReceiveInfo" runat="server" Text="制作部接收"></asp:Label>
             <br />
@@ -177,6 +208,11 @@
             <asp:ListItem Value="00000000-0000-0000-0000-000000000128">已废除</asp:ListItem>
             <asp:ListItem Value="00000000-0000-0000-0000-999999999999">有延迟</asp:ListItem>
         </asp:RadioButtonList>
+        <asp:RadioButtonList ID="RadioButtonListDate" runat="server" OnSelectedIndexChanged="SelectSetChanged" AutoPostBack="true" CssClass="RadioButtonListPlanType" RepeatDirection="Horizontal">
+            <asp:ListItem Value="3m" Selected="True">近三个月</asp:ListItem>
+            <asp:ListItem Value="12m">近一年</asp:ListItem>
+            <asp:ListItem Value="all">历史全部</asp:ListItem>
+        </asp:RadioButtonList>
         <%--<asp:Button ID="btnFilter" runat="server" Text="查询" OnClick="btnFilter_Click" />--%>
     </asp:Panel>
     <dx:ASPxGridView ID="axgvProject" ClientInstanceName="axgvProject" runat="server" KeyFieldName="ProjectId"
@@ -195,14 +231,17 @@
             <dx:GridViewDataColumn FieldName="ProjectPlanName" Caption="专题名" Settings-AutoFilterCondition="Contains" VisibleIndex="3">
                 <Settings AutoFilterCondition="Contains"></Settings>
             </dx:GridViewDataColumn>
+            <dx:GridViewDataColumn FieldName="EpisodeCount" Caption="集数" Settings-AutoFilterCondition="Contains" VisibleIndex="3">
+                <Settings AutoFilterCondition="Contains"></Settings>
+            </dx:GridViewDataColumn>
             <dx:GridViewDataColumn FieldName="SendingDate" Caption="派单日期" VisibleIndex="3" />
             <dx:GridViewDataColumn FieldName="lecturer" Caption="主讲人" Settings-AutoFilterCondition="Contains" VisibleIndex="4">
                 <Settings AutoFilterCondition="Contains"></Settings>
             </dx:GridViewDataColumn>
-            <dx:GridViewDataColumn FieldName="ProgressText" Caption="进度" Settings-AutoFilterCondition="Contains" VisibleIndex="6">
+            <dx:GridViewDataColumn FieldName="ProgressTotalText" Caption="进度" Settings-AutoFilterCondition="Contains" VisibleIndex="8">
                 <Settings ShowFilterRowMenu="True"></Settings>
             </dx:GridViewDataColumn>
-            <dx:GridViewDataColumn Caption="操作" FieldName="Operate" VisibleIndex="7" Name="ColOperate">
+            <dx:GridViewDataColumn Caption="操作" FieldName="Operate" VisibleIndex="9" Name="ColOperate">
                 <Settings AllowSort="False"></Settings>
                 <Settings AllowAutoFilter="False"></Settings>
                 <HeaderTemplate>
@@ -219,6 +258,10 @@
                     </asp:Panel>
                     <asp:Panel ID="panelCopyCol" runat="server" Visible="false" CssClass="inline">
                         <dx:ASPxButton ID="btnCopy" runat="server" Text="复制工单" CommandArgument='<%# Eval("ProjectId")%>' CommandName="copy" OnCommand="btnShowPopup_Command">
+                        </dx:ASPxButton>
+                    </asp:Panel>
+                    <asp:Panel ID="panelEndCol" runat="server" Visible="false" CssClass="inline">
+                        <dx:ASPxButton ID="btnEnd" runat="server" Text="终止制作" CommandArgument='<%# Eval("ProjectId")%>' CommandName="end" OnCommand="btnProjectEnd_Click">
                         </dx:ASPxButton>
                     </asp:Panel>
                 </DataItemTemplate>

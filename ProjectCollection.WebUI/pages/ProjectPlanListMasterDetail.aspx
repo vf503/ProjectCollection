@@ -64,7 +64,7 @@
         </Tabs>
     </dx:ASPxTabControl>
     <asp:Button ID="btnCreate" runat="server" Text="新建" OnClick="btnCreate_Click" Visible="false" />
-    <asp:Panel ID="PanelProgress" runat="server" CssClass="PanelProgress" Visible="false">
+     <asp:Panel ID="PanelProgress" runat="server" CssClass="PanelProgress" Visible="false">
         <asp:Panel ID="ProgressInfo" runat="server" CssClass="ProgressTitle">
             <asp:Label ID="ProgressNo" runat="server" Text=""></asp:Label>
             <asp:Label ID="ProgressDate" runat="server" Text="Label"></asp:Label>
@@ -93,6 +93,36 @@
             <br />
             <asp:Label ID="ShorthandState" runat="server" Text=""></asp:Label>
         </asp:Panel>
+        <!--新流程OP-->
+        <asp:Panel ID="NewProgressProductionReceive" runat="server" BackColor="#e3f0f6" CssClass="ProgressBox">
+            <asp:Label ID="NewProductionReceiveInfo" runat="server" Text="技术部接收"></asp:Label>
+            <br />
+            <asp:Label ID="NewProductionReceiveDuration" runat="server" Text=""></asp:Label>
+            <br />
+            <asp:Label ID="NewProductionReceiveState" runat="server" Text=""></asp:Label>
+        </asp:Panel>
+        <asp:Panel ID="NewProgressProductionOperator" runat="server" BackColor="#e3f0f6" CssClass="ProgressBox">
+            <asp:Label ID="NewProductionOperatorInfo" runat="server" Text="技术部制作"></asp:Label>
+            <br />
+            <asp:Label ID="NewProductionOperatorDuration" runat="server" Text=""></asp:Label>
+            <br />
+            <asp:Label ID="NewProductionOperatorState" runat="server" Text=""></asp:Label>
+        </asp:Panel>
+        <asp:Panel ID="NewProgressProductionCheck" runat="server" BackColor="#e3f0f6" CssClass="ProgressBox">
+            <asp:Label ID="NewProductionCheckInfo" runat="server" Text="技术部审核"></asp:Label>
+            <br />
+            <asp:Label ID="NewProductionCheckDuration" runat="server" Text=""></asp:Label>
+            <br />
+            <asp:Label ID="NewProductionCheckState" runat="server" Text=""></asp:Label>
+        </asp:Panel>
+         <asp:Panel ID="NewProgressSTT" runat="server" BackColor="#e3f0f6" CssClass="ProgressBox">
+            <asp:Label ID="NewProgressSTTInfo" runat="server" Text="字幕制作"></asp:Label>
+            <br />
+            <asp:Label ID="NewProgressSTTDuration" runat="server" Text=""></asp:Label>
+            <br />
+            <asp:Label ID="NewProgressSTTState" runat="server" Text=""></asp:Label>
+        </asp:Panel>
+        <!--新流程ED-->
         <asp:Panel ID="ProgressContentReceive" runat="server" BackColor="#e3f0f6" CssClass="ProgressBox">
             <asp:Label ID="ContentReceiveInfo" runat="server" Text="制作部接收"></asp:Label>
             <br />
@@ -200,14 +230,14 @@
                     <Columns>
                         <dx:GridViewDataColumn FieldName="ProjectNo" Caption="编号" VisibleIndex="1" />
                         <dx:GridViewDataColumn FieldName="CourseName" Caption="课名" VisibleIndex="2" />
-                        <dx:GridViewDataColumn FieldName="lecturer" Caption="主讲人" VisibleIndex="3" />
-                        <dx:GridViewDataColumn FieldName="ProgressText" Caption="进度" VisibleIndex="4" />
-                        <dx:GridViewDataColumn FieldName="SendingDate" Caption="派单日期" VisibleIndex="5" />
-                        <dx:GridViewDataColumn Caption="操作" FieldName="Operate" Settings-AllowAutoFilter="False" VisibleIndex="6">
+                        <dx:GridViewDataColumn FieldName="EpisodeCount" Caption="集数" VisibleIndex="3" />
+                        <dx:GridViewDataColumn FieldName="lecturer" Caption="主讲人" VisibleIndex="4" />
+                        <dx:GridViewDataColumn FieldName="ProgressTotalText" Caption="进度" VisibleIndex="5" />
+                        <dx:GridViewDataColumn Caption="操作" FieldName="Operate" Settings-AllowAutoFilter="False" VisibleIndex="5">
                             <Settings AllowAutoFilter="False" />
                             <DataItemTemplate>
                                 <asp:Button ID="btnProjectProgress" runat="server" Text="显示进度" CommandArgument='<%# Eval("ProjectId")%>' CommandName="ShowProjectProgress" OnCommand="btnProjectProgress_Click" />
-                                <asp:HyperLink ID="aProjectSelect" runat="server" NavigateUrl='<%#"ProjectCreateEdit.aspx?mode=browse&ProjectId="+ Eval("ProjectId")%>' Text="查看信息" Target="_blank"></asp:HyperLink>
+                                <asp:HyperLink ID="aProjectSelect" runat="server" NavigateUrl='<%#"ProjectCreateEdit.aspx?mode=browse&ProjectId="+ Eval("ProjectId")+"&type="+ Eval("ProjectTypeId")%>' Text="查看信息" Target="_blank"></asp:HyperLink>
                             </DataItemTemplate>
                         </dx:GridViewDataColumn>
                     </Columns>

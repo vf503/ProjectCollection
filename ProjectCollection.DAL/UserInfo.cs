@@ -21,7 +21,9 @@ select * from user_info
 inner join role_authority on user_info.role_identity=role_authority.role_identity
 inner join user_authority on role_authority.authority_identity=user_authority.authority_identity
 where user_info.user_identity=@userIdentity";
-
+        private const string SELECT_04 = @"
+select * from user_info 
+where role_identity=@role_identity";
         //Id
         private const string SELECT_RealName = "select real_name from user_info where user_identity=@userIdentity";
 
@@ -80,6 +82,13 @@ where user_info.user_identity=@userIdentity";
             return table;
         }
 
+        public DataTable SelectListByRole(Guid role_identity)
+        {
+            DbParameter[] parameters = new DbParameter[1];
+            parameters[0] = Manager.CreateParameter("role_identity", role_identity);
+            DataTable table = this.SelectOperate.Select(UserInfo.SELECT_04, parameters);
+            return table;
+        }
         //
         public string Select(Guid userIdentity)
         {

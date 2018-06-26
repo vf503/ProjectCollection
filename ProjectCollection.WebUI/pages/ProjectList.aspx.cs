@@ -64,6 +64,12 @@ namespace ProjectCollection.WebUI.pages
                 this.gvProject.Columns[7].Visible = false;
                 this.gvProject.Columns[8].Visible = true;
             }
+            else if (this.Request["mode"] == "shorthand")
+            {
+                btnBatchHandle.Visible = true;
+                btnBatchHandle.Text = "批量完成";
+                btnBatchHandle.PostBackUrl = "~/pages/ProjectCreateEdit.aspx?mode=shorthandbatchhandle";
+            }
             else if (this.Request["mode"] == "contentreceive")
             {
                 //btnBatchSave.Visible = true;
@@ -117,6 +123,8 @@ namespace ProjectCollection.WebUI.pages
         protected void gvProject_SelectedIndexChanging(object sender, GridViewSelectEventArgs e)
         {
             Guid identity = Guid.Parse(this.gvProject.DataKeys[e.NewSelectedIndex].Values["ProjectId"].ToString());
+            //NewPms
+            BLL.Project project = BLL.Project.GetProject(identity);
             if (this.Request["mode"] == "browse")
             {
                 this.Response.Redirect("~/pages/ProjectCreateEdit.aspx?mode=browse&ProjectId=" + identity);
@@ -159,7 +167,9 @@ namespace ProjectCollection.WebUI.pages
             }
             else if (this.Request["mode"] == "productionreceive")
             {
+                //NewPms
                 this.Redirect("~/pages/ProjectCreateEdit.aspx?mode=productionreceive&ProjectId=" + identity);
+                //this.Redirect("http://192.168.194.88:666/AjaxVideoUploadPage/?CourseTitle=" + project.CourseName);
             }
             else if (this.Request["mode"] == "productionfinish")
             {
@@ -349,7 +359,7 @@ namespace ProjectCollection.WebUI.pages
             }
             else
             {
-                this.gvProject.DataSource = BLL.Project.GetAllProject(FilterListPlanType, FilterProgress);
+                this.gvProject.DataSource = BLL.Project.GetAllProject(FilterListPlanType, FilterProgress,"all");
                 this.gvProject.DataBind();
             }
         }
