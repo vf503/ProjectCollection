@@ -273,12 +273,43 @@
         <SettingsPager PageSize="20"></SettingsPager>
         <Settings ShowFilterRow="True" />
     </dx:ASPxGridView>
-    <span id="popupArea">
-    </span>
+    <div id="popupArea">
+    </div>
     <dx:ASPxPopupControl ID="popupEdit" runat="server" AllowDragging="True" AllowResize="True"
-        CloseAction="CloseButton" EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="Center"
-        PopupVerticalAlign="Middle" AutoUpdatePosition="true" ShowFooter="True" ShowOnPageLoad="False" Width="1000px"
+        CloseAction="CloseButton" EnableViewState="False" PopupElementID="popupArea" PopupHorizontalAlign="Center" PopupVerticalAlign="Below"
+        AutoUpdatePosition="True" ShowFooter="True" ShowOnPageLoad="False" Width="1000px"
         Height="760px" FooterText="" HeaderText="工单编辑" EnableHierarchyRecreation="True" ClientInstanceName="popupEdit" ShowMaximizeButton="True">
+        <ClientSideEvents PopUp="function(s, e) { 
+             var pop = document.getElementById('ContentPlaceHolder1_popupEdit_PW-1');
+             pop.style.top = GetCookie('scroll')+'px';
+             }" 
+            Init="function(s, e) { }" />
     </dx:ASPxPopupControl>
     <asp:HiddenField ID="hidViewState" runat="server"/>
+    <script>
+        console.log(window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0);
+        function Trim(strValue) {
+            return strValue.replace(/^\s*|\s*$/g, "");
+        }
+        function SetCookie(sName, sValue) {
+            document.cookie = sName + "=" + escape(sValue);
+        }
+        function GetCookie(sName) {
+            var aCookie = document.cookie.split(";");
+            for (var i = 0; i < aCookie.length; i++) {
+                var aCrumb = aCookie[i].split("=");
+                if (sName == Trim(aCrumb[0])) {
+                    return unescape(aCrumb[1]);
+                }
+            }
+            return null;
+        }
+        function scrollback() {
+            if (GetCookie("scroll") != null) { document.body.scrollTop = GetCookie("scroll") }
+        }  
+        $(window).scroll(function () {
+            SetCookie("scroll", window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0);
+            console.log(GetCookie("scroll"));
+        });
+    </script>
 </asp:Content>
