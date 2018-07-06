@@ -248,8 +248,8 @@ namespace ProjectCollection.WebUI.pages
         {
             BLL.ProjectPlan projectPlan = BLL.ProjectPlan.GetProjectPlan(new Guid(this.hidProjectPlanId.Value.ToString()));
             this.txtProjectPlanNo.Text = projectPlan.ProjectPlanNo;
-            this.txtMakingDate.Text = projectPlan.MakingDate.ToString("yyyy-MM-dd");
-            this.hidPlanDate.Value = projectPlan.PlanDate.ToString("yyyy-MM-dd");
+            this.txtMakingDate.Text = projectPlan.MakingDate.ToString("yyyy-MM-dd HH:mm");
+            this.hidPlanDate.Value = projectPlan.PlanDate.ToString("yyyy-MM-dd HH:mm");
             this.ddlProjectPlanType.SelectedValue = projectPlan.ProjectPlanTypeId.ToString();
             this.txtTitle.Text = projectPlan.Title;
             this.txtLecturer.Text = projectPlan.Lecturer;
@@ -276,11 +276,11 @@ namespace ProjectCollection.WebUI.pages
         private void InitRecondData()
         {
             BLL.ProjectPlan projectPlan = BLL.ProjectPlan.GetProjectPlan(new Guid(this.hidProjectPlanId.Value.ToString()));
-            this.RecordingDate.Text = projectPlan.RecordingDate.ToString("yyyy-MM-dd");
+            this.hidRecordingDate.Value = projectPlan.RecordingDate.ToString("yyyy-MM-dd HH:mm");
             this.txtRecordingPlace.Text = projectPlan.RecordingPlace;
             this.ddlRecordingScriptHolder.SelectedValue = projectPlan.RecordingScriptHolder.ToString();
             this.txtRecordingLecture.Text = projectPlan.RecordingLecture.ToString();
-            this.FileDeliverDate.Text = projectPlan.FileDeliverDate.ToString("yyyy-MM-dd HH:mm");
+            this.hidFileDeliverDate.Value = projectPlan.FileDeliverDate.ToString("yyyy-MM-dd HH:mm");
             this.txtRecordingFile.Text = projectPlan.RecordingFile.ToString();
             this.txtRecordingNote.Text = projectPlan.RecordingNote.ToString();
         }
