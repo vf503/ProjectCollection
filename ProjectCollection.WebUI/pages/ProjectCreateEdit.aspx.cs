@@ -788,7 +788,8 @@ namespace ProjectCollection.WebUI.pages
                     + HttpUtility.UrlEncode(project.CourseName)
                     + "&lecturer="
                     + HttpUtility.UrlEncode(project.lecturer)
-                    + "&type=a"
+                    + "&type="
+                    + project.ProjectNo.Substring(0,1).ToLower()
                     + "&link="
                     + str;
             }
