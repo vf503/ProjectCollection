@@ -197,6 +197,7 @@
     <asp:Panel ID="PanelContentReceive" runat="server" Visible="false">
         <div class="PanelName">制作部负责人填写（接收）:</div>
         <asp:HyperLink ID="ContentReceiveLink" Font-Size="14" ForeColor="#009900" runat="server" Target="_blank">上传资料</asp:HyperLink><br />
+        <asp:HyperLink ID="ContentReceiveEditLink" Font-Size="14" ForeColor="#009900" runat="server" Target="_blank">查看/编辑课件</asp:HyperLink><br />
         制作部门负责人：<asp:TextBox ID="txtContentPersonInCharge" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         制作人：<asp:DropDownList ID="ddlContentOperator" runat="server"></asp:DropDownList><br />
         接收时间：<asp:TextBox ID="txtContentReceiveDate" runat="server" Visible="false"></asp:TextBox><br />

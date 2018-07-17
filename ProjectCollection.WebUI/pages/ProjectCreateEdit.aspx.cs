@@ -454,6 +454,14 @@ namespace ProjectCollection.WebUI.pages
                 this.ContentReceiveLink.NavigateUrl = @"http://newpms.cei.cn/SrtUpload?ProjectNo="
                 + HttpUtility.UrlEncode(project.ProjectNo)
                 + "&mode=slide";
+                UserName = LoginUserInfo.LoginName;
+                PassWord = LoginUserInfo.Password;
+                byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                string str = Convert.ToBase64String(bytes);
+                this.ContentReceiveEditLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
+                    + HttpUtility.UrlEncode(project.ProjectNo)
+                    + "&link="
+                    + str;
             }
             #endregion
             #region contentreceivebatchhandle
