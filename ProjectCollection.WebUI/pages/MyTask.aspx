@@ -23,8 +23,14 @@
                 var dHeight = 0;
                 if (isFireFox == true)
                     dHeight = iframe.contentWindow.document.documentElement.offsetHeight + 2;
-                else if (isIE == false && isOpera == false)
-                    dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+                else if (isIE == false && isOpera == false) {
+                    //dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+                    try {
+                        bHeight = iframe.contentWindow.document.body.scrollHeight;
+                        //dHeight = iframe.contentWindow.document.documentElement.scrollHeight;
+                        //console.log(bHeight);
+                    } catch (ex) { }
+                }
                 else if (isIE == true && isIE9More) {//ie9+
                     var heightDeviation = bHeight - eval("window.IE9MoreRealHeight" + iframeId);
                     if (heightDeviation == 0) {
@@ -44,7 +50,7 @@
         }
         function startInit(iframeId, minHeight) {
             eval("window.IE9MoreRealHeight" + iframeId + "=0");
-            window.setInterval("reinitIframe('" + iframeId + "'," + minHeight + ")", 100);
+            window.setInterval("reinitIframe('" + iframeId + "'," + minHeight + ")", 500);
         }
 
         $(document).ready(function () {

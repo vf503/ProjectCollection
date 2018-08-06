@@ -586,7 +586,23 @@ namespace ProjectCollection.WebUI.pages
                     {
 
                     }
+                    //
+                    try
+                    {
+                        this.PanelContentReceive.Visible = true;
+                        InitDropDownListContentReceive();
+                        this.InitContentReceiveData();
+                    }
+                    catch
+                    {
+
+                    }
+                    finally
+                    {
+
+                    }
                 }
+                //
 
             }
             #endregion contentcheck
@@ -691,6 +707,40 @@ namespace ProjectCollection.WebUI.pages
                 + "&link="
                 + str;
                 //
+                if (!IsPostBack)
+                {
+                    //
+                    try
+                    {
+                        this.PanelContentReceive.Visible = true;
+                        InitDropDownListContentReceive();
+                        this.InitContentReceiveData();
+                    }
+                    catch
+                    {
+
+                    }
+                    finally
+                    {
+
+                    }
+                    //
+                    //
+                    try
+                    {
+                        this.PanelPublish.Visible = true;
+                        InitDropDownListPublish();
+                        this.InitPublishData();
+                    }
+                    catch
+                    {
+
+                    }
+                    finally
+                    {
+
+                    }
+                }
             }
             #endregion contentrecheck
             #region productionreceive
@@ -966,7 +1016,9 @@ namespace ProjectCollection.WebUI.pages
                 Guid projectId = new Guid(this.Request["ProjectId"]);
                 this.hidProjectId.Value = projectId.ToString();
                 this.btnOk.Visible = true;
-                this.btnOk.Text = "发布";
+                this.btnOk.Text = "通过";
+                this.btnSentBack.Visible = true;
+                this.btnSentBack.Text = "退回";
                 this.PanelPublish.Visible = true;
                 this.InitBrowseData();
                 //
@@ -1377,6 +1429,10 @@ namespace ProjectCollection.WebUI.pages
             else if (this.Request["mode"] == "productionfinish")
             {
                 BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
+                if (project.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000199")
+                {
+
+                }
                 UpdateProductionFinish(project);
                 this.Redirect("~/pages/MyTask.aspx?mode=productionfinish");
             }
@@ -1657,6 +1713,23 @@ namespace ProjectCollection.WebUI.pages
                     ThisProject.progress = new Guid("00000000-0000-0000-0000-000000000106");
                     ThisProject.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000106");
                     ProjectModel.SaveChanges();
+                }
+                this.Redirect("~/pages/MyTask.aspx?mode=manufacture&range=now");
+            }
+            else if (this.Request["mode"] == "publish")//新课件发布环节退回制作部复审
+            {
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                          where p.ProjectId.ToString() == this.hidProjectId.Value.ToString()
+                                                                          select p).First();
+                    if (ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
+                    {
+                        ThisProject.progress = new Guid("00000000-0000-0000-0000-000000000122");
+                        ThisProject.ContentProgress = new Guid("00000000-0000-0000-0000-000000000122");
+                        ThisProject.PublishNote = this.txtPublishNote.Text.ToString();
+                        ProjectModel.SaveChanges();
+                    }
                 }
                 this.Redirect("~/pages/MyTask.aspx?mode=manufacture&range=now");
             }
