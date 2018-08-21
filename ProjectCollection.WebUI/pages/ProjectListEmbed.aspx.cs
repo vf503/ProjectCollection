@@ -335,7 +335,8 @@ namespace ProjectCollection.WebUI.pages
                      }
                     if (check)
                     {
-                        aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=capturebatchhandle&BatchId=" + hidBatchId.Value;
+                        //aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=capturebatchhandle&BatchId=" + hidBatchId.Value;
+                        aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=capturebatchhandle";
                     }
                     else
                     {

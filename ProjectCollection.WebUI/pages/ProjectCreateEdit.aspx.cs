@@ -555,6 +555,8 @@ namespace ProjectCollection.WebUI.pages
                 this.btnOk.Text = "审核通过";
                 this.btnSentBack.Visible = true;
                 this.btnSentBack.Text = "退回";
+                this.PanelContentReceive.Visible = true;
+                this.PanelContentOperator.Visible = true;
                 this.PanelContentCheck.Visible = true;
                 this.PanelContentRecheck.Visible = true;
                 this.InitBrowseData();
@@ -575,6 +577,8 @@ namespace ProjectCollection.WebUI.pages
                     InitDropDownListContentCheck();
                     try
                     {
+                        this.InitDropDownListContentFinish();
+                        this.InitContentFinishData();
                         this.InitContentCheckData();
                         this.InitContentRecheckData();
                     }
@@ -588,8 +592,7 @@ namespace ProjectCollection.WebUI.pages
                     }
                     //
                     try
-                    {
-                        this.PanelContentReceive.Visible = true;
+                    {  
                         InitDropDownListContentReceive();
                         this.InitContentReceiveData();
                     }
@@ -715,6 +718,9 @@ namespace ProjectCollection.WebUI.pages
                         this.PanelContentReceive.Visible = true;
                         InitDropDownListContentReceive();
                         this.InitContentReceiveData();
+                        this.PanelContentOperator.Visible = true;
+                        this.InitDropDownListContentFinish();
+                        this.InitContentFinishData();
                     }
                     catch
                     {
