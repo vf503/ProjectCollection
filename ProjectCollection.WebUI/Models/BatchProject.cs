@@ -43,6 +43,9 @@ namespace ProjectCollection.WebUI.Models
         public Nullable<System.DateTime> HelperFinishDate { get; set; }
         public Nullable<System.Guid> helper { get; set; }
         public string HelperFinishNote { get; set; }
+        public Nullable<System.DateTime> PicSendingDate { get; set; }
+        public Nullable<System.DateTime> TemplateSendingDate { get; set; }
+        public Nullable<System.DateTime> DeadLine { get; set; }
     
         public virtual user_info user_info { get; set; }
         public virtual user_info user_info1 { get; set; }

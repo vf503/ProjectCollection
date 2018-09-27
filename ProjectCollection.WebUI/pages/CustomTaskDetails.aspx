@@ -9,24 +9,32 @@
     <asp:Panel ID="PanelBase" runat="server">
         派单序号：<asp:TextBox ID="txtId" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
         派单时间：<asp:TextBox ID="txtCreateDate" runat="server" ReadOnly="true"></asp:TextBox><br />
+        完成期限：<asp:TextBox ID="txtDeadLine" runat="server" ReadOnly="true"></asp:TextBox><br />
         客户信息：<asp:TextBox ID="txtCustom" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
-        任务要求：<asp:TextBox ID="txtTaskRequire" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
-        包含课件数：<asp:TextBox ID="txtCourseAmount" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
+        任务要求：<asp:TextBox ID="txtTaskRequire" TextMode="MultiLine" Height="80px" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
         下单者：<asp:TextBox ID="txtCreator" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
-        备注：<asp:TextBox ID="txtCreateNote" runat="server" TextMode="MultiLine" Height="100px" ReadOnly="true"></asp:TextBox><br />
+        备注：<asp:TextBox ID="txtCreateNote" runat="server" TextMode="MultiLine" Height="80px" ReadOnly="true"></asp:TextBox><br />
         进度：<asp:TextBox ID="txtProgress" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
+        <span style="color:red; font-size:16px;">课件列表：</span><asp:HyperLink ID="aCourseList" runat="server" Target="_blank" Text=">>查看<<" ></asp:HyperLink><br />
     </asp:Panel>
     <asp:Panel ID="PanelCheck" runat="server" Visible="false">
-        <div class="PanelName">任务预审人填写:</div>
+        <div class="PanelName" style="color:green">任务预审人填写:</div>
         预审人：<asp:TextBox ID="txtSigner" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         预审时间：<asp:TextBox ID="txtCheckDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         预审备注：<asp:TextBox ID="txtCheckNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
     </asp:Panel>
-        <asp:Panel ID="PanelFinish" runat="server" Visible="false">
-        <div class="PanelName">执行人填写:</div>
+    <asp:Panel ID="PanelFinish" runat="server" Visible="false">
+        <div class="PanelName" style="color:green">执行人填写:</div>
         执行人：<asp:TextBox ID="txtTransactor" runat="server" ReadOnly="true"></asp:TextBox><br />
         执行时间：<asp:TextBox ID="txtFinishDate" runat="server" ReadOnly="true"></asp:TextBox><br />
         执行备注：<asp:TextBox ID="txtFinishNote" runat="server" TextMode="MultiLine" ReadOnly="true"></asp:TextBox><br />
+    </asp:Panel>
+    <asp:Panel ID="PanelHelpFinish" runat="server" Visible="false">
+        <div class="PanelName" style="color:green">辅助执行人填写:</div>
+        执行人：<asp:TextBox ID="txtHelper" runat="server" ReadOnly="true"></asp:TextBox><br />
+        派发时间：<asp:TextBox ID="txtHelpSendingDate" runat="server" ReadOnly="true"></asp:TextBox><br />
+        完成时间：<asp:TextBox ID="txtHelperFinishDate" runat="server" ReadOnly="true"></asp:TextBox><br />
+        执行备注：<asp:TextBox ID="txtHelperFinishNote" runat="server" TextMode="MultiLine" ReadOnly="true"></asp:TextBox><br />
     </asp:Panel>
     <asp:Panel ID="PanelBtn" runat="server">
         <%--<asp:Button ID="btnExecute" runat="server" Text="执行" OnClick="btnExecuteOnclick" Visible="false" />--%>

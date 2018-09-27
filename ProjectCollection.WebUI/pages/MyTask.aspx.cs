@@ -270,6 +270,21 @@ namespace ProjectCollection.WebUI.pages
                         else { }
                         //HidPanelFilterGrid(CurrentAuthority);
                     }
+                    else if (CurrentAuthority == "CustomHelpExecute")
+                    {
+                        CurrentPage.FindControl("Panel" + CurrentAuthority).Visible = true;
+                        if (ModeRange == "now")
+                        {
+                            IframeCustomHelpExecute.Visible = true;
+                            IframeCustomHelpExecute.Attributes["src"] = "~/pages/CustomTaskList.aspx?mode=helpexecute";
+                        }
+                        else if (ModeRange == "all")
+                        {
+                            //ShowAmountData(CurrentAuthority);
+                        }
+                        else { }
+                        //HidPanelFilterGrid(CurrentAuthority);
+                    }
                     else if (CurrentAuthority == "cross"|| CurrentAuthority == "CreateProject")
                     {
 

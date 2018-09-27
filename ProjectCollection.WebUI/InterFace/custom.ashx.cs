@@ -35,6 +35,7 @@ namespace ProjectCollection.WebUI.InterFace
                 string custom = (string)o["custom"];
                 string user = (string)o["user"];
                 string note = (string)o["note"];
+                string DeadLine = (string)o["DeadLine"];
                 string TaskRequire = (string)o["require"].ToString();
                 string CourseData = (string)o["CourseData"].ToString();
 
@@ -58,6 +59,7 @@ namespace ProjectCollection.WebUI.InterFace
                     ThisProject.custom = custom;
                     ThisProject.CreatorId = ThisUser.user_identity;
                     ThisProject.CreateNote = note;
+                    ThisProject.DeadLine = Convert.ToDateTime(DeadLine);
                     ThisProject.TaskRequire = TaskRequire;
                     ThisProject.progress = "等待审核";
                     ThisProject.CreateDate = DateTime.Now;
@@ -98,10 +100,18 @@ namespace ProjectCollection.WebUI.InterFace
                         new JProperty("custom", ThisProject.custom),
                         new JProperty("user", ThisUser.real_name),
                         new JProperty("require", JsonConvert.DeserializeObject(ThisProject.TaskRequire)),
-                        new JProperty("CreateDate", ThisProject.CreateDate.ToString(("yyyy-MM-dd"))),
+                        new JProperty("CreateDate", ThisProject.CreateDate.ToString("yyyy-MM-dd")),
+                        new JProperty("DeadLine", ThisProject.DeadLine.HasValue ? ThisProject.DeadLine.Value.ToString("yyyy-MM-dd") : "n/a"), //nullabale type
                         new JProperty("note", ThisProject.CreateNote),
-                        new JProperty("CheckDate", ThisProject.CheckDate),
+                        new JProperty("CheckDate", ThisProject.CheckDate.HasValue ? ThisProject.CheckDate.Value.ToString("yyyy-MM-dd") : "n/a"),
                         new JProperty("CheckNote", ThisProject.CheckNote),
+                        new JProperty("HelpSendingDate", ThisProject.HelpSendingDate.ToString()),
+                        new JProperty("HelperFinishDate", ThisProject.HelperFinishDate.ToString()),
+                        new JProperty("PicSendingDate", ThisProject.PicSendingDate.ToString()),
+                        new JProperty("PicFinishDate", ThisProject.PicFinishDate.ToString()),
+                        new JProperty("TemplateSendingDate", ThisProject.TemplateSendingDate.ToString()),
+                        new JProperty("TemplateFinishDate", ThisProject.TemplateFinishDate.ToString()),
+                        new JProperty("FinishDate", ThisProject.FinishDate.ToString()),
                         new JProperty("CourseData", JsonConvert.DeserializeObject(ThisProject.CourseData))
                         );
                     context.Response.ContentType = "text/plain";
@@ -115,7 +125,7 @@ namespace ProjectCollection.WebUI.InterFace
             {
                 JObject o = JObject.Parse(strReq);
                 string id = (string)o["id"];
-                string TaskRequire = (string)o["require"].ToString();
+                //string TaskRequire = (string)o["require"].ToString();
                 string CourseData = (string)o["CourseData"].ToString();
                 string transactor = (string)o["transactor"].ToString();
                 string note = (string)o["note"].ToString();
@@ -128,11 +138,40 @@ namespace ProjectCollection.WebUI.InterFace
                                                                          where u.login_name == transactor
                                                                          select u).First();
                     ThisProject.transactor = ThisUser.user_identity;
-                    ThisProject.TaskRequire = TaskRequire;
+                    //ThisProject.TaskRequire = TaskRequire;
                     ThisProject.CourseData = CourseData;
-                    ThisProject.progress = "等待系统处理";
+                    ThisProject.progress = "已完成";
                     ThisProject.FinishDate = DateTime.Now;
                     ThisProject.FinishNote = note;
+                    ProjectModel.SaveChanges();
+                }
+                context.Response.ContentType = "text/plain";
+                context.Response.StatusCode = 200;
+                context.Response.Write("success");
+            }
+            else if (HttpContext.Current.Request["method"] == "UpdateSending")
+            {
+                JObject o = JObject.Parse(strReq);
+                string id = (string)o["id"];
+                string type = (string)o["type"].ToString();
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    ProjectCollection.WebUI.Models.BatchProject ThisProject = (from p in ProjectModel.BatchProject
+                                                                               where p.id == id
+                                                                               select p).First();
+                    if (type == "help")
+                    {
+                        ThisProject.HelpSendingDate = DateTime.Now;
+                    }
+                    else if (type == "pic")
+                    {
+                        ThisProject.PicSendingDate = DateTime.Now;
+                    }
+                    else if (type == "template")
+                    {
+                        ThisProject.TemplateSendingDate = DateTime.Now;
+                    }
+                    else { }
                     ProjectModel.SaveChanges();
                 }
                 context.Response.ContentType = "text/plain";

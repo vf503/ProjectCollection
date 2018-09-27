@@ -8,7 +8,7 @@
         <EntityTypeShape EntityType="ProjectCollectionModel.CustomProject" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ProjectCollectionModel.data_dictionary" Width="1.5" PointX="0.625" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ProjectCollectionModel.ProjectPlan" Width="1.5" PointX="5.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="ProjectCollectionModel.user_info" Width="1.5" PointX="0.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.user_info" Width="1.5" PointX="0.75" PointY="6.625" IsExpanded="true" />
         <EntityTypeShape EntityType="ProjectCollectionModel.role_authority" Width="1.5" PointX="11.875" PointY="7.5" IsExpanded="true" />
         <EntityTypeShape EntityType="ProjectCollectionModel.user_authority" Width="1.5" PointX="11.75" PointY="2.625" IsExpanded="true" />
         <AssociationConnector Association="ProjectCollectionModel.FK_CustomProject_To_data_dictionary" ManuallyRouted="false" />

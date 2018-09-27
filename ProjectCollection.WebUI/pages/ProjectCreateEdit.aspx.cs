@@ -8,6 +8,8 @@ using System.Net;
 using System.Text;
 using System.Web;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ProjectCollection.WebUI.pages
 {
@@ -515,9 +517,9 @@ namespace ProjectCollection.WebUI.pages
                     BLL.Project project = BLL.Project.GetProject(projectId);
                     this.ContentOperatLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
                     + HttpUtility.UrlEncode(project.ProjectNo)
-                    + "&type=a"
                     + "&link="
-                    + str;
+                    + HttpUtility.UrlEncode(str)
+                    + "&type=a";
                     //
                     try
                     {
@@ -842,20 +844,20 @@ namespace ProjectCollection.WebUI.pages
                 }
                 //NewPms
                 //string FileNo = project.ProjectNo.Replace("-","").Replace("—", "").Replace("_","");
-                UserName = LoginUserInfo.LoginName;
-                PassWord = LoginUserInfo.Password;
-                byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
-                string str = Convert.ToBase64String(bytes);
-                UploadVideoLink.NavigateUrl = @"http://newpms.cei.cn/FTPVideoUpload?ProjectNo=" 
-                    + HttpUtility.UrlEncode(project.ProjectNo)
-                    + "&title="
-                    + HttpUtility.UrlEncode(project.CourseName)
-                    + "&lecturer="
-                    + HttpUtility.UrlEncode(project.lecturer)
-                    + "&type="
-                    + project.ProjectNo.Substring(0,1).ToLower()
-                    + "&link="
-                    + str;
+                //UserName = LoginUserInfo.LoginName;
+                //PassWord = LoginUserInfo.Password;
+                //byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                //string str = Convert.ToBase64String(bytes);
+                //UploadVideoLink.NavigateUrl = @"http://newpms.cei.cn/FTPVideoUpload?ProjectNo=" 
+                //    + HttpUtility.UrlEncode(project.ProjectNo)
+                //    + "&title="
+                //    + HttpUtility.UrlEncode(project.CourseName)
+                //    + "&lecturer="
+                //    + HttpUtility.UrlEncode(project.lecturer)
+                //    + "&type="
+                //    + project.ProjectNo.Substring(0,1).ToLower()
+                //    + "&link="
+                //    + str;
             }
             #endregion productionfinish
             #region productionfinishbatchhandle
@@ -1437,7 +1439,38 @@ namespace ProjectCollection.WebUI.pages
                 BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
                 if (project.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000199")
                 {
-
+                    UserName = LoginUserInfo.LoginName;
+                    PassWord = LoginUserInfo.Password;
+                    byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                    string str = Convert.ToBase64String(bytes);
+                    string url = @"http://203.207.118.96/FTPVideoUpload?ProjectNo="
+                        + HttpUtility.UrlEncode(project.ProjectNo)
+                        + "&title="
+                        + HttpUtility.UrlEncode(project.CourseName)
+                        + "&lecturer="
+                        + HttpUtility.UrlEncode(project.lecturer)
+                        + "&type="
+                        + project.ProjectNo.Substring(0, 1).ToLower()
+                        + "&link="
+                        + str;
+                    //
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    request.Method = "GET";
+                    request.ContentType = "text/html;charset=UTF-8";
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    Stream myResponseStream = response.GetResponseStream();
+                    StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                    string retString = myStreamReader.ReadToEnd();
+                    myStreamReader.Close();
+                    myResponseStream.Close();
+                    //
+                    JObject jo = (JObject)JsonConvert.DeserializeObject(retString);
+                    if (jo["status"].ToString() == "文件完备" && jo["data"].ToString() == "数据添加成功")
+                    { }
+                    else
+                    {
+                        throw new MyException(jo["status"].ToString());
+                    }
                 }
                 UpdateProductionFinish(project);
                 this.Redirect("~/pages/MyTask.aspx?mode=productionfinish");

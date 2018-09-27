@@ -281,8 +281,8 @@
     <asp:Panel ID="PanelProductionOperator" runat="server" Visible="false">
         <div class="PanelName">技术部制作员填写:</div>
         <!--NewPMS-->
-        <asp:HyperLink ID="UploadVideoLink" Font-Size="14" ForeColor="#009900" Target="_blank" runat="server">确认完成上传视频</asp:HyperLink><br />
-        <%--<<button onclick="$.RedirectUrl('<%= RedirectUrl%>','<%= UserName%>','<%= PassWord%>');">上传视频</button><br />
+        <%--<asp:HyperLink ID="UploadVideoLink" Font-Size="14" ForeColor="#009900" Target="_blank" runat="server">确认完成上传视频</asp:HyperLink><br />
+        <button onclick="$.RedirectUrl('<%= RedirectUrl%>','<%= UserName%>','<%= PassWord%>');">上传视频</button><br />
         asp:Button ID="BtnUploadVideo" runat="server" Text="上传视频" OnClick="BtnUploadVideo_Click" />--%>
         <!--NewPMS-->
         画面质量：<asp:DropDownList ID="ddlProductionVideoQuality" runat="server"></asp:DropDownList><br />

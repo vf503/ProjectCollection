@@ -381,6 +381,7 @@
     <Compile Include="pages\BackUp\ProjectCreateEdit_backup.aspx.designer.cs">
       <DependentUpon>ProjectCreateEdit_backup.aspx</DependentUpon>
     </Compile>
+    <Compile Include="pages\common\MyException.cs" />
     <Compile Include="pages\CustomProjectListEmbed.aspx.cs">
       <DependentUpon>CustomProjectListEmbed.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

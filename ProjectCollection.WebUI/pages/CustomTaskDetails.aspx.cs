@@ -93,6 +93,17 @@ namespace ProjectCollection.WebUI.pages
                     }
                 }
                 #endregion execute
+                #region helpexecute
+                else if (this.Request["mode"] == "helpexecute")
+                {
+                    PanelCheck.Visible = true;
+                    PanelHelpFinish.Visible = true;
+                    this.InitCheckData(ThisProject);
+                    this.txtHelpSendingDate.Text = ThisProject.HelpSendingDate.ToString();
+                    this.btnPass.Visible = true;
+                    this.btnPass.Text = "完成";
+                }
+                #endregion helpexecute
                 else
                 {
                     
@@ -133,10 +144,19 @@ namespace ProjectCollection.WebUI.pages
                 ProjectCollection.WebUI.Models.BatchProject ThisProject = (from p in ProjectModel.BatchProject
                                                                            where p.id == this.hidProjectId.Value.ToString()
                                                                            select p).First();
-                ThisProject.signer = this.LoginUserInfo.Identity;
-                ThisProject.CheckDate = DateTime.Now;
-                ThisProject.CheckNote = this.txtCheckNote.Text;
-                ThisProject.progress = "等待执行";
+                if (this.Request["mode"] == "check")
+                {
+                    ThisProject.signer = this.LoginUserInfo.Identity;
+                    ThisProject.CheckDate = DateTime.Now;
+                    ThisProject.CheckNote = this.txtCheckNote.Text;
+                    ThisProject.progress = "等待执行";
+                }
+                else if (this.Request["mode"] == "helpexecute")
+                {
+                    ThisProject.helper = this.LoginUserInfo.Identity;
+                    ThisProject.HelperFinishDate = DateTime.Now;
+                    ThisProject.HelperFinishNote = this.txtHelperFinishNote.Text;
+                }
                 ProjectModel.SaveChanges();
             }
             this.Redirect("~/pages/MyTask.aspx?mode=manufacture&range=now");
@@ -164,16 +184,39 @@ namespace ProjectCollection.WebUI.pages
         {
             this.txtId.Text = ThisProject.id;
             this.txtCreateDate.Text = ThisProject.CreateDate.ToString("yyyy-MM-dd");
+            this.txtDeadLine.Text = ThisProject.DeadLine.HasValue ? ThisProject.DeadLine.Value.ToString("yyyy-MM-dd") : "n/a";
             this.txtCustom.Text = ThisProject.custom;
             JObject TaskRequireJson = (JObject)JsonConvert.DeserializeObject(ThisProject.TaskRequire);
             string TaskRequireStr = "";
             if (TaskRequireJson["template"].ToString() != "")
             {
-                TaskRequireStr += "下载套模板：" + TaskRequireJson["template"]+" ; ";
+                TaskRequireStr += "下载套模板：" + TaskRequireJson["template"]+ " ; ";
             }
             if (TaskRequireJson["DisplaySize"].ToString() != "")
             {
-                TaskRequireStr += "输出视频：" + TaskRequireJson["DisplaySize"] + " ; ";
+                TaskRequireStr += "输出分辨率：" + TaskRequireJson["DisplaySize"] + "\r\n";
+            }
+            if (TaskRequireJson["BitRate"].ToString() != "")
+            {
+                TaskRequireStr += "码率：" + TaskRequireJson["BitRate"] + "K ; ";
+            }
+            if (TaskRequireJson["IsWaterMark"].ToString() != "")
+            {
+                TaskRequireStr += "水印：";
+                TaskRequireStr += TaskRequireJson["IsWaterMark"].ToString() == "1" ? "要\r\n" : "不要\r\n";
+            }
+            if (TaskRequireJson["IsPic"].ToString() != "")
+            {
+                TaskRequireStr += "做图片：";
+                TaskRequireStr += TaskRequireJson["IsPic"].ToString() == "1" ? "是" : "否";
+                TaskRequireStr += " ; ";
+                TaskRequireStr += "图片要求：" + TaskRequireJson["PicNote"] + "\r\n";
+            }
+            if (TaskRequireJson["IsTemplate"].ToString() != "")
+            {
+                TaskRequireStr += "做新模板：";
+                TaskRequireStr += TaskRequireJson["IsTemplate"].ToString() == "1" ? "是 ; " : "否 ; ";
+                TaskRequireStr += "模板要求：" + TaskRequireJson["TemplateNote"] + "\r\n";
             }
             this.txtTaskRequire.Text = TaskRequireStr;
             string CreatorName = "";
@@ -188,6 +231,10 @@ namespace ProjectCollection.WebUI.pages
             this.txtCreator.Text = CreatorName;
             this.txtCreateNote.Text = ThisProject.CreateNote;
             this.txtProgress.Text = ThisProject.progress;
+            string encode = string.Empty;
+            byte[] bytes = Encoding.UTF8.GetBytes(this.LoginUserInfo.LoginName + "_" + this.LoginUserInfo.Password);
+            encode = HttpUtility.UrlEncode(Convert.ToBase64String(bytes), Encoding.UTF8);
+            this.aCourseList.NavigateUrl = "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=browse&project=" + ThisProject.id + "&login=" + encode; ;
             if (ThisProject.progress != null)
             {
             }

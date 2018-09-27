@@ -132,6 +132,17 @@ namespace ProjectCollection.WebUI.pages
                     this.gvProject.DataBind();
                 }
             }
+            else if (this.Request["mode"] == "helpexecute")
+            {
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    var projects = (from p in ProjectModel.BatchProject
+                                    where p.HelpSendingDate.HasValue && !p.HelperFinishDate.HasValue
+                                    select p);
+                    this.gvProject.DataSource = projects.ToList();
+                    this.gvProject.DataBind();
+                }
+            }
             else
             {
             }
@@ -139,12 +150,6 @@ namespace ProjectCollection.WebUI.pages
         //
         protected void gvProject_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-            if (this.Request["mode"] == "browse")
-            {
-            }
-            else
-            {
-            }
             string ID = "";
             string PageIndex = gvProject.PageIndex.ToString();
             int count = gvProject.Rows.Count;
@@ -161,7 +166,21 @@ namespace ProjectCollection.WebUI.pages
                     ProjectCollection.WebUI.Models.BatchProject ThisProject = (from p in ProjectModel.BatchProject
                                                                                where p.id == ID
                                                                                select p).First();
-                    CurrentLink.NavigateUrl = "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=disposal&project=" + ThisProject.id + "&login=" + encode;
+                    if (this.Request["mode"] == "check")
+                    {
+                        CurrentLink.NavigateUrl = "~/pages/CustomTaskDetails.aspx?mode=" + this.Request["mode"] + "&id=" + ID;
+                    }
+                    else if (this.Request["mode"] == "execute")
+                    {
+                        CurrentLink.NavigateUrl = "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=disposal&project=" + ThisProject.id + "&login=" + encode;
+                    }
+                    else if (this.Request["mode"] == "helpexecute")
+                    {
+                        CurrentLink.NavigateUrl = "~/pages/CustomTaskDetails.aspx?mode=" + this.Request["mode"] + "&id=" + ID;
+                    }
+                    else
+                    {
+                    }
                 }
             }
         }

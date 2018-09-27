@@ -38,6 +38,9 @@
           <Property Name="HelperFinishDate" Type="datetime" />
           <Property Name="helper" Type="uniqueidentifier" />
           <Property Name="HelperFinishNote" Type="nvarchar" MaxLength="200" />
+          <Property Name="PicSendingDate" Type="datetime" />
+          <Property Name="TemplateSendingDate" Type="datetime" />
+          <Property Name="DeadLine" Type="datetime" />
         </EntityType>
         <EntityType Name="CustomProject">
           <Key>
@@ -1034,6 +1037,9 @@
           <NavigationProperty Name="user_info3" Relationship="ProjectCollectionModel.FK_BatchProject_user_info3" FromRole="BatchProject" ToRole="user_info" />
           <NavigationProperty Name="user_info4" Relationship="ProjectCollectionModel.FK_BatchProject_user_info4" FromRole="BatchProject" ToRole="user_info" />
           <NavigationProperty Name="user_info5" Relationship="ProjectCollectionModel.FK_BatchProject_user_info5" FromRole="BatchProject" ToRole="user_info" />
+          <Property Name="PicSendingDate" Type="DateTime" Precision="3" />
+          <Property Name="TemplateSendingDate" Type="DateTime" Precision="3" />
+          <Property Name="DeadLine" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_BatchProject_user_info">
           <End Type="ProjectCollectionModel.user_info" Role="user_info" Multiplicity="1" />
@@ -1399,6 +1405,9 @@
           <EntitySetMapping Name="BatchProject">
             <EntityTypeMapping TypeName="ProjectCollectionModel.BatchProject">
               <MappingFragment StoreEntitySet="BatchProject">
+                <ScalarProperty Name="DeadLine" ColumnName="DeadLine" />
+                <ScalarProperty Name="TemplateSendingDate" ColumnName="TemplateSendingDate" />
+                <ScalarProperty Name="PicSendingDate" ColumnName="PicSendingDate" />
                 <ScalarProperty Name="HelperFinishNote" ColumnName="HelperFinishNote" />
                 <ScalarProperty Name="helper" ColumnName="helper" />
                 <ScalarProperty Name="HelperFinishDate" ColumnName="HelperFinishDate" />

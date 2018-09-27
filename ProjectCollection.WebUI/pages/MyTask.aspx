@@ -224,14 +224,19 @@
             <asp:Label ID="LabelAmountOpenClassCheck" runat="server" Visible="false" Text=""></asp:Label>
         </asp:Panel>
         <asp:Panel ID="PanelCustomCheck" runat="server" Visible="false">
-            <asp:Label ID="LabelCustomCheck" runat="server" Text="定制任务审核"></asp:Label>
+            <asp:Label ID="LabelCustomCheck" runat="server" Text="输出任务审核"></asp:Label>
             <iframe id="IframeCustomCheck" runat="server"></iframe>
             <asp:Label ID="LabelAmountCustomCheck" runat="server" Visible="false" Text=""></asp:Label>
         </asp:Panel>
         <asp:Panel ID="PanelCustomExecute" runat="server" Visible="false">
-            <asp:Label ID="LabelCustomExecute" runat="server" Text="定制任务执行"></asp:Label>
+            <asp:Label ID="LabelCustomExecute" runat="server" Text="输出任务执行"></asp:Label>
             <iframe id="IframeCustomExecute" runat="server"></iframe>
             <asp:Label ID="LabelAmountCustomExecute" runat="server" Visible="false" Text=""></asp:Label>
+        </asp:Panel>
+        <asp:Panel ID="PanelCustomHelpExecute" runat="server" Visible="false">
+            <asp:Label ID="LabelCustomHelpExecute" runat="server" Text="输出任务执行(辅助)"></asp:Label>
+            <iframe id="IframeCustomHelpExecute" runat="server"></iframe>
+            <asp:Label ID="LabelAmountCustomHelpExecute" runat="server" Visible="false" Text=""></asp:Label>
         </asp:Panel>
     </div>
 </asp:Content>

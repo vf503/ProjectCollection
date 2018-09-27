@@ -85,7 +85,7 @@
                                 <%--<asp:CheckBox ID="SelectCheckBox" runat="server" AutoPostBack="true" OnCheckedChanged="btnBatch_Click"/>--%>
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:BoundField DataField="id" HeaderText="编号" ItemStyle-Width="115px" />
+                        <asp:BoundField DataField="id" HeaderText="编号" ItemStyle-Width="150px" />
                         <asp:BoundField DataField="custom" HeaderText="客户" />
                         <asp:BoundField DataField="CreateDate" HeaderText="日期" DataFormatString="{0: yyyy-MM-dd }" ItemStyle-Width="90px"/>
                         <asp:BoundField DataField="progress" HeaderText="进度" />
