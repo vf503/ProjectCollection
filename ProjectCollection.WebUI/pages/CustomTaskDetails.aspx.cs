@@ -104,6 +104,28 @@ namespace ProjectCollection.WebUI.pages
                     this.btnPass.Text = "完成";
                 }
                 #endregion helpexecute
+                #region pic
+                else if (this.Request["mode"] == "pic")
+                {
+                    PanelCheck.Visible = true;
+                    PanelPicFinish.Visible = true;
+                    this.InitCheckData(ThisProject);
+                    this.txtPicSendingDate.Text = ThisProject.PicSendingDate.ToString();
+                    this.btnPass.Visible = true;
+                    this.btnPass.Text = "完成";
+                }
+                #endregion pic
+                #region template
+                else if (this.Request["mode"] == "template")
+                {
+                    PanelCheck.Visible = true;
+                    PanelTemplateFinish.Visible = true;
+                    this.InitCheckData(ThisProject);
+                    this.txtTemplateSendingDate.Text = ThisProject.TemplateSendingDate.ToString();
+                    this.btnPass.Visible = true;
+                    this.btnPass.Text = "完成";
+                }
+                #endregion template
                 else
                 {
                     
@@ -156,6 +178,18 @@ namespace ProjectCollection.WebUI.pages
                     ThisProject.helper = this.LoginUserInfo.Identity;
                     ThisProject.HelperFinishDate = DateTime.Now;
                     ThisProject.HelperFinishNote = this.txtHelperFinishNote.Text;
+                }
+                else if (this.Request["mode"] == "pic")
+                {
+                    ThisProject.PicProducer = this.LoginUserInfo.Identity;
+                    ThisProject.PicFinishDate = DateTime.Now;
+                    ThisProject.PicFinishNote = this.txtPicFinishNote.Text;
+                }
+                else if (this.Request["mode"] == "template")
+                {
+                    ThisProject.TemplateProducer = this.LoginUserInfo.Identity;
+                    ThisProject.TemplateFinishDate = DateTime.Now;
+                    ThisProject.TemplateFinishNote = this.txtTemplateFinishNote.Text;
                 }
                 ProjectModel.SaveChanges();
             }

@@ -41,6 +41,8 @@
           <Property Name="PicSendingDate" Type="datetime" />
           <Property Name="TemplateSendingDate" Type="datetime" />
           <Property Name="DeadLine" Type="datetime" />
+          <Property Name="PicFinishNote" Type="nvarchar" MaxLength="500" />
+          <Property Name="TemplateFinishNote" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="CustomProject">
           <Key>
@@ -1040,6 +1042,8 @@
           <Property Name="PicSendingDate" Type="DateTime" Precision="3" />
           <Property Name="TemplateSendingDate" Type="DateTime" Precision="3" />
           <Property Name="DeadLine" Type="DateTime" Precision="3" />
+          <Property Name="PicFinishNote" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TemplateFinishNote" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_BatchProject_user_info">
           <End Type="ProjectCollectionModel.user_info" Role="user_info" Multiplicity="1" />
@@ -1405,6 +1409,8 @@
           <EntitySetMapping Name="BatchProject">
             <EntityTypeMapping TypeName="ProjectCollectionModel.BatchProject">
               <MappingFragment StoreEntitySet="BatchProject">
+                <ScalarProperty Name="TemplateFinishNote" ColumnName="TemplateFinishNote" />
+                <ScalarProperty Name="PicFinishNote" ColumnName="PicFinishNote" />
                 <ScalarProperty Name="DeadLine" ColumnName="DeadLine" />
                 <ScalarProperty Name="TemplateSendingDate" ColumnName="TemplateSendingDate" />
                 <ScalarProperty Name="PicSendingDate" ColumnName="PicSendingDate" />

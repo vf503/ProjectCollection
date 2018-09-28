@@ -36,6 +36,20 @@
         完成时间：<asp:TextBox ID="txtHelperFinishDate" runat="server" ReadOnly="true"></asp:TextBox><br />
         执行备注：<asp:TextBox ID="txtHelperFinishNote" runat="server" TextMode="MultiLine" ReadOnly="true"></asp:TextBox><br />
     </asp:Panel>
+    <asp:Panel ID="PanelPicFinish" runat="server" Visible="false">
+        <div class="PanelName" style="color:green">图片制作:</div>
+        执行人：<asp:TextBox ID="txtPicMaker" runat="server" ReadOnly="true"></asp:TextBox><br />
+        派发时间：<asp:TextBox ID="txtPicSendingDate" runat="server" ReadOnly="true"></asp:TextBox><br />
+        完成时间：<asp:TextBox ID="txtPicFinishDate" runat="server" ReadOnly="true"></asp:TextBox><br />
+        执行备注：<asp:TextBox ID="txtPicFinishNote" runat="server" TextMode="MultiLine" ReadOnly="true"></asp:TextBox><br />
+    </asp:Panel>
+    <asp:Panel ID="PanelTemplateFinish" runat="server" Visible="false">
+        <div class="PanelName" style="color:green">模版制作:</div>
+        执行人：<asp:TextBox ID="txtTemplateMaker" runat="server" ReadOnly="true"></asp:TextBox><br />
+        派发时间：<asp:TextBox ID="txtTemplateSendingDate" runat="server" ReadOnly="true"></asp:TextBox><br />
+        完成时间：<asp:TextBox ID="txtTemplateFinishDate" runat="server" ReadOnly="true"></asp:TextBox><br />
+        执行备注：<asp:TextBox ID="txtTemplateFinishNote" runat="server" TextMode="MultiLine" ReadOnly="true"></asp:TextBox><br />
+    </asp:Panel>
     <asp:Panel ID="PanelBtn" runat="server">
         <%--<asp:Button ID="btnExecute" runat="server" Text="执行" OnClick="btnExecuteOnclick" Visible="false" />--%>
         <asp:HyperLink ID="aExecute" runat="server" Target="_blank" Text="执行" Visible="false"></asp:HyperLink>

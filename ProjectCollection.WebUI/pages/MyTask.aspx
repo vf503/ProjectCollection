@@ -238,5 +238,15 @@
             <iframe id="IframeCustomHelpExecute" runat="server"></iframe>
             <asp:Label ID="LabelAmountCustomHelpExecute" runat="server" Visible="false" Text=""></asp:Label>
         </asp:Panel>
+        <asp:Panel ID="PanelCustomPic" runat="server" Visible="false">
+            <asp:Label ID="LabelCustomPic" runat="server" Text="制作课件图片"></asp:Label>
+            <iframe id="IframeCustomPic" runat="server"></iframe>
+            <asp:Label ID="LabelAmountCustomPic" runat="server" Visible="false" Text=""></asp:Label>
+        </asp:Panel>
+        <asp:Panel ID="PanelCustomTemplate" runat="server" Visible="false">
+            <asp:Label ID="LabelCustomTemplate" runat="server" Text="制作课件模板"></asp:Label>
+            <iframe id="IframeCustomTemplate" runat="server"></iframe>
+            <asp:Label ID="LabelAmountCustomTemplate" runat="server" Visible="false" Text=""></asp:Label>
+        </asp:Panel>
     </div>
 </asp:Content>

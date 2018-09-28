@@ -143,6 +143,28 @@ namespace ProjectCollection.WebUI.pages
                     this.gvProject.DataBind();
                 }
             }
+            else if (this.Request["mode"] == "pic")
+            {
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    var projects = (from p in ProjectModel.BatchProject
+                                    where p.PicSendingDate.HasValue && !p.PicFinishDate.HasValue
+                                    select p);
+                    this.gvProject.DataSource = projects.ToList();
+                    this.gvProject.DataBind();
+                }
+            }
+            else if (this.Request["mode"] == "template")
+            {
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    var projects = (from p in ProjectModel.BatchProject
+                                    where p.TemplateSendingDate.HasValue && !p.TemplateFinishDate.HasValue
+                                    select p);
+                    this.gvProject.DataSource = projects.ToList();
+                    this.gvProject.DataBind();
+                }
+            }
             else
             {
             }
@@ -180,6 +202,7 @@ namespace ProjectCollection.WebUI.pages
                     }
                     else
                     {
+                        CurrentLink.NavigateUrl = "~/pages/CustomTaskDetails.aspx?mode=" + this.Request["mode"] + "&id=" + ID;
                     }
                 }
             }

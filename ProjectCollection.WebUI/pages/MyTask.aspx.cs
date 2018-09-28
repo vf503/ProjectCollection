@@ -285,6 +285,36 @@ namespace ProjectCollection.WebUI.pages
                         else { }
                         //HidPanelFilterGrid(CurrentAuthority);
                     }
+                    else if (CurrentAuthority == "CustomPic")
+                    {
+                        CurrentPage.FindControl("Panel" + CurrentAuthority).Visible = true;
+                        if (ModeRange == "now")
+                        {
+                            IframeCustomPic.Visible = true;
+                            IframeCustomPic.Attributes["src"] = "~/pages/CustomTaskList.aspx?mode=pic";
+                        }
+                        else if (ModeRange == "all")
+                        {
+                            //ShowAmountData(CurrentAuthority);
+                        }
+                        else { }
+                        //HidPanelFilterGrid(CurrentAuthority);
+                    }
+                    else if (CurrentAuthority == "CustomTemplate")
+                    {
+                        CurrentPage.FindControl("Panel" + CurrentAuthority).Visible = true;
+                        if (ModeRange == "now")
+                        {
+                            IframeCustomTemplate.Visible = true;
+                            IframeCustomTemplate.Attributes["src"] = "~/pages/CustomTaskList.aspx?mode=template";
+                        }
+                        else if (ModeRange == "all")
+                        {
+                            //ShowAmountData(CurrentAuthority);
+                        }
+                        else { }
+                        //HidPanelFilterGrid(CurrentAuthority);
+                    }
                     else if (CurrentAuthority == "cross"|| CurrentAuthority == "CreateProject")
                     {
 
