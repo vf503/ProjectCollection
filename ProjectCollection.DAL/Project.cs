@@ -263,35 +263,35 @@ and CheckPersonInCharge=@CheckPersonInCharge";
         private const string Select_AmountManHours = @"Select Title, COUNT(Title) as Count From(
 SELECT
 (case 
-when dbo.WorkDay(SendingDate, ProductionCheckDate) <= 5 then '1'
-when(dbo.WorkDay(SendingDate, ProductionCheckDate) > 5) and(dbo.WorkDay(SendingDate, ProductionCheckDate) <= 10)  then '2'
-when(dbo.WorkDay(SendingDate, ProductionCheckDate) > 10) and(dbo.WorkDay(SendingDate, ProductionCheckDate) <= 15)  then '3'
-when(dbo.WorkDay(SendingDate, ProductionCheckDate) > 15) and(dbo.WorkDay(SendingDate, ProductionCheckDate) <= 20)  then '4'
-when dbo.WorkDay(SendingDate, ProductionCheckDate) > 20 then '5'
+when (dbo.WorkDay(SendingDate, CheckTaskCheckDate) <= 5) then '1' 
+when (dbo.WorkDay(SendingDate, CheckTaskCheckDate) > 5) and (dbo.WorkDay(SendingDate, CheckTaskCheckDate) <= 10) then '2'
+when (dbo.WorkDay(SendingDate, CheckTaskCheckDate) > 10) and (dbo.WorkDay(SendingDate, CheckTaskCheckDate) <= 15) then '3'
+when (dbo.WorkDay(SendingDate, CheckTaskCheckDate) > 15) and (dbo.WorkDay(SendingDate, CheckTaskCheckDate) <= 20) then '4'
+when (dbo.WorkDay(SendingDate, CheckTaskCheckDate) > 20) then '5'
 else '0'
 end
 ) as Title
   FROM Project
-  where ProductionCheckDate is not Null
+  where CheckTaskCheckDate is not Null
   and ProjectNo like @ProjectType
-  and (ProductionCheckDate between @DateBegin and @DateEnd)
+  and (CheckTaskCheckDate between @DateBegin and @DateEnd)
 ) as a
 Group By Title
 order by Title";
         private const string Select_AmountManHoursCalendarDay = @"Select Title, COUNT(Title) as Count From(
 SELECT
 (case 
-when DATEDIFF(DAY,SendingDate, ProductionCheckDate) <= 15 then '1'
-when(DATEDIFF(DAY,SendingDate, ProductionCheckDate) > 15) and(DATEDIFF(DAY,SendingDate, ProductionCheckDate) <= 20)  then '2'
-when(DATEDIFF(DAY,SendingDate, ProductionCheckDate) > 20) and(DATEDIFF(DAY,SendingDate, ProductionCheckDate) <= 25)  then '3'
-when DATEDIFF(DAY,SendingDate, ProductionCheckDate) > 25 then '4'
+when (DATEDIFF(DAY,SendingDate, CheckTaskCheckDate) <= 15) then '1'
+when (DATEDIFF(DAY,SendingDate, CheckTaskCheckDate) > 15) and (DATEDIFF(DAY,SendingDate, CheckTaskCheckDate) <= 20) then '2'
+when (DATEDIFF(DAY,SendingDate, CheckTaskCheckDate) > 20) and (DATEDIFF(DAY,SendingDate, CheckTaskCheckDate) <= 25) then '3'
+when (DATEDIFF(DAY,SendingDate, CheckTaskCheckDate) > 25) then '4'
 else '0'
 end
 ) as Title
   FROM Project
-  where ProductionCheckDate is not Null
+  where CheckTaskCheckDate is not Null
   and ProjectNo like @ProjectType
-  and (ProductionCheckDate between @DateBegin and @DateEnd)
+  and (CheckTaskCheckDate between @DateBegin and @DateEnd)
 ) as a
 Group By Title
 order by Title";

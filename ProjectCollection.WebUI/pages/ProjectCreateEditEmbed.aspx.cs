@@ -2,6 +2,7 @@
 using ProjectCollection.WebUI.pages.common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ProjectCollection.WebUI.pages
 {
@@ -1074,7 +1075,7 @@ namespace ProjectCollection.WebUI.pages
                 this.Redirect("~/pages/ProjectList.aspx?mode=productionfinish");
             }
             #endregion
-            #region
+            #region productionfinishbatchhandle
             else if (this.Request["mode"] == "productionfinishbatchhandle")
             {
                 List<Guid> BatchProjectId = new List<Guid>();
@@ -1086,7 +1087,7 @@ namespace ProjectCollection.WebUI.pages
                 }
                 this.Redirect("~/pages/ProjectList.aspx?mode=productionfinish");
             }
-            #endregion
+            #endregion productionfinishbatchhandle
             #region
             else if (this.Request["mode"] == "productioncheck")
             {
@@ -1683,6 +1684,13 @@ namespace ProjectCollection.WebUI.pages
             this.ddlContentIsTimely.SelectedValue = project.ContentIsTimely.ToString();
             this.txtContentCheckDate.Text = project.ContentCheckDate.ToString("yyyy-MM-dd HH:mm");
             this.txtContentCheckNote.Text = project.ContentCheckNote;
+            using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+            {
+                ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                      where p.ProjectId.ToString() == this.hidProjectId.Value.ToString()
+                                                                      select p).First();
+                this.ddlContentCheckScore.SelectedValue = ThisProject.ContentCheckScore;
+            }
         }
         private void InitContentRecheckData()
         {

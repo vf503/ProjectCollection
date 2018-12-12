@@ -36,6 +36,7 @@ namespace ProjectCollection.WebUI.Models
         public string Email_address { get; set; }
         public Nullable<System.Guid> role_identity { get; set; }
         public Nullable<System.Guid> SupervisorRole { get; set; }
+        public string area { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomProject> CustomProject { get; set; }

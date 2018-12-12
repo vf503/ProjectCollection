@@ -699,6 +699,7 @@ namespace ProjectCollection.WebUI.pages
                 this.PanelContentCheck.Visible = true;
                 this.PanelContentRecheck.Visible = true;
                 this.InitBrowseData();
+                this.InitDropDownListContentCheck();
                 this.InitContentCheckData();
                 //
                 UserName = LoginUserInfo.LoginName;
@@ -723,7 +724,7 @@ namespace ProjectCollection.WebUI.pages
                         this.PanelContentOperator.Visible = true;
                         this.InitDropDownListContentFinish();
                         this.InitContentFinishData();
-                    }
+                     }
                     catch
                     {
 
@@ -1433,50 +1434,15 @@ namespace ProjectCollection.WebUI.pages
                 this.Redirect("~/pages/MyTask.aspx?mode=contentrecheck");
             }
             #endregion
-            #region
+            #region productionfinish
             else if (this.Request["mode"] == "productionfinish")
             {
                 BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
-                if (project.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000199")
-                {
-                    UserName = LoginUserInfo.LoginName;
-                    PassWord = LoginUserInfo.Password;
-                    byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
-                    string str = Convert.ToBase64String(bytes);
-                    string url = @"http://203.207.118.96/FTPVideoUpload?ProjectNo="
-                        + HttpUtility.UrlEncode(project.ProjectNo)
-                        + "&title="
-                        + HttpUtility.UrlEncode(project.CourseName)
-                        + "&lecturer="
-                        + HttpUtility.UrlEncode(project.lecturer)
-                        + "&type="
-                        + project.ProjectNo.Substring(0, 1).ToLower()
-                        + "&link="
-                        + str;
-                    //
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                    request.Method = "GET";
-                    request.ContentType = "text/html;charset=UTF-8";
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                    Stream myResponseStream = response.GetResponseStream();
-                    StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
-                    string retString = myStreamReader.ReadToEnd();
-                    myStreamReader.Close();
-                    myResponseStream.Close();
-                    //
-                    JObject jo = (JObject)JsonConvert.DeserializeObject(retString);
-                    if (jo["status"].ToString() == "文件完备" && jo["data"].ToString() == "数据添加成功")
-                    { }
-                    else
-                    {
-                        throw new MyException(jo["status"].ToString());
-                    }
-                }
                 UpdateProductionFinish(project);
                 this.Redirect("~/pages/MyTask.aspx?mode=productionfinish");
             }
-            #endregion
-            #region
+            #endregion productionfinish
+            #region productionfinishbatch
             else if (this.Request["mode"] == "productionfinishbatchhandle")
             {
                 List<Guid> BatchProjectId = new List<Guid>();
@@ -1488,7 +1454,7 @@ namespace ProjectCollection.WebUI.pages
                 }
                 this.Redirect("~/pages/MyTask.aspx?mode=productionfinish");
             }
-            #endregion
+            #endregion productionfinishbatch
             #region
             else if (this.Request["mode"] == "productioncheck")
             {
@@ -2179,6 +2145,13 @@ namespace ProjectCollection.WebUI.pages
             this.ddlContentIsTimely.SelectedValue = project.ContentIsTimely.ToString();
             this.txtContentCheckDate.Text = project.ContentCheckDate.ToString("yyyy-MM-dd HH:mm");
             this.txtContentCheckNote.Text = project.ContentCheckNote;
+            using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+            {
+                ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                      where p.ProjectId.ToString() == this.hidProjectId.Value.ToString()
+                                                                      select p).First();
+                this.ddlContentCheckScore.SelectedValue = ThisProject.ContentCheckScore;
+            }
         }
         private void InitContentRecheckData()
         {
@@ -2438,6 +2411,14 @@ namespace ProjectCollection.WebUI.pages
                 project.ContentProgress = new Guid("00000000-0000-0000-0000-000000000122");
             }
             BLL.Project.UpdateContentCheck(project);
+            using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+            {
+                ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                      where p.ProjectId.ToString() == project.ProjectId.ToString()
+                                                                      select p).First();
+                ThisProject.ContentCheckScore = this.ddlContentCheckScore.SelectedValue;
+                ProjectModel.SaveChanges();
+            }
         }
         private void UpdateProductionReceive(Project project)
         {
@@ -2497,6 +2478,42 @@ namespace ProjectCollection.WebUI.pages
         }
         private void UpdateProductionFinish(Project project)
         {
+            //新
+            if (project.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000199")
+            {
+                UserName = LoginUserInfo.LoginName;
+                PassWord = LoginUserInfo.Password;
+                byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                string str = Convert.ToBase64String(bytes);
+                string url = @"http://newpms.cei.cn/FTPVideoUpload?ProjectNo="
+                    + HttpUtility.UrlEncode(project.ProjectNo)
+                    + "&title="
+                    + HttpUtility.UrlEncode(project.CourseName)
+                    + "&lecturer="
+                    + HttpUtility.UrlEncode(project.lecturer)
+                    + "&type="
+                    + project.ProjectNo.Substring(0, 1).ToLower()
+                    + "&link="
+                    + str;
+                //
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.Method = "GET";
+                request.ContentType = "text/html;charset=UTF-8";
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Stream myResponseStream = response.GetResponseStream();
+                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                string retString = myStreamReader.ReadToEnd();
+                myStreamReader.Close();
+                myResponseStream.Close();
+                //
+                JObject jo = (JObject)JsonConvert.DeserializeObject(retString);
+                if (jo["status"].ToString() == "文件完备" && jo["data"].ToString() == "数据添加成功")
+                { }
+                else
+                {
+                    throw new MyException(jo["status"].ToString());
+                }
+            }
             if (project.ProductionProgress == new Guid("00000000-0000-0000-0000-000000000125"))
             {
                 project.ProductionLastModifyDate = DateTime.Now;

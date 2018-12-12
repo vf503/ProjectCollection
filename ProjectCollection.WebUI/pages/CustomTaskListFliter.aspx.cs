@@ -5,24 +5,24 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace ProjectCollection.WebUI
+namespace ProjectCollection.WebUI.pages
 {
-    public partial class CustomProjectList : System.Web.UI.Page
+    public partial class CustomTaskListFliter : System.Web.UI.Page
     {
-        public Guid type;
-        public string mode;
+        public string range="";
+        public string process="";
         #region 事件
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            type = new Guid(this.Request["type"]);
-            mode = this.Request["mode"];
-            DataBindProjectPlanList(type, mode);
+            //range = this.Request["range"];
+            //range = this.Request["process"];
+            DataBindProjectPlanList(range, process);
         }
 
         protected void axgvProject_PageIndexChanged(object sender, EventArgs e)
         {
-            DataBindProjectPlanList(type, mode);
+            DataBindProjectPlanList(range, process);
         }
 
         protected void axgvProject_CustomButtonCallback(object sender, DevExpress.Web.ASPxGridViewCustomButtonCallbackEventArgs e)
@@ -45,7 +45,7 @@ namespace ProjectCollection.WebUI
             foreach (object key in keyValues)
             {
                 HyperLink CurrentASelect = (HyperLink)axgvProject.FindRowCellTemplateControlByKey(key, (DevExpress.Web.GridViewDataColumn)axgvProject.Columns["Operate"], "aSelect");
-                CurrentASelect.NavigateUrl = "~/pages/CustomProjectCreateEdit.aspx?mode=" + this.Request["mode"] + "&type=" + this.Request["type"] + "&ProjectId=" + key.ToString();
+                CurrentASelect.NavigateUrl = "~/pages/CustomTaskDetails.aspx?mode=browse" + "&id=" + key.ToString();
             }
         }
 
@@ -54,7 +54,9 @@ namespace ProjectCollection.WebUI
             if (rblMain.Value.ToString() == "normal")
             { Response.Redirect("~/pages/ProjectListFilter.aspx?mode=browse"); }
             else if (rblMain.Value.ToString() == "OpenClass")
-            { }
+            {
+                Response.Redirect("~/pages/CustomProjectList.aspx?type=00000000-0000-0000-0000-000000000202&mode=browse");
+            }
             else if (rblMain.Value.ToString() == "batch")
             { Response.Redirect("~/pages/CustomTaskListFliter.aspx?mode=browse"); }
             else
@@ -65,42 +67,23 @@ namespace ProjectCollection.WebUI
 
         #region 方法
 
-        private void DataBindProjectPlanList(Guid type, string mode)
+        private void DataBindProjectPlanList(string range,string process)
         {
-            if (mode == "browse")
+            using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
             {
-                this.axgvProject.DataSource = BLL.CustomProject.GetCustomProjectByType(type);
+                var projects = (from p in ProjectModel.BatchProject
+                                orderby p.CreateDate descending
+                                select p);
+                this.axgvProject.DataSource = projects.ToList();
                 this.axgvProject.DataBind();
             }
-            else if (mode == "receive")
-            {
-                this.axgvProject.DataSource = BLL.CustomProject.GetCustomProjectByType(type, new Guid("00000000-0000-0000-0000-000000000203"));
-                this.axgvProject.DataBind();
-            }
-            else if (mode == "operation")
-            {
-                this.axgvProject.DataSource = BLL.CustomProject.GetCustomProjectByType(type, new Guid("00000000-0000-0000-0000-000000000204"));
-                this.axgvProject.DataBind();
-            }
-            else if (mode == "publish")
-            {
-                this.axgvProject.DataSource = BLL.CustomProject.GetCustomProjectByType(type, new Guid("00000000-0000-0000-0000-000000000205"));
-                this.axgvProject.DataBind();
-            }
-            else if (mode == "check")
-            {
-                this.axgvProject.DataSource = BLL.CustomProject.GetCustomProjectByType(type, new Guid("00000000-0000-0000-0000-000000000207"));
-                this.axgvProject.DataBind();
-            }
-            else { }
             List<object> keyValues = axgvProject.GetCurrentPageRowValues(axgvProject.KeyFieldName);
             foreach (object key in keyValues)
             {
                 HyperLink CurrentASelect = (HyperLink)axgvProject.FindRowCellTemplateControlByKey(key, (DevExpress.Web.GridViewDataColumn)axgvProject.Columns["Operate"], "aSelect");
-                CurrentASelect.NavigateUrl = "~/pages/CustomProjectCreateEdit.aspx?mode=" + this.Request["mode"] + "&type=" + this.Request["type"] + "&ProjectId=" + key.ToString();
+                CurrentASelect.NavigateUrl = "~/pages/CustomTaskDetails.aspx?mode=browse" + "&id=" + key.ToString();
             }
         }
-
         #endregion 方法
     }
 }

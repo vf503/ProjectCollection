@@ -40,6 +40,10 @@ namespace ProjectCollection.WebUI.pages
                 int Count = 0;
                 foreach (DataRow dr in dtManHours.Rows)
                 {
+                    if (dr["Title"].ToString() == "0")
+                    {
+                        //dr["Text"] = "其他";
+                    }
                     if (dr["Title"].ToString() == "1")
                     {
                         dr["Text"] = "15天内";

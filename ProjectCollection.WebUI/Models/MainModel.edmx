@@ -43,6 +43,7 @@
           <Property Name="DeadLine" Type="datetime" />
           <Property Name="PicFinishNote" Type="nvarchar" MaxLength="500" />
           <Property Name="TemplateFinishNote" Type="nvarchar" MaxLength="500" />
+          <Property Name="customer" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="CustomProject">
           <Key>
@@ -234,6 +235,7 @@
           <Property Name="ContentCheckPersonInCharge" Type="uniqueidentifier" />
           <Property Name="EpisodeCount" Type="smallint" />
           <Property Name="VideoEncodeFinishDate" Type="datetime" />
+          <Property Name="ContentCheckScore" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ProjectPlan">
           <Key>
@@ -332,6 +334,7 @@
           <Property Name="Email_address" Type="nvarchar" MaxLength="50" />
           <Property Name="role_identity" Type="uniqueidentifier" />
           <Property Name="SupervisorRole" Type="uniqueidentifier" />
+          <Property Name="area" Type="nchar" MaxLength="10" />
         </EntityType>
         <Association Name="FK_BatchProject_user_info">
           <End Role="user_info" Type="Self.user_info" Multiplicity="1" />
@@ -673,6 +676,7 @@
           <NavigationProperty Name="BatchProject3" Relationship="ProjectCollectionModel.FK_BatchProject_user_info3" FromRole="user_info" ToRole="BatchProject" />
           <NavigationProperty Name="BatchProject4" Relationship="ProjectCollectionModel.FK_BatchProject_user_info4" FromRole="user_info" ToRole="BatchProject" />
           <NavigationProperty Name="BatchProject5" Relationship="ProjectCollectionModel.FK_BatchProject_user_info5" FromRole="user_info" ToRole="BatchProject" />
+          <Property Name="area" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           </EntityType>
         <EntityType Name="role_authority">
           <Key>
@@ -970,6 +974,7 @@
           <Property Name="ContentCheckPersonInCharge" Type="Guid" />
           <Property Name="EpisodeCount" Type="Int16" />
           <Property Name="VideoEncodeFinishDate" Type="DateTime" Precision="3" />
+          <Property Name="ContentCheckScore" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ProjectPlanRecord">
           <Key>
@@ -1044,6 +1049,7 @@
           <Property Name="DeadLine" Type="DateTime" Precision="3" />
           <Property Name="PicFinishNote" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="TemplateFinishNote" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="customer" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_BatchProject_user_info">
           <End Type="ProjectCollectionModel.user_info" Role="user_info" Multiplicity="1" />
@@ -1206,6 +1212,7 @@
           <EntitySetMapping Name="user_info">
             <EntityTypeMapping TypeName="ProjectCollectionModel.user_info">
               <MappingFragment StoreEntitySet="user_info">
+                <ScalarProperty Name="area" ColumnName="area" />
                 <ScalarProperty Name="SupervisorRole" ColumnName="SupervisorRole" />
                 <ScalarProperty Name="user_identity" ColumnName="user_identity" />
                 <ScalarProperty Name="login_name" ColumnName="login_name" />
@@ -1237,6 +1244,7 @@
           <EntitySetMapping Name="Project">
             <EntityTypeMapping TypeName="ProjectCollectionModel.Project">
               <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="ContentCheckScore" ColumnName="ContentCheckScore" />
                 <ScalarProperty Name="VideoEncodeFinishDate" ColumnName="VideoEncodeFinishDate" />
                 <ScalarProperty Name="EpisodeCount" ColumnName="EpisodeCount" />
                 <ScalarProperty Name="ContentCheckPersonInCharge" ColumnName="ContentCheckPersonInCharge" />
@@ -1409,6 +1417,7 @@
           <EntitySetMapping Name="BatchProject">
             <EntityTypeMapping TypeName="ProjectCollectionModel.BatchProject">
               <MappingFragment StoreEntitySet="BatchProject">
+                <ScalarProperty Name="customer" ColumnName="customer" />
                 <ScalarProperty Name="TemplateFinishNote" ColumnName="TemplateFinishNote" />
                 <ScalarProperty Name="PicFinishNote" ColumnName="PicFinishNote" />
                 <ScalarProperty Name="DeadLine" ColumnName="DeadLine" />

@@ -238,6 +238,11 @@
         PPT质量：<asp:DropDownList ID="ddlContentPPTQuality" runat="server"></asp:DropDownList><br />
         考题质量：<asp:DropDownList ID="ddlContentExercisesQuality" runat="server"></asp:DropDownList><br />
         文稿整理质量：<asp:DropDownList ID="ddlContentTextQuality" runat="server"></asp:DropDownList><br />
+        整体打分：<asp:DropDownList ID="ddlContentCheckScore" runat="server">
+            <asp:ListItem>A</asp:ListItem>
+            <asp:ListItem>B</asp:ListItem>
+            <asp:ListItem>C</asp:ListItem>
+        </asp:DropDownList><br />
         是否及时：<asp:DropDownList ID="ddlContentIsTimely" runat="server"></asp:DropDownList><br />
         审核时间：<asp:TextBox ID="txtContentCheckDate" runat="server" Text="自动填充"></asp:TextBox><br />
         备注：<asp:TextBox ID="txtContentCheckNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />

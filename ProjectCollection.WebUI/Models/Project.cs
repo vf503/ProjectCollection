@@ -157,5 +157,6 @@ namespace ProjectCollection.WebUI.Models
         public Nullable<System.Guid> ContentCheckPersonInCharge { get; set; }
         public Nullable<short> EpisodeCount { get; set; }
         public Nullable<System.DateTime> VideoEncodeFinishDate { get; set; }
+        public string ContentCheckScore { get; set; }
     }
 }

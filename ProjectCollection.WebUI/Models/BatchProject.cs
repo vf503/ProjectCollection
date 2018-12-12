@@ -48,6 +48,7 @@ namespace ProjectCollection.WebUI.Models
         public Nullable<System.DateTime> DeadLine { get; set; }
         public string PicFinishNote { get; set; }
         public string TemplateFinishNote { get; set; }
+        public string customer { get; set; }
     
         public virtual user_info user_info { get; set; }
         public virtual user_info user_info1 { get; set; }

@@ -7,10 +7,10 @@
 // </自动生成>
 //------------------------------------------------------------------------------
 
-namespace ProjectCollection.WebUI {
+namespace ProjectCollection.WebUI.pages {
     
     
-    public partial class CustomProjectList {
+    public partial class CustomTaskListFliter {
         
         /// <summary>
         /// rblMain 控件。

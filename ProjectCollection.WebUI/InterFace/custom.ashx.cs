@@ -33,6 +33,7 @@ namespace ProjectCollection.WebUI.InterFace
                 JObject o = JObject.Parse(strReq);
                 string id = (string)o["id"];
                 string custom = (string)o["custom"];
+                string customerid = (string)o["CustomerId"];
                 string user = (string)o["user"];
                 string note = (string)o["note"];
                 string DeadLine = (string)o["DeadLine"];
@@ -57,6 +58,7 @@ namespace ProjectCollection.WebUI.InterFace
                                                                          select u).First();
                     ThisProject.id = id;
                     ThisProject.custom = custom;
+                    ThisProject.customer = customerid;
                     ThisProject.CreatorId = ThisUser.user_identity;
                     ThisProject.CreateNote = note;
                     ThisProject.DeadLine = Convert.ToDateTime(DeadLine);
@@ -98,6 +100,7 @@ namespace ProjectCollection.WebUI.InterFace
                     rss = new JObject(
                         new JProperty("id", ThisProject.id),
                         new JProperty("custom", ThisProject.custom),
+                        new JProperty("CustomerId", ThisProject.customer),
                         new JProperty("user", ThisUser.real_name),
                         new JProperty("require", JsonConvert.DeserializeObject(ThisProject.TaskRequire)),
                         new JProperty("CreateDate", ThisProject.CreateDate.ToString("yyyy-MM-dd")),

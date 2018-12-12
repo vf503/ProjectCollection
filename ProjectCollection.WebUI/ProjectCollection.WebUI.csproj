@@ -242,6 +242,7 @@
     <Content Include="packages.config" />
     <Content Include="pages\CustomTaskDetails.aspx" />
     <Content Include="pages\CustomTaskList.aspx" />
+    <Content Include="pages\CustomTaskListFliter.aspx" />
     <Content Include="pages\MyTask.aspx" />
     <Content Include="pages\ProjectCreateEditEmbed.aspx" />
     <Content Include="pages\ProjectListEmbed.aspx" />
@@ -429,6 +430,13 @@
     </Compile>
     <Compile Include="pages\CustomTaskList.aspx.designer.cs">
       <DependentUpon>CustomTaskList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\CustomTaskListFliter.aspx.cs">
+      <DependentUpon>CustomTaskListFliter.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\CustomTaskListFliter.aspx.designer.cs">
+      <DependentUpon>CustomTaskListFliter.aspx</DependentUpon>
     </Compile>
     <Compile Include="pages\error.aspx.cs">
       <DependentUpon>error.aspx</DependentUpon>

@@ -38,6 +38,7 @@ namespace ProjectCollection.WebUI.pages
                 {
                     try
                     {
+                        PanelCheck.Visible = true;
                         this.InitCheckData(ThisProject);
                     }
                     catch
@@ -48,11 +49,63 @@ namespace ProjectCollection.WebUI.pages
                     {
 
                     }
-
                     //
                     try
                     {
+                        PanelFinish.Visible = true;
                         this.InitExecuteData(ThisProject);
+                    }
+                    catch
+                    {
+
+                    }
+                    finally
+                    {
+
+                    }
+                    //
+                    try
+                    {
+                        PanelHelpFinish.Visible = true;
+                        this.txtHelpSendingDate.Text = ThisProject.HelpSendingDate.ToString();
+                        this.txtHelper.Text = ThisProject.user_info5.real_name.ToString();
+                        this.txtHelperFinishDate.Text = ThisProject.HelperFinishDate.ToString();
+                        this.txtHelperFinishNote.Text = ThisProject.HelperFinishNote.ToString();
+                    }
+                    catch
+                    {
+
+                    }
+                    finally
+                    {
+
+                    }
+                    //
+                    //
+                    try
+                    {
+                        PanelPicFinish.Visible = true;
+                        this.txtPicSendingDate.Text = ThisProject.PicSendingDate.ToString();
+                        this.txtPicMaker.Text = ThisProject.user_info3.real_name.ToString();
+                        this.txtPicFinishDate.Text = ThisProject.PicFinishDate.ToString();
+                        this.txtPicFinishNote.Text = ThisProject.PicFinishNote.ToString();
+                    }
+                    catch
+                    {
+
+                    }
+                    finally
+                    {
+
+                    }
+                    //
+                    try
+                    {
+                        PanelTemplateFinish.Visible = true;
+                        this.txtTemplateSendingDate.Text = ThisProject.TemplateSendingDate.ToString();
+                        this.txtTemplateMaker.Text= ThisProject.user_info4.real_name.ToString();
+                        this.txtTemplateFinishDate.Text = ThisProject.TemplateFinishDate.ToString();
+                        this.txtTemplateFinishNote.Text = ThisProject.TemplateFinishNote.ToString();
                     }
                     catch
                     {
@@ -224,11 +277,18 @@ namespace ProjectCollection.WebUI.pages
             string TaskRequireStr = "";
             if (TaskRequireJson["template"].ToString() != "")
             {
-                TaskRequireStr += "下载套模板：" + TaskRequireJson["template"]+ " ; ";
+                if (TaskRequireJson["template"].ToString() == "0")
+                {
+                    TaskRequireStr += "下载套模板：模板未指定\r\n";
+                }
+                else
+                {
+                    TaskRequireStr += "下载套模板：" + TaskRequireJson["template"] + "\r\n";
+                }
             }
             if (TaskRequireJson["DisplaySize"].ToString() != "")
             {
-                TaskRequireStr += "输出分辨率：" + TaskRequireJson["DisplaySize"] + "\r\n";
+                TaskRequireStr += "输出分辨率：" + TaskRequireJson["DisplaySize"] + " ; ";
             }
             if (TaskRequireJson["BitRate"].ToString() != "")
             {

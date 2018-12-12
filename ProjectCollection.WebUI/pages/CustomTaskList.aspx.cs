@@ -139,6 +139,10 @@ namespace ProjectCollection.WebUI.pages
                     var projects = (from p in ProjectModel.BatchProject
                                     where p.HelpSendingDate.HasValue && !p.HelperFinishDate.HasValue
                                     select p);
+                    foreach (var p in projects)
+                    {
+                        p.progress = "等待执行";
+                    }
                     this.gvProject.DataSource = projects.ToList();
                     this.gvProject.DataBind();
                 }
@@ -150,6 +154,10 @@ namespace ProjectCollection.WebUI.pages
                     var projects = (from p in ProjectModel.BatchProject
                                     where p.PicSendingDate.HasValue && !p.PicFinishDate.HasValue
                                     select p);
+                    foreach (var p in projects)
+                    {
+                        p.progress = "等待执行";
+                    }
                     this.gvProject.DataSource = projects.ToList();
                     this.gvProject.DataBind();
                 }
@@ -161,6 +169,10 @@ namespace ProjectCollection.WebUI.pages
                     var projects = (from p in ProjectModel.BatchProject
                                     where p.TemplateSendingDate.HasValue && !p.TemplateFinishDate.HasValue
                                     select p);
+                    foreach (var p in projects)
+                    {
+                        p.progress = "等待执行";
+                    }
                     this.gvProject.DataSource = projects.ToList();
                     this.gvProject.DataBind();
                 }

@@ -130,7 +130,7 @@ namespace ProjectCollection.WebUI.pages
 
         protected void HidAllPanel()
         {
-            List<string> PanelList = new List<string>() { "recond", "OpenClassReceive", "OpenClassOperation", "OpenClassPublish", "OpenClassCheck","capture","capturecheck","execution","shorthand","contentreceive","contentcheck","contentrecheck","contentfinish","productionreceive","productioncheck","productionfinish","publish","check"};
+            List<string> PanelList = new List<string>() { "recond", "OpenClassReceive", "OpenClassOperation", "OpenClassPublish", "OpenClassCheck","capture","capturecheck","execution","shorthand","contentreceive","contentcheck","contentrecheck","contentfinish","productionreceive","productioncheck","productionfinish","publish","check", "CustomCheck", "CustomExecute" };
             foreach (string CurrentPanelId in PanelList)
             {
                 Panel CurrentPanel = (Panel)CurrentPage.FindControl("Panel" + CurrentPanelId);
@@ -140,7 +140,7 @@ namespace ProjectCollection.WebUI.pages
 
         protected void HidAmountLabel()
         {
-            List<string> PanelList = new List<string>() { "recond", "OpenClassReceive", "OpenClassOperation", "OpenClassPublish", "OpenClassCheck", "capture", "capturecheck", "execution", "shorthand", "contentreceive", "contentcheck", "contentrecheck", "contentfinish", "productionreceive", "productioncheck", "productionfinish", "publish", "check" };
+            List<string> PanelList = new List<string>() { "recond", "OpenClassReceive", "OpenClassOperation", "OpenClassPublish", "OpenClassCheck", "capture", "capturecheck", "execution", "shorthand", "contentreceive", "contentcheck", "contentrecheck", "contentfinish", "productionreceive", "productioncheck", "productionfinish", "publish", "check", "CustomCheck", "CustomExecute" };
             foreach (string CurrentPanelId in PanelList)
             {
                 Label CurrentPanel = (Label)CurrentPage.FindControl("LabelAmount" + CurrentPanelId);

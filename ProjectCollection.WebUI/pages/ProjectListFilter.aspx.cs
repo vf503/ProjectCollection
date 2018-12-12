@@ -158,6 +158,10 @@ namespace ProjectCollection.WebUI.pages
                 {
                     Response.Redirect("~/pages/CustomProjectList.aspx?type=00000000-0000-0000-0000-000000000202&mode=browse");
                 }
+                else if (FilterListPlanType.ToString() == "99999999-9999-9999-9999-000000000000")
+                {
+                    Response.Redirect("~/pages/CustomTaskListFliter.aspx?mode=browse");
+                }
                 else { }
                 //
                 if (FilterProgress.ToString() == "00000000-0000-0000-0000-999999999999")

@@ -199,6 +199,7 @@
             <asp:ListItem Value="00000000-0000-0000-0000-000000000016">外拍</asp:ListItem>
             <asp:ListItem Value="00000000-0000-0000-0000-000000000014">采购</asp:ListItem>
             <asp:ListItem Value="00000000-0000-0000-0000-000000000201">客户</asp:ListItem>
+            <asp:ListItem Value="99999999-9999-9999-9999-000000000000">产品输出</asp:ListItem>
             <asp:ListItem Value="99999999-9999-9999-9999-999999999999">公开课</asp:ListItem>
         </asp:RadioButtonList>
         <asp:RadioButtonList ID="RadioButtonListProgress" runat="server" OnSelectedIndexChanged="SelectSetChanged" AutoPostBack="true" CssClass="RadioButtonListPlanType" RepeatDirection="Horizontal">

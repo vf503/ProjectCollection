@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/pages/common/Master.Master" AutoEventWireup="true" CodeBehind="CustomProjectList.aspx.cs" Inherits="ProjectCollection.WebUI.CustomProjectList" MaintainScrollPositionOnPostback="true"%>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/pages/common/Master.Master" AutoEventWireup="true" CodeBehind="CustomTaskListFliter.aspx.cs" Inherits="ProjectCollection.WebUI.pages.CustomTaskListFliter" %>
 <%@ Register Assembly="DevExpress.Web.v16.1, Version=16.1.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" Namespace="DevExpress.Web" TagPrefix="dx"%>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style type="text/css">
@@ -14,27 +14,22 @@
     <dx:ASPxRadioButtonList ID="rblMain" runat="server" RepeatDirection="Horizontal" AutoPostBack="true" OnSelectedIndexChanged="rblMain_SelectedIndexChanged">
         <Items>
             <dx:ListEditItem Text="普通工单" Value="normal" />
-            <dx:ListEditItem Text="产品输出" Value="batch"/>
-            <dx:ListEditItem Text="公开课" Value="OpenClass" Selected="true"/>
+            <dx:ListEditItem Text="产品输出" Value="batch" Selected="true"/>
+            <dx:ListEditItem Text="公开课" Value="OpenClass" />
         </Items>
     </dx:ASPxRadioButtonList>
-    <dx:ASPxGridView ID="axgvProject" ClientInstanceName="axgvProject" runat="server" KeyFieldName="CustomProjectId"
+    <dx:ASPxGridView ID="axgvProject" ClientInstanceName="axgvProject" runat="server" KeyFieldName="id"
         OnPageIndexChanged="axgvProject_PageIndexChanged" AutoGenerateColumns="False" OnCustomButtonCallback="axgvProject_CustomButtonCallback"
         OnDetailRowExpandedChanged="axgvProject_DataHandle" OnAfterPerformCallback="axgvProject_DataHandle">
         <Columns>
-            <dx:GridViewCommandColumn Caption="" ShowClearFilterButton="True" VisibleIndex="0">
-            </dx:GridViewCommandColumn>
-            <dx:GridViewDataColumn FieldName="No" Caption="编号" Settings-AutoFilterCondition="Contains" VisibleIndex="1" >
+            <dx:GridViewDataColumn FieldName="custom" Caption="客户名称" Settings-AutoFilterCondition="Contains" VisibleIndex="0" >
 <Settings AutoFilterCondition="Contains"></Settings>
             </dx:GridViewDataColumn>
-            <dx:GridViewDataColumn FieldName="Title" Caption="名称" Settings-AutoFilterCondition="Contains" VisibleIndex="2" >
+            <dx:GridViewDataColumn FieldName="CreateDate" Caption="创建日期" VisibleIndex="1" />
+            <dx:GridViewDataColumn FieldName="user_info.real_name" Caption="创建人" Settings-AutoFilterCondition="Contains" VisibleIndex="2" >
 <Settings AutoFilterCondition="Contains"></Settings>
             </dx:GridViewDataColumn>
-            <dx:GridViewDataColumn FieldName="SendingDate" Caption="派发日期" VisibleIndex="3" />
-            <dx:GridViewDataColumn FieldName="Lecturer" Caption="主讲人" Settings-AutoFilterCondition="Contains" VisibleIndex="4" >
-<Settings AutoFilterCondition="Contains"></Settings>
-            </dx:GridViewDataColumn>
-            <dx:GridViewDataColumn FieldName="ProgressText" Caption="进度" Settings-AutoFilterCondition="Contains" VisibleIndex="5" >
+            <dx:GridViewDataColumn FieldName="progress" Caption="进度" Settings-AutoFilterCondition="Contains" VisibleIndex="3" >
 <Settings AutoFilterCondition="Contains"></Settings>
             </dx:GridViewDataColumn>
             <dx:GridViewDataColumn Caption="操作" FieldName="Operate" VisibleIndex="6">
