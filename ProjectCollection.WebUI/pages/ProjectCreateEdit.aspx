@@ -329,11 +329,33 @@
     <asp:Panel ID="PanelBaseBtn" runat="server">
         <asp:Button ID="btnCancel" runat="server" Text="取消" OnClick="btnCancel_Click" />
         <asp:Button ID="btnOk" runat="server" Text="派发工单" OnClick="btnOk_Click" Visible="false" />
+        <asp:Button ID="btnNewOkNew" runat="server" Text="完成(新)" Visible="false" OnClick="btnNewOkNew_Click"/>
         <asp:Button ID="btnReceive" runat="server" Text="接受任务" OnClick="btnReceive_Click" Visible="false" />
         <asp:Button ID="btnSentBack" runat="server" Text="审核不通过" OnClick="btnSentBack_Click" Visible="false" />
     </asp:Panel>
     <asp:Panel ID="PanelCaptureCheckBtn" runat="server" Visible="false">
         <%--<asp:Button ID="btnDelete" runat="server" Text="删除" OnClick="btnDelete_Click" Visible="false" />--%>
         <asp:Button ID="btnDiscard" runat="server" Text="废除" OnClick="btnDiscard_Click" Visible="false" />
+    </asp:Panel>
+    <asp:Panel ID="PanelResult" runat="server" Visible="false">
+        <asp:GridView ID="TableResult" runat="server" AllowPaging="False" AutoGenerateColumns="False" 
+                    BackColor="White" BorderColor="#DEDFDE" BorderStyle="None" BorderWidth="1px" CellPadding="10" CssClass="MainList" 
+                    DataKeyNames="id" ForeColor="Black" GridLines="Vertical" OnRowDataBound="TableResult_RowDataBound" >
+                    <AlternatingRowStyle BackColor="White" />
+                    <Columns>
+                        <asp:BoundField DataField="id" HeaderText="编号" ItemStyle-Width="150px" />
+                        <asp:BoundField DataField="title" HeaderText="标题" />
+                        <asp:BoundField DataField="result" HeaderText="结果" />
+                    </Columns>
+                    <FooterStyle BackColor="#CCCC99" />
+                    <HeaderStyle BackColor="#D6EBFE" Font-Bold="True" Font-Names="Microsoft YaHei" ForeColor="#3285e5" Height="40px" />
+                    <RowStyle BackColor="#F7F7DE" />
+                    <SelectedRowStyle BackColor="#CE5D5A" Font-Bold="True" ForeColor="White" />
+                    <SortedAscendingCellStyle BackColor="#FBFBF2" />
+                    <SortedAscendingHeaderStyle BackColor="#848384" />
+                    <SortedDescendingCellStyle BackColor="#EAEAD3" />
+                    <SortedDescendingHeaderStyle BackColor="#575357" />
+        </asp:GridView>
+        <asp:Button ID="btnBack" runat="server" Text="返回任务列表"  OnClick="btnBack_Click"/>
     </asp:Panel>
 </asp:Content>

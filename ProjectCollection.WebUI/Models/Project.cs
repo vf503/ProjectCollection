@@ -158,5 +158,6 @@ namespace ProjectCollection.WebUI.Models
         public Nullable<short> EpisodeCount { get; set; }
         public Nullable<System.DateTime> VideoEncodeFinishDate { get; set; }
         public string ContentCheckScore { get; set; }
+        public string MakeType { get; set; }
     }
 }

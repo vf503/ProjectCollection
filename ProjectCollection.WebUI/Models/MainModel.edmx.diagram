@@ -27,6 +27,7 @@
         <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info3" />
         <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info4" />
         <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info5" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.sysdiagrams" Width="1.5" PointX="10.375" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1435,6 +1435,15 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.WebControls.Button btnOk;
         
         /// <summary>
+        /// btnNewOkNew 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnNewOkNew;
+        
+        /// <summary>
         /// btnReceive 控件。
         /// </summary>
         /// <remarks>
@@ -1469,6 +1478,33 @@ namespace ProjectCollection.WebUI.pages {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnDiscard;
+        
+        /// <summary>
+        /// PanelResult 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelResult;
+        
+        /// <summary>
+        /// TableResult 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView TableResult;
+        
+        /// <summary>
+        /// btnBack 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnBack;
         
         /// <summary>
         /// PreviousPage 属性。

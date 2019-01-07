@@ -89,9 +89,14 @@
                         <%--<asp:BoundField DataField="WorkTypeText" HeaderText="用途" />--%>
                         <asp:BoundField DataField="ProgressText" HeaderText="进度" />
                         <asp:BoundField DataField="SendingDate" DataFormatString="{0: yy年MM月dd日}" HeaderText="派单时间" ItemStyle-Width="90px" />
-                        <asp:TemplateField>
+                        <asp:TemplateField ControlStyle-Width="30px">
                             <ItemTemplate>
                                 <asp:HyperLink ID="aSelect" runat="server" Target="_parent">选择</asp:HyperLink>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField>
+                            <ItemTemplate>
+                                <asp:Label ID="LabelInfo" Width="100" runat="server" Text="无讲师信息"  ToolTip="" Visible="false"></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
                     </Columns>
@@ -107,8 +112,10 @@
                 </asp:GridView>
                 <asp:HyperLink ID="aBatchSave" runat="server" Target="_parent" CssClass="LinkBtn" Visible="false">批量保存</asp:HyperLink>
                 <asp:HyperLink ID="aBatchHandle" runat="server" Target="_parent" CssClass="LinkBtn" Visible="false">批量处理</asp:HyperLink>
+                <asp:Button ID="btnBatchDownload" runat="server" Text="打包音频" OnClick="btnBatchDownload_Click" Visible="false" />
+                <asp:HyperLink ID="aDownload" runat="server"  Visible="false">点击下载</asp:HyperLink>
                 <asp:Label ID="tips" runat="server"></asp:Label>
-        <asp:HiddenField ID="hidBatchId" runat="server"/>
+                <asp:HiddenField ID="hidBatchId" runat="server"/>
             </ContentTemplate>
         </asp:UpdatePanel>
         <%--<asp:Button ID="btnBatchSave" runat="server" Text="批量保存" OnClick="btnBatch_Click" Visible="false" />

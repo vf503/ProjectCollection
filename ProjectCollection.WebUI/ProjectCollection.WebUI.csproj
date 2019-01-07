@@ -355,6 +355,9 @@
     <Compile Include="Models\role_authority.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\sysdiagrams.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\user_authority.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>

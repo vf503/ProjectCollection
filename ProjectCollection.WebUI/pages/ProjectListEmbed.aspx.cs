@@ -6,6 +6,11 @@ using System.Linq;
 using System.Configuration;
 using System.Collections.Generic;
 using System.Web.UI.WebControls;
+using Newtonsoft.Json;
+using System.IO;
+using System.Text;
+using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace ProjectCollection.WebUI.pages
 {
@@ -13,6 +18,7 @@ namespace ProjectCollection.WebUI.pages
 
     {
         public List<Guid> BatchProjectId = new List<Guid>();
+        public List<String> BatchProjectNo = new List<String>();
         //
         public string SerializeBatchProjectId;
 
@@ -64,6 +70,11 @@ namespace ProjectCollection.WebUI.pages
                 //    btnBatchHandle.PostBackUrl = "~/pages/ProjectCreateEdit.aspx?mode=contentreceivebatchhandle";
                 aBatchHandle.Visible = true;
                 aBatchHandle.Text = "批量接收";
+            }
+            else if (this.Request["mode"] == "contentfinish")
+            {
+                aBatchHandle.Visible = true;
+                btnBatchDownload.Visible = true;
             }
             else if (this.Request["mode"] == "contentcheck")
             {
@@ -257,6 +268,49 @@ namespace ProjectCollection.WebUI.pages
             {
 
             }
+            else if (this.Request["mode"] == "contentfinish")
+            {
+                string LecturerName = "";
+                string PageIndex = gvProject.PageIndex.ToString();
+                int count = gvProject.Rows.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    GridViewRow row = gvProject.Rows[i];
+                    LecturerName = row.Cells[4].Text;
+                    Label CurrentLabel = (Label)gvProject.Rows[i].FindControl("LabelInfo");
+                    string url = @"http://newpms.cei.cn/UpdateLecturer/?name="
+                        + LecturerName;
+                    //
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    request.Method = "GET";
+                    request.ContentType = "text/html;charset=UTF-8";
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    Stream myResponseStream = response.GetResponseStream();
+                    StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                    string retString = myStreamReader.ReadToEnd();
+                    myStreamReader.Close();
+                    myResponseStream.Close();
+                    //
+                    JArray ja = JArray.Parse(retString);
+                    string LecturerInfo = "";
+                    int InfoCount = 0;
+                    foreach(JObject jo in ja)
+                    {
+                        InfoCount += 1;
+                        LecturerInfo += InfoCount.ToString()+")" + jo["job"].ToString() + "； ";
+                    }
+                    if (InfoCount > 0)
+                    {
+                        CurrentLabel.Text = LecturerInfo;
+                    }
+                    CurrentLabel.ToolTip= LecturerInfo;
+                    CurrentLabel.Visible = true;
+                    //
+                    ID = gvProject.DataKeys[i].Value.ToString();
+                    HyperLink CurrentLink = (HyperLink)gvProject.Rows[i].FindControl("aSelect");
+                    CurrentLink.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=" + this.Request["mode"] + "&ProjectId=" + ID;
+                }
+            }
             else
             {
                 string ID = "";
@@ -348,6 +402,10 @@ namespace ProjectCollection.WebUI.pages
                 {
                     aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=contentreceivebatchhandle&BatchId=" + hidBatchId.Value;
                 }
+                else if (this.Request["mode"] == "contentfinish")
+                {
+                    aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=contentfinishbatchhandle";
+                }
                 else if (this.Request["mode"] == "contentcheck")
                 {
                     aBatchSave.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=contentcheckbatchsave&BatchId=" + hidBatchId.Value;
@@ -376,6 +434,89 @@ namespace ProjectCollection.WebUI.pages
                 aBatchSave.NavigateUrl = "";
                 aBatchHandle.NavigateUrl = "";
             }
+        }
+        protected void btnBatchDownload_Click(object sender, EventArgs e)
+        {
+            btnBatchDownload.Text = "正在打包音频";
+            for (int i = 0; i < gvProject.Rows.Count; i++)
+            {
+                GridViewRow row = gvProject.Rows[i];
+                bool isChecked = ((CheckBox)row.FindControl("SelectCheckBox")).Checked;
+                string CurrentId = row.Cells[1].Text;
+                if (CurrentId.Substring(0, 1) == "X") { }
+                else
+                {
+                    if (isChecked)
+                    {
+                        //Guid CurrentId = Guid.Parse(gvProject.DataKeys[gvProject.Rows[i].DataItemIndex].Values["ProjectId"].ToString());
+                        if (BatchProjectNo.Contains(CurrentId))
+                        {
+
+                        }
+                        else { BatchProjectNo.Add(CurrentId); }
+                    }
+                    else
+                    {
+                        if (BatchProjectNo.Contains(CurrentId))
+                        {
+                            BatchProjectNo.Remove(CurrentId);
+                        }
+                        else { }
+                    }
+                }
+            }
+            JsonSerializer serializer = new JsonSerializer();
+            StringWriter sw = new StringWriter();
+            serializer.Serialize(new JsonTextWriter(sw), BatchProjectNo);
+            string PostData = sw.GetStringBuilder().ToString();
+            string result = sw.GetStringBuilder().ToString();
+            string UserName = LoginUserInfo.LoginName;
+            string PassWord = LoginUserInfo.Password;
+            byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+            string str = Convert.ToBase64String(bytes);
+            string url = @"http://newpms.cei.cn/DownloadAudioPack/"
+                + "?link="
+                + str;
+            //
+            String ret = "";
+            HttpWebRequest webrequest = (HttpWebRequest)HttpWebRequest.Create(url);
+            webrequest.Method = "post";
+            //webrequest.ContentType = "text/html;charset=UTF-8";
+            byte[] postdatabyte = Encoding.UTF8.GetBytes(PostData);
+            webrequest.ContentLength = postdatabyte.Length;
+            Stream stream;
+            stream = webrequest.GetRequestStream();
+            stream.Write(postdatabyte, 0, postdatabyte.Length);
+            stream.Close();
+            try
+            {
+                HttpWebResponse response = (HttpWebResponse)webrequest.GetResponse();
+                StreamReader sr = new StreamReader(response.GetResponseStream(), Encoding.Default);
+                ret = sr.ReadToEnd();
+                sr.Close();
+                response.Close();
+                stream.Close();
+            }
+            catch (WebException ex)
+            {
+                StreamReader reex = new StreamReader(ex.Response.GetResponseStream());
+                string strex = reex.ReadToEnd();
+            }
+            //
+            JObject jo = (JObject)JsonConvert.DeserializeObject(ret);
+            if (jo["status"].ToString() == "success")
+            {
+                aDownload.NavigateUrl = jo["data"].ToString();
+                aDownload.Visible = true;
+                btnBatchDownload.Enabled = false;
+                btnBatchDownload.Text = "已打包音频";
+                System.Web.UI.ScriptManager.RegisterStartupScript(this.UpdatePanel1, this.GetType(), "download", "window.open('" + jo["data"].ToString() + "');", true);
+            }
+            else
+            {
+
+            }
+            //New ED
         }
         #endregion 方法
     }

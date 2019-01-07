@@ -35,5 +35,6 @@ namespace ProjectCollection.WebUI.Models
         public virtual DbSet<ProjectPlanRecord> ProjectPlanRecord { get; set; }
         public virtual DbSet<ProjectRecord> ProjectRecord { get; set; }
         public virtual DbSet<BatchProject> BatchProject { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
     }
 }
