@@ -329,6 +329,40 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="TempCourse">
+          <Key>
+            <PropertyRef Name="CourseId" />
+          </Key>
+          <Property Name="CourseId" Type="nchar" MaxLength="100" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="200" />
+          <Property Name="CreateDate" Type="date" />
+          <Property Name="lecturer_name" Type="nvarchar" MaxLength="100" />
+          <Property Name="lecturer_post" Type="nvarchar" MaxLength="300" />
+          <Property Name="GroupName" Type="nvarchar" MaxLength="200" />
+          <Property Name="type" Type="nvarchar" MaxLength="50" />
+          <Property Name="TempletType" Type="nvarchar" MaxLength="50" />
+          <Property Name="InternalCategoryTop" Type="nvarchar" MaxLength="50" />
+          <Property Name="InternalCategory" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="TempCustomer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" />
+          <Property Name="sort" Type="nvarchar" MaxLength="50" />
+          <Property Name="area" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="TempOrder">
+          <Key>
+            <PropertyRef Name="CourseId" />
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CourseId" Type="nchar" MaxLength="100" Nullable="false" />
+          <Property Name="CustomerId" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="date" Type="date" Nullable="false" />
+          <Property Name="SellerId" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="user_authority">
           <Key>
             <PropertyRef Name="authority_identity" />
@@ -495,6 +529,33 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TempOrder_TempCustomer">
+          <End Role="TempCustomer" Type="Self.TempCustomer" Multiplicity="1" />
+          <End Role="TempOrder" Type="Self.TempOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TempCustomer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TempOrder">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--生成过程中发现错误:
+警告 6035: 关系“FK_TempOrder_TempOrder”在关系主端上有一些列不属于表的键的一部分。已排除了此关系。
+        <Association Name="FK_TempOrder_TempOrder" />-->
+        <Association Name="FK_TempOrder_TempOrder1">
+          <End Role="TempCourse" Type="Self.TempCourse" Multiplicity="1" />
+          <End Role="TempOrder" Type="Self.TempOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TempCourse">
+              <PropertyRef Name="CourseId" />
+            </Principal>
+            <Dependent Role="TempOrder">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="WorkDay" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
           <Parameter Name="dt_begin" Type="datetime" Mode="In" />
           <Parameter Name="dt_end" Type="datetime" Mode="In" />
@@ -505,6 +566,9 @@
           <EntitySet Name="data_dictionary" EntityType="Self.data_dictionary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProjectPlan" EntityType="Self.ProjectPlan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TempCourse" EntityType="Self.TempCourse" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TempCustomer" EntityType="Self.TempCustomer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TempOrder" EntityType="Self.TempOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user_authority" EntityType="Self.user_authority" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user_info" EntityType="Self.user_info" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProjectPlanRecord" EntityType="Self.ProjectPlanRecord" store:Type="Tables" store:Schema="dbo">
@@ -588,6 +652,14 @@
           <AssociationSet Name="FK_CustomProject_To_user_info4" Association="Self.FK_CustomProject_To_user_info4">
             <End Role="user_info" EntitySet="user_info" />
             <End Role="CustomProject" EntitySet="CustomProject" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TempOrder_TempCustomer" Association="Self.FK_TempOrder_TempCustomer">
+            <End Role="TempCustomer" EntitySet="TempCustomer" />
+            <End Role="TempOrder" EntitySet="TempOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TempOrder_TempOrder1" Association="Self.FK_TempOrder_TempOrder1">
+            <End Role="TempCourse" EntitySet="TempCourse" />
+            <End Role="TempOrder" EntitySet="TempOrder" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -851,6 +923,17 @@
             <End Role="BatchProject" EntitySet="BatchProject" />
           </AssociationSet>
           <EntitySet Name="sysdiagrams" EntityType="ProjectCollectionModel.sysdiagrams" />
+          <EntitySet Name="TempCourse" EntityType="ProjectCollectionModel.TempCourse" />
+          <EntitySet Name="TempCustomer" EntityType="ProjectCollectionModel.TempCustomer" />
+          <EntitySet Name="TempOrder" EntityType="ProjectCollectionModel.TempOrder" />
+          <AssociationSet Name="FK_TempOrder_TempOrder1" Association="ProjectCollectionModel.FK_TempOrder_TempOrder1">
+            <End Role="TempCourse" EntitySet="TempCourse" />
+            <End Role="TempOrder" EntitySet="TempOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TempOrder_TempCustomer" Association="ProjectCollectionModel.FK_TempOrder_TempCustomer">
+            <End Role="TempCustomer" EntitySet="TempCustomer" />
+            <End Role="TempOrder" EntitySet="TempOrder" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Project">
           <Key>
@@ -1161,6 +1244,68 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
+        <EntityType Name="TempCourse">
+          <Key>
+            <PropertyRef Name="CourseId" />
+          </Key>
+          <Property Name="CourseId" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="0" />
+          <Property Name="lecturer_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="lecturer_post" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="GroupName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TempletType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InternalCategoryTop" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="InternalCategory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TempOrder" Relationship="ProjectCollectionModel.FK_TempOrder_TempOrder1" FromRole="TempCourse" ToRole="TempOrder" />
+        </EntityType>
+        <EntityType Name="TempCustomer">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="sort" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="area" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="TempOrder" Relationship="ProjectCollectionModel.FK_TempOrder_TempCustomer" FromRole="TempCustomer" ToRole="TempOrder" />
+        </EntityType>
+        <EntityType Name="TempOrder">
+          <Key>
+            <PropertyRef Name="CourseId" />
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CourseId" Type="String" Nullable="false" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="CustomerId" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="SellerId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TempCourse" Relationship="ProjectCollectionModel.FK_TempOrder_TempOrder1" FromRole="TempOrder" ToRole="TempCourse" />
+          <NavigationProperty Name="TempCustomer" Relationship="ProjectCollectionModel.FK_TempOrder_TempCustomer" FromRole="TempOrder" ToRole="TempCustomer" />
+        </EntityType>
+        <Association Name="FK_TempOrder_TempOrder1">
+          <End Type="ProjectCollectionModel.TempCourse" Role="TempCourse" Multiplicity="1" />
+          <End Type="ProjectCollectionModel.TempOrder" Role="TempOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TempCourse">
+              <PropertyRef Name="CourseId" />
+            </Principal>
+            <Dependent Role="TempOrder">
+              <PropertyRef Name="CourseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TempOrder_TempCustomer">
+          <End Type="ProjectCollectionModel.TempCustomer" Role="TempCustomer" Multiplicity="1" />
+          <End Type="ProjectCollectionModel.TempOrder" Role="TempOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TempCustomer">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TempOrder">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1502,6 +1647,42 @@
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="principal_id" ColumnName="principal_id" />
                 <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TempCourse">
+            <EntityTypeMapping TypeName="ProjectCollectionModel.TempCourse">
+              <MappingFragment StoreEntitySet="TempCourse">
+                <ScalarProperty Name="InternalCategory" ColumnName="InternalCategory" />
+                <ScalarProperty Name="InternalCategoryTop" ColumnName="InternalCategoryTop" />
+                <ScalarProperty Name="TempletType" ColumnName="TempletType" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="lecturer_post" ColumnName="lecturer_post" />
+                <ScalarProperty Name="lecturer_name" ColumnName="lecturer_name" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TempCustomer">
+            <EntityTypeMapping TypeName="ProjectCollectionModel.TempCustomer">
+              <MappingFragment StoreEntitySet="TempCustomer">
+                <ScalarProperty Name="area" ColumnName="area" />
+                <ScalarProperty Name="sort" ColumnName="sort" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TempOrder">
+            <EntityTypeMapping TypeName="ProjectCollectionModel.TempOrder">
+              <MappingFragment StoreEntitySet="TempOrder">
+                <ScalarProperty Name="SellerId" ColumnName="SellerId" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="CourseId" ColumnName="CourseId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -228,6 +228,7 @@
     <Content Include="pages\AmountServer.aspx" />
     <Content Include="pages\BackUp\ProjectCreateEdit_backup.aspx" />
     <Content Include="pages\ChartTest.html" />
+    <Content Include="pages\CustomCount.aspx" />
     <Content Include="pages\CustomProjectListEmbed.aspx" />
     <Content Include="pages\CustomProjectCreateEdit.aspx" />
     <Content Include="pages\CustomProjectList.aspx" />
@@ -358,6 +359,15 @@
     <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TempCourse.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TempCustomer.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TempOrder.cs">
+      <DependentUpon>MainModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\user_authority.cs">
       <DependentUpon>MainModel.tt</DependentUpon>
     </Compile>
@@ -386,6 +396,13 @@
       <DependentUpon>ProjectCreateEdit_backup.aspx</DependentUpon>
     </Compile>
     <Compile Include="pages\common\MyException.cs" />
+    <Compile Include="pages\CustomCount.aspx.cs">
+      <DependentUpon>CustomCount.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\CustomCount.aspx.designer.cs">
+      <DependentUpon>CustomCount.aspx</DependentUpon>
+    </Compile>
     <Compile Include="pages\CustomProjectListEmbed.aspx.cs">
       <DependentUpon>CustomProjectListEmbed.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
