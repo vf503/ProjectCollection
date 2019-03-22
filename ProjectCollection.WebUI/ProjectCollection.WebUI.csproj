@@ -395,6 +395,7 @@
     <Compile Include="pages\BackUp\ProjectCreateEdit_backup.aspx.designer.cs">
       <DependentUpon>ProjectCreateEdit_backup.aspx</DependentUpon>
     </Compile>
+    <Compile Include="pages\common\extend.cs" />
     <Compile Include="pages\common\MyException.cs" />
     <Compile Include="pages\CustomCount.aspx.cs">
       <DependentUpon>CustomCount.aspx</DependentUpon>

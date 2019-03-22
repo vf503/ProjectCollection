@@ -231,8 +231,9 @@
         制作部制作员备注：<asp:TextBox ID="txtContentOperateNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
     </asp:Panel>
     <asp:Panel ID="PanelContentCheck" runat="server" Visible="false">
-        <div class="PanelName">制作部负责人填写（初审）:</div>
+        <div class="PanelName">制作部初审员填写:</div>
         <asp:HyperLink ID="ContentCheckLink" Font-Size="14" ForeColor="#009900" runat="server" Target="_blank">审核课件</asp:HyperLink><br />
+        初审审核人：<asp:TextBox ID="txtContentCheckPersonInCharge" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         课程简介质量：<asp:DropDownList ID="ddlContentCourseIntroductionQuality" runat="server"></asp:DropDownList><br />
         专家简历质量：<asp:DropDownList ID="ddlContentResumeQuality" runat="server"></asp:DropDownList><br />
         PPT质量：<asp:DropDownList ID="ddlContentPPTQuality" runat="server"></asp:DropDownList><br />

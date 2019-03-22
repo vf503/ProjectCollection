@@ -28,7 +28,7 @@ namespace ProjectCollection.WebUI.pages
         {
             //判断用户身份进行跳转
             BLL.UserInfo userInfo;
-            if (Login(this.txtLoginUserName.Text, this.txtLoginPassword.Text, out userInfo))
+            if (Login(this.txtFuckScannerN.Text, this.txtFuckScannerP.Text, out userInfo))
             {
                 // 登录成功
                 if (LoginUserInfo.Authority.Contains("manage"))

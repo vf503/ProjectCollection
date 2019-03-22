@@ -22,30 +22,30 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// txtLoginUserName 控件。
+        /// txtFuckScannerN 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLoginUserName;
+        protected global::System.Web.UI.WebControls.TextBox txtFuckScannerN;
         
         /// <summary>
-        /// txtLoginPassword 控件。
+        /// txtFuckScannerP 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLoginPassword;
+        protected global::System.Web.UI.WebControls.TextBox txtFuckScannerP;
         
         /// <summary>
-        /// btnLogin 控件。
+        /// btnFuckScanner 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnLogin;
+        protected global::System.Web.UI.WebControls.Button btnFuckScanner;
     }
 }

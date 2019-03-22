@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ProjectCollection.WebUI.pages.common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -103,6 +104,12 @@ namespace ProjectCollection.WebUI.pages
                             {
                                 ThisCourse.InternalCategoryTop = "文化修养";
                             }
+                            if (jc["SourceCourseId"] is null)
+                            { }
+                            else
+                            {
+                                ThisCourse.SourceCourseId = jc["SourceCourseId"].ToString();
+                            }
                             ProjectModel.TempCourse.Add(ThisCourse);
                         }
                         else
@@ -124,6 +131,12 @@ namespace ProjectCollection.WebUI.pages
                             if (ThisCourse.InternalCategoryTop == "文化素养")
                             {
                                 ThisCourse.InternalCategoryTop = "文化修养";
+                            }
+                            if (jc["SourceCourseId"] is null)
+                            { }
+                            else
+                            {
+                                ThisCourse.SourceCourseId = jc["SourceCourseId"].ToString();
                             }
                         }
                         ProjectModel.SaveChanges();
@@ -237,16 +250,37 @@ namespace ProjectCollection.WebUI.pages
                                       where o.TempCourse.type !=""
                                       group o by new { o.TempCourse.type } into oc
                                       orderby oc.Count() descending
-                                      select new { type = oc.Key.type, count = oc.Count(), ratio= ((oc.Count() / Convert.ToDouble(NumberOfTimes))*100).ToString("f2") + "%" };
-                NumberOfTimesTable.DataSource = SourceTimesList.ToList();
-                NumberOfTimesTable.DataBind();
+                                      select new { SourceName = oc.Key.type, TimesCount = oc.Count(), TimesRatio = ((oc.Count() / Convert.ToDouble(NumberOfTimes))*100).ToString("f2") + "%" };
                 var SourceCoursesList = from c in ProjectModel.TempCourse.ToList()
                                         where NumberOfCoursesList.ToList().Contains(c.CourseId) && (c.type != "")
                                         group c by new { c.type } into sc
                                         orderby sc.Count() descending
-                                        select new { type = sc.Key.type, count = sc.Count(), ratio = (sc.Count() / (Convert.ToDouble(NumberOfCoursesList.Count()))*100).ToString("f2") + "%" };
-                NumberOfCoursesTable.DataSource = SourceCoursesList.ToList();
-                NumberOfCoursesTable.DataBind();
+                                        select new { SourceName = sc.Key.type, CoursesCount = sc.Count(), CoursesRatio = (sc.Count() / (Convert.ToDouble(NumberOfCoursesList.Count()))*100).ToString("f2") + "%" };
+                var NumberOfCourseGroupList = (from o in OrderList
+                                               where o.TempCourse.SourceCourseId != null
+                                               select o).DistinctBy(o => o.TempCourse.SourceCourseId);
+                var SourceCourseGroupList = from g in NumberOfCourseGroupList
+                                            group g by new { g.TempCourse.type } into sg
+                                            select new { SourceName = sg.Key.type, GroupCount = sg.Count().ToString(), GroupRatio = (sg.Count() / (Convert.ToDouble(NumberOfCourseGroupList.Count())) * 100).ToString("f2") + "%" };
+                var SourceCount = (from t in SourceTimesList
+                                    join c in SourceCoursesList on t.SourceName equals c.SourceName into TC
+                                  from tc in TC.DefaultIfEmpty()
+                                    join g in SourceCourseGroupList on t.SourceName equals g.SourceName into TCG
+                                  from tcg in TCG.DefaultIfEmpty()
+                                  orderby t.TimesCount descending
+                                  select new
+                                  {
+                                      SourceName = t.SourceName,
+                                      times = t.TimesCount,
+                                      TimesRatio = t.TimesRatio,
+                                      number = tc.CoursesCount,
+                                      NumberRatio = tc.CoursesRatio,
+                                      GroupTimes = tcg != null ? tcg.GroupCount : "无",
+                                      GroupTimesRatio = tcg != null ? tcg.GroupRatio : "无",
+                                      TimesAVG = (t.TimesCount / Convert.ToDouble(tc.CoursesCount)).ToString("f2")
+                                  }).ToList();
+                SourceTable.DataSource = SourceCount;
+                SourceTable.DataBind();
                 //Current Year
                 List<Models.TempOrder> OrderCurrentYearList = (from o in ProjectModel.TempOrder
                                                     where (o.date >= StratTime) && (o.date <= EndTime) && (o.TempCourse.type != "") && (o.TempCourse.CreateDate >= CurrentYearDate)
@@ -262,16 +296,38 @@ namespace ProjectCollection.WebUI.pages
                                                  where o.TempCourse.type != ""
                                                  group o by new { o.TempCourse.type } into oc
                                                  orderby oc.Count() descending
-                                                 select new { type = oc.Key.type, count = oc.Count(), ratio = ((oc.Count() / Convert.ToDouble(NumberOfTimesCurrentYear)) * 100).ToString("f2") + "%" };
-                NumberOfTimesCurrentYearTable.DataSource = SourceTimesCurrentYearList.ToList();
-                NumberOfTimesCurrentYearTable.DataBind();
+                                                 select new { SourceName = oc.Key.type, TimesCount = oc.Count(), TimesRatio = ((oc.Count() / Convert.ToDouble(NumberOfTimesCurrentYear)) * 100).ToString("f2") + "%" };
                 var SourceCoursesCurrentYearList = from c in ProjectModel.TempCourse.ToList()
                                         where NumberOfCoursesCurrentYearList.ToList().Contains(c.CourseId) && (c.type != "")
                                         group c by new { c.type } into sc
                                         orderby sc.Count() descending
-                                        select new { type = sc.Key.type, count = sc.Count(), ratio = (sc.Count() / (Convert.ToDouble(NumberOfCoursesCurrentYearList.Count())) * 100).ToString("f2") + "%" };
-                NumberOfCoursesCurrentYearTable.DataSource = SourceCoursesCurrentYearList.ToList();
-                NumberOfCoursesCurrentYearTable.DataBind();
+                                        select new { SourceName = sc.Key.type, CoursesCount = sc.Count(), CoursesRatio = (sc.Count() / (Convert.ToDouble(NumberOfCoursesCurrentYearList.Count())) * 100).ToString("f2") + "%" };
+                var NumberOfCourseGroupCurrentYearList = (from o in OrderList
+                                               where o.TempCourse.SourceCourseId != null && (o.TempCourse.CreateDate >= CurrentYearDate)
+                                               select o).DistinctBy(o => o.TempCourse.SourceCourseId);
+                var SourceCourseGroupCurrentYearList = from g in NumberOfCourseGroupCurrentYearList
+                                                       group g by new { g.TempCourse.type } into sg
+                                                       select new { SourceName = sg.Key.type, GroupCount = sg.Count().ToString(), GroupRatio = (sg.Count() / (Convert.ToDouble(NumberOfCourseGroupCurrentYearList.Count())) * 100).ToString("f2") + "%" };
+                var SourceCountCurrentYear = from t in SourceTimesCurrentYearList
+                                             join c in SourceCoursesCurrentYearList on t.SourceName equals c.SourceName into TC
+                                              from tc in TC.DefaultIfEmpty()
+                                              join g in SourceCourseGroupCurrentYearList on t.SourceName equals g.SourceName into TCG
+                                              from tcg in TCG.DefaultIfEmpty()
+                                              orderby t.TimesCount descending
+                                              select new
+                                              {
+                                                  SourceName = t.SourceName,
+                                                  times = t.TimesCount,
+                                                  TimesRatio = t.TimesRatio,
+                                                  number = tc.CoursesCount,
+                                                  NumberRatio = tc.CoursesRatio,
+                                                  GroupTimes = tcg != null ? tcg.GroupCount : "无",
+                                                  GroupTimesRatio = tcg != null ? tcg.GroupRatio : "无",
+                                                  TimesAVG = (t.TimesCount / Convert.ToDouble(tc.CoursesCount)).ToString("f2")
+                                              };
+                SourceTableCurrentYear.DataSource = SourceCountCurrentYear.ToList();
+                SourceTableCurrentYear.DataBind();
+
             }
         }
 
@@ -347,5 +403,7 @@ namespace ProjectCollection.WebUI.pages
                 NumberOfCoursesCategoryCurrentYearTable.DataBind();
             }
         }
+
     }
+
 }

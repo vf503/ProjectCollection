@@ -248,5 +248,10 @@
             <iframe id="IframeCustomTemplate" runat="server"></iframe>
             <asp:Label ID="LabelAmountCustomTemplate" runat="server" Visible="false" Text=""></asp:Label>
         </asp:Panel>
+        <asp:Panel ID="PanelCustomAttachment" runat="server" Visible="false">
+            <asp:Label ID="LabelCustomAttachment" runat="server" Text="制作课件素材"></asp:Label>
+            <iframe id="IframeCustomAttachment" runat="server"></iframe>
+            <asp:Label ID="LabelAmountCustomAttachment" runat="server" Visible="false" Text=""></asp:Label>
+        </asp:Panel>
     </div>
 </asp:Content>

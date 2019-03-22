@@ -27,6 +27,7 @@ namespace ProjectCollection.WebUI.Models
             this.BatchProject3 = new HashSet<BatchProject>();
             this.BatchProject4 = new HashSet<BatchProject>();
             this.BatchProject5 = new HashSet<BatchProject>();
+            this.BatchProject6 = new HashSet<BatchProject>();
         }
     
         public System.Guid user_identity { get; set; }
@@ -58,5 +59,7 @@ namespace ProjectCollection.WebUI.Models
         public virtual ICollection<BatchProject> BatchProject4 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BatchProject> BatchProject5 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BatchProject> BatchProject6 { get; set; }
     }
 }

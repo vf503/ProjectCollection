@@ -11,7 +11,7 @@
         派单时间：<asp:TextBox ID="txtCreateDate" runat="server" ReadOnly="true"></asp:TextBox><br />
         完成期限：<asp:TextBox ID="txtDeadLine" runat="server" ReadOnly="true"></asp:TextBox><br />
         客户信息：<asp:TextBox ID="txtCustom" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
-        任务要求：<asp:TextBox ID="txtTaskRequire" TextMode="MultiLine" Height="80px" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
+        任务要求：<asp:TextBox ID="txtTaskRequire" TextMode="MultiLine" Height="90px" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
         下单者：<asp:TextBox ID="txtCreator" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
         备注：<asp:TextBox ID="txtCreateNote" runat="server" TextMode="MultiLine" Height="80px" ReadOnly="true"></asp:TextBox><br />
         进度：<asp:TextBox ID="txtProgress" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
@@ -27,28 +27,35 @@
         <div class="PanelName" style="color:green">执行人填写:</div>
         执行人：<asp:TextBox ID="txtTransactor" runat="server" ReadOnly="true"></asp:TextBox><br />
         执行时间：<asp:TextBox ID="txtFinishDate" runat="server" ReadOnly="true"></asp:TextBox><br />
-        执行备注：<asp:TextBox ID="txtFinishNote" runat="server" TextMode="MultiLine" ReadOnly="true"></asp:TextBox><br />
+        执行备注：<asp:TextBox ID="txtFinishNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
     </asp:Panel>
     <asp:Panel ID="PanelHelpFinish" runat="server" Visible="false">
         <div class="PanelName" style="color:green">辅助执行人填写:</div>
         执行人：<asp:TextBox ID="txtHelper" runat="server" ReadOnly="true"></asp:TextBox><br />
         派发时间：<asp:TextBox ID="txtHelpSendingDate" runat="server" ReadOnly="true"></asp:TextBox><br />
         完成时间：<asp:TextBox ID="txtHelperFinishDate" runat="server" ReadOnly="true"></asp:TextBox><br />
-        执行备注：<asp:TextBox ID="txtHelperFinishNote" runat="server" TextMode="MultiLine" ReadOnly="true"></asp:TextBox><br />
+        执行备注：<asp:TextBox ID="txtHelperFinishNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
     </asp:Panel>
     <asp:Panel ID="PanelPicFinish" runat="server" Visible="false">
         <div class="PanelName" style="color:green">图片制作:</div>
         执行人：<asp:TextBox ID="txtPicMaker" runat="server" ReadOnly="true"></asp:TextBox><br />
         派发时间：<asp:TextBox ID="txtPicSendingDate" runat="server" ReadOnly="true"></asp:TextBox><br />
         完成时间：<asp:TextBox ID="txtPicFinishDate" runat="server" ReadOnly="true"></asp:TextBox><br />
-        执行备注：<asp:TextBox ID="txtPicFinishNote" runat="server" TextMode="MultiLine" ReadOnly="true"></asp:TextBox><br />
+        执行备注：<asp:TextBox ID="txtPicFinishNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
     </asp:Panel>
     <asp:Panel ID="PanelTemplateFinish" runat="server" Visible="false">
         <div class="PanelName" style="color:green">模版制作:</div>
         执行人：<asp:TextBox ID="txtTemplateMaker" runat="server" ReadOnly="true"></asp:TextBox><br />
         派发时间：<asp:TextBox ID="txtTemplateSendingDate" runat="server" ReadOnly="true"></asp:TextBox><br />
         完成时间：<asp:TextBox ID="txtTemplateFinishDate" runat="server" ReadOnly="true"></asp:TextBox><br />
-        执行备注：<asp:TextBox ID="txtTemplateFinishNote" runat="server" TextMode="MultiLine" ReadOnly="true"></asp:TextBox><br />
+        执行备注：<asp:TextBox ID="txtTemplateFinishNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
+    </asp:Panel>
+    <asp:Panel ID="PanelAttachmentFinish" runat="server" Visible="false">
+        <div class="PanelName" style="color:green">素材输出制作:</div>
+        执行人：<asp:TextBox ID="txtAttachmentMaker" runat="server" ReadOnly="true"></asp:TextBox><br />
+        派发时间：<asp:TextBox ID="txtAttachmentSendingDate" runat="server" ReadOnly="true"></asp:TextBox><br />
+        完成时间：<asp:TextBox ID="txtAttachmentFinishDate" runat="server" ReadOnly="true"></asp:TextBox><br />
+        执行备注：<asp:TextBox ID="txtAttachmentFinishNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
     </asp:Panel>
     <asp:Panel ID="PanelBtn" runat="server">
         <%--<asp:Button ID="btnExecute" runat="server" Text="执行" OnClick="btnExecuteOnclick" Visible="false" />--%>

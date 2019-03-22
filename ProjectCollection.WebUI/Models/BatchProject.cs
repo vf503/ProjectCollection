@@ -49,6 +49,10 @@ namespace ProjectCollection.WebUI.Models
         public string PicFinishNote { get; set; }
         public string TemplateFinishNote { get; set; }
         public string customer { get; set; }
+        public Nullable<System.Guid> AttachmentProducer { get; set; }
+        public Nullable<System.DateTime> AttachmentSendingDate { get; set; }
+        public Nullable<System.DateTime> AttachmentFinishDate { get; set; }
+        public string AttachmentFinishNote { get; set; }
     
         public virtual user_info user_info { get; set; }
         public virtual user_info user_info1 { get; set; }
@@ -56,5 +60,6 @@ namespace ProjectCollection.WebUI.Models
         public virtual user_info user_info3 { get; set; }
         public virtual user_info user_info4 { get; set; }
         public virtual user_info user_info5 { get; set; }
+        public virtual user_info user_info6 { get; set; }
     }
 }

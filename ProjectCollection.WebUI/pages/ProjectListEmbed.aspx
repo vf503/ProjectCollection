@@ -95,6 +95,9 @@
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField>
+                            <HeaderTemplate>
+                                <span>讲师信息</span>
+                            </HeaderTemplate>
                             <ItemTemplate>
                                 <asp:Label ID="LabelInfo" Width="100" runat="server" Text="无讲师信息"  ToolTip="" Visible="false"></asp:Label>
                             </ItemTemplate>

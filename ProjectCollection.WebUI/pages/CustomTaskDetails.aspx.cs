@@ -179,6 +179,17 @@ namespace ProjectCollection.WebUI.pages
                     this.btnPass.Text = "完成";
                 }
                 #endregion template
+                #region attachment
+                else if (this.Request["mode"] == "attachment")
+                {
+                    PanelCheck.Visible = true;
+                    PanelAttachmentFinish.Visible = true;
+                    this.InitCheckData(ThisProject);
+                    this.txtAttachmentSendingDate.Text = ThisProject.AttachmentSendingDate.ToString();
+                    this.btnPass.Visible = true;
+                    this.btnPass.Text = "完成";
+                }
+                #endregion attachment
                 else
                 {
                     
@@ -244,6 +255,12 @@ namespace ProjectCollection.WebUI.pages
                     ThisProject.TemplateFinishDate = DateTime.Now;
                     ThisProject.TemplateFinishNote = this.txtTemplateFinishNote.Text;
                 }
+                else if (this.Request["mode"] == "attachment")
+                {
+                    ThisProject.AttachmentProducer = this.LoginUserInfo.Identity;
+                    ThisProject.AttachmentFinishDate = DateTime.Now;
+                    ThisProject.AttachmentFinishNote = this.txtAttachmentFinishNote.Text;
+                }
                 ProjectModel.SaveChanges();
             }
             this.Redirect("~/pages/MyTask.aspx?mode=manufacture&range=now");
@@ -297,7 +314,7 @@ namespace ProjectCollection.WebUI.pages
             if (TaskRequireJson["IsWaterMark"].ToString() != "")
             {
                 TaskRequireStr += "水印：";
-                TaskRequireStr += TaskRequireJson["IsWaterMark"].ToString() == "1" ? "要\r\n" : "不要\r\n";
+                TaskRequireStr += TaskRequireJson["IsWaterMark"].ToString() + "\r\n";
             }
             if (TaskRequireJson["IsPic"].ToString() != "")
             {
@@ -312,6 +329,12 @@ namespace ProjectCollection.WebUI.pages
                 TaskRequireStr += TaskRequireJson["IsTemplate"].ToString() == "1" ? "是 ; " : "否 ; ";
                 TaskRequireStr += "模板要求：" + TaskRequireJson["TemplateNote"] + "\r\n";
             }
+            TaskRequireStr += "附件：";
+            TaskRequireStr += (!(TaskRequireJson["AttText"] is null) && TaskRequireJson["AttText"].ToString() == "true") ? "全文、" : "";
+            TaskRequireStr += (!(TaskRequireJson["AttPPT"] is null) && TaskRequireJson["AttPPT"].ToString() == "true") ? "PPT、" : "";
+            TaskRequireStr += (!(TaskRequireJson["AttTest"] is null) && TaskRequireJson["AttTest"].ToString() == "true") ? "考题、" : "";
+            TaskRequireStr += (!(TaskRequireJson["AttSummary"] is null) && TaskRequireJson["AttSummary"].ToString() == "true") ? "简介、" : "";
+            TaskRequireStr += (!(TaskRequireJson["AttLecturer"] is null) && TaskRequireJson["AttLecturer"].ToString() == "true") ? "教师简介" : "";
             this.txtTaskRequire.Text = TaskRequireStr;
             string CreatorName = "";
             using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())

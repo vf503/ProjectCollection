@@ -44,6 +44,10 @@
           <Property Name="PicFinishNote" Type="nvarchar" MaxLength="500" />
           <Property Name="TemplateFinishNote" Type="nvarchar" MaxLength="500" />
           <Property Name="customer" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AttachmentProducer" Type="uniqueidentifier" />
+          <Property Name="AttachmentSendingDate" Type="datetime" />
+          <Property Name="AttachmentFinishDate" Type="datetime" />
+          <Property Name="AttachmentFinishNote" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="CustomProject">
           <Key>
@@ -343,6 +347,7 @@
           <Property Name="TempletType" Type="nvarchar" MaxLength="50" />
           <Property Name="InternalCategoryTop" Type="nvarchar" MaxLength="50" />
           <Property Name="InternalCategory" Type="nvarchar" MaxLength="50" />
+          <Property Name="SourceCourseId" Type="nchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="TempCustomer">
           <Key>
@@ -454,6 +459,18 @@
             </Principal>
             <Dependent Role="BatchProject">
               <PropertyRef Name="helper" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BatchProject_user_info6">
+          <End Role="user_info" Type="Self.user_info" Multiplicity="0..1" />
+          <End Role="BatchProject" Type="Self.BatchProject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user_info">
+              <PropertyRef Name="user_identity" />
+            </Principal>
+            <Dependent Role="BatchProject">
+              <PropertyRef Name="AttachmentProducer" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -629,6 +646,10 @@
             <End Role="user_info" EntitySet="user_info" />
             <End Role="BatchProject" EntitySet="BatchProject" />
           </AssociationSet>
+          <AssociationSet Name="FK_BatchProject_user_info6" Association="Self.FK_BatchProject_user_info6">
+            <End Role="user_info" EntitySet="user_info" />
+            <End Role="BatchProject" EntitySet="BatchProject" />
+          </AssociationSet>
           <AssociationSet Name="FK_CustomProject_To_data_dictionary" Association="Self.FK_CustomProject_To_data_dictionary">
             <End Role="data_dictionary" EntitySet="data_dictionary" />
             <End Role="CustomProject" EntitySet="CustomProject" />
@@ -773,6 +794,7 @@
           <NavigationProperty Name="BatchProject4" Relationship="ProjectCollectionModel.FK_BatchProject_user_info4" FromRole="user_info" ToRole="BatchProject" />
           <NavigationProperty Name="BatchProject5" Relationship="ProjectCollectionModel.FK_BatchProject_user_info5" FromRole="user_info" ToRole="BatchProject" />
           <Property Name="area" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="BatchProject6" Relationship="ProjectCollectionModel.FK_BatchProject_user_info6" FromRole="user_info" ToRole="BatchProject" />
           </EntityType>
         <EntityType Name="role_authority">
           <Key>
@@ -933,6 +955,10 @@
           <AssociationSet Name="FK_TempOrder_TempCustomer" Association="ProjectCollectionModel.FK_TempOrder_TempCustomer">
             <End Role="TempCustomer" EntitySet="TempCustomer" />
             <End Role="TempOrder" EntitySet="TempOrder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BatchProject_user_info6" Association="ProjectCollectionModel.FK_BatchProject_user_info6">
+            <End Role="user_info" EntitySet="user_info" />
+            <End Role="BatchProject" EntitySet="BatchProject" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Project">
@@ -1159,6 +1185,11 @@
           <Property Name="PicFinishNote" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="TemplateFinishNote" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="customer" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AttachmentProducer" Type="Guid" />
+          <Property Name="AttachmentSendingDate" Type="DateTime" Precision="3" />
+          <Property Name="AttachmentFinishDate" Type="DateTime" Precision="3" />
+          <Property Name="AttachmentFinishNote" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="user_info6" Relationship="ProjectCollectionModel.FK_BatchProject_user_info6" FromRole="BatchProject" ToRole="user_info" />
         </EntityType>
         <Association Name="FK_BatchProject_user_info">
           <End Type="ProjectCollectionModel.user_info" Role="user_info" Multiplicity="1" />
@@ -1259,6 +1290,7 @@
           <Property Name="InternalCategoryTop" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="InternalCategory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="TempOrder" Relationship="ProjectCollectionModel.FK_TempOrder_TempOrder1" FromRole="TempCourse" ToRole="TempOrder" />
+          <Property Name="SourceCourseId" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="TempCustomer">
           <Key>
@@ -1303,6 +1335,18 @@
             </Principal>
             <Dependent Role="TempOrder">
               <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BatchProject_user_info6">
+          <End Type="ProjectCollectionModel.user_info" Role="user_info" Multiplicity="0..1" />
+          <End Type="ProjectCollectionModel.BatchProject" Role="BatchProject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user_info">
+              <PropertyRef Name="user_identity" />
+            </Principal>
+            <Dependent Role="BatchProject">
+              <PropertyRef Name="AttachmentProducer" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1601,6 +1645,10 @@
           <EntitySetMapping Name="BatchProject">
             <EntityTypeMapping TypeName="ProjectCollectionModel.BatchProject">
               <MappingFragment StoreEntitySet="BatchProject">
+                <ScalarProperty Name="AttachmentFinishNote" ColumnName="AttachmentFinishNote" />
+                <ScalarProperty Name="AttachmentFinishDate" ColumnName="AttachmentFinishDate" />
+                <ScalarProperty Name="AttachmentSendingDate" ColumnName="AttachmentSendingDate" />
+                <ScalarProperty Name="AttachmentProducer" ColumnName="AttachmentProducer" />
                 <ScalarProperty Name="customer" ColumnName="customer" />
                 <ScalarProperty Name="TemplateFinishNote" ColumnName="TemplateFinishNote" />
                 <ScalarProperty Name="PicFinishNote" ColumnName="PicFinishNote" />
@@ -1653,6 +1701,7 @@
           <EntitySetMapping Name="TempCourse">
             <EntityTypeMapping TypeName="ProjectCollectionModel.TempCourse">
               <MappingFragment StoreEntitySet="TempCourse">
+                <ScalarProperty Name="SourceCourseId" ColumnName="SourceCourseId" />
                 <ScalarProperty Name="InternalCategory" ColumnName="InternalCategory" />
                 <ScalarProperty Name="InternalCategoryTop" ColumnName="InternalCategoryTop" />
                 <ScalarProperty Name="TempletType" ColumnName="TempletType" />

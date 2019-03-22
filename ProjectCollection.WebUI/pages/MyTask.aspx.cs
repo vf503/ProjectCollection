@@ -315,6 +315,21 @@ namespace ProjectCollection.WebUI.pages
                         else { }
                         //HidPanelFilterGrid(CurrentAuthority);
                     }
+                    else if (CurrentAuthority == "CustomAttachment")
+                    {
+                        CurrentPage.FindControl("Panel" + CurrentAuthority).Visible = true;
+                        if (ModeRange == "now")
+                        {
+                            IframeCustomAttachment.Visible = true;
+                            IframeCustomAttachment.Attributes["src"] = "~/pages/CustomTaskList.aspx?mode=attachment";
+                        }
+                        else if (ModeRange == "all")
+                        {
+                            //ShowAmountData(CurrentAuthority);
+                        }
+                        else { }
+                        //HidPanelFilterGrid(CurrentAuthority);
+                    }
                     else if (CurrentAuthority == "cross"|| CurrentAuthority == "CreateProject")
                     {
 

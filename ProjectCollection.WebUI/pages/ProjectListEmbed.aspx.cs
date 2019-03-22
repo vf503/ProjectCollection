@@ -268,7 +268,7 @@ namespace ProjectCollection.WebUI.pages
             {
 
             }
-            else if (this.Request["mode"] == "contentfinish")
+            else if (this.Request["mode"] == "contentfinish" || this.Request["mode"] == "contentcheck" || this.Request["mode"] == "contentrecheck")
             {
                 string LecturerName = "";
                 string PageIndex = gvProject.PageIndex.ToString();

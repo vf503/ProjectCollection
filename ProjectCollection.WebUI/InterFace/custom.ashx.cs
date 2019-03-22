@@ -114,6 +114,8 @@ namespace ProjectCollection.WebUI.InterFace
                         new JProperty("PicFinishDate", ThisProject.PicFinishDate.ToString()),
                         new JProperty("TemplateSendingDate", ThisProject.TemplateSendingDate.ToString()),
                         new JProperty("TemplateFinishDate", ThisProject.TemplateFinishDate.ToString()),
+                        new JProperty("AttachmentSendingDate", ThisProject.AttachmentSendingDate.ToString()),
+                        new JProperty("AttachmentFinishDate", ThisProject.AttachmentFinishDate.ToString()),
                         new JProperty("FinishDate", ThisProject.FinishDate.ToString()),
                         new JProperty("CourseData", JsonConvert.DeserializeObject(ThisProject.CourseData))
                         );
@@ -173,6 +175,10 @@ namespace ProjectCollection.WebUI.InterFace
                     else if (type == "template")
                     {
                         ThisProject.TemplateSendingDate = DateTime.Now;
+                    }
+                    else if (type == "attachment")
+                    {
+                        ThisProject.AttachmentSendingDate = DateTime.Now;
                     }
                     else { }
                     ProjectModel.SaveChanges();

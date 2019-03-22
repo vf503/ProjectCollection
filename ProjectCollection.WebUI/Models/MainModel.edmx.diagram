@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9db6c4410fb24e439b38c1f975b89bb3" Name="Diagram1" ZoomLevel="106">
+      <Diagram DiagramId="9db6c4410fb24e439b38c1f975b89bb3" Name="Diagram1" ZoomLevel="82">
         <EntityTypeShape EntityType="ProjectCollectionModel.CustomProject" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="ProjectCollectionModel.data_dictionary" Width="1.5" PointX="0.625" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ProjectCollectionModel.ProjectPlan" Width="1.5" PointX="5.75" PointY="1" IsExpanded="true" />
@@ -20,7 +20,7 @@
         <EntityTypeShape EntityType="ProjectCollectionModel.Project" Width="1.5" PointX="7.875" PointY="0.625" />
         <EntityTypeShape EntityType="ProjectCollectionModel.ProjectPlanRecord" Width="1.5" PointX="10.375" PointY="9.75" />
         <EntityTypeShape EntityType="ProjectCollectionModel.ProjectRecord" Width="1.5" PointX="12.375" PointY="9.75" />
-        <EntityTypeShape EntityType="ProjectCollectionModel.BatchProject" Width="1.5" PointX="2.75" PointY="10.5" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.BatchProject" Width="1.5" PointX="4.75" PointY="9.625" />
         <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info" />
         <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info1" />
         <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info2" />
@@ -33,6 +33,7 @@
         <EntityTypeShape EntityType="ProjectCollectionModel.TempOrder" Width="1.5" PointX="20.875" PointY="1.5" />
         <AssociationConnector Association="ProjectCollectionModel.FK_TempOrder_TempOrder1" />
         <AssociationConnector Association="ProjectCollectionModel.FK_TempOrder_TempCustomer" />
+        <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info6" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

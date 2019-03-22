@@ -2363,6 +2363,15 @@ namespace ProjectCollection.WebUI.pages
         private void InitContentCheckData()
         {
             BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
+            string name = "";
+            using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+            {
+                ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                      where p.ProjectId.ToString() == project.ProjectId.ToString()
+                                                                      select p).First();
+                name = BLL.UserInfo.GetRealNameByID(new Guid(ThisProject.ContentCheckPersonInCharge.ToString()));   
+            }
+            this.txtContentCheckPersonInCharge.Text = name;
             this.ddlContentCourseIntroductionQuality.SelectedValue = project.ContentCourseIntroductionQuality.ToString();
             this.ddlContentResumeQuality.SelectedValue = project.ContentResumeQuality.ToString();
             this.ddlContentPPTQuality.SelectedValue = project.ContentPPTQuality.ToString();

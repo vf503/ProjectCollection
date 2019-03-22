@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="LoginMain.aspx.cs" Inherits="ProjectCollection.WebUI.pages.LoginMain" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="LoginMain.aspx.cs" Inherits="ProjectCollection.WebUI.pages.LoginMain"  EnableViewState="false" %>
 
 <!DOCTYPE html>
 
@@ -61,11 +61,11 @@
     <form id="form1" runat="server">
         <div id="main">
             <div id="UserName">
-                <asp:TextBox ID="txtLoginUserName" runat="server" BorderWidth="0"></asp:TextBox></div>
+                <asp:TextBox ID="txtFuckScannerN" runat="server" BorderWidth="0"></asp:TextBox></div>
             <div id="Password">
-                <asp:TextBox ID="txtLoginPassword" runat="server" TextMode="Password" BorderWidth="0"></asp:TextBox></div>
+                <asp:TextBox ID="txtFuckScannerP" runat="server" TextMode="Password" BorderWidth="0"></asp:TextBox></div>
             <div id="Login">
-                <asp:Button ID="btnLogin" runat="server" Text="" OnClick="btnLogin_Click" CssClass="LoginBtn" BorderWidth="0" /></div>
+                <asp:Button ID="btnFuckScanner" runat="server" Text="" OnClick="btnLogin_Click" CssClass="LoginBtn" BorderWidth="0" /></div>
         </div>
     </form>
 </body>

@@ -265,31 +265,13 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.WebControls.Label Label5;
         
         /// <summary>
-        /// NumberOfTimesTable 控件。
+        /// SourceTable 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView NumberOfTimesTable;
-        
-        /// <summary>
-        /// Label6 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label6;
-        
-        /// <summary>
-        /// NumberOfCoursesTable 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView NumberOfCoursesTable;
+        protected global::System.Web.UI.WebControls.GridView SourceTable;
         
         /// <summary>
         /// NumberOfCoursesCurrentYearLB 控件。
@@ -319,31 +301,31 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.WebControls.Label Label7;
         
         /// <summary>
-        /// NumberOfTimesCurrentYearTable 控件。
+        /// SourceTableCurrentYear 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView NumberOfTimesCurrentYearTable;
+        protected global::System.Web.UI.WebControls.GridView SourceTableCurrentYear;
         
         /// <summary>
-        /// Label8 控件。
+        /// Label6 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label8;
+        protected global::System.Web.UI.WebControls.Label Label6;
         
         /// <summary>
-        /// NumberOfCoursesCurrentYearTable 控件。
+        /// SourceCreateTable 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView NumberOfCoursesCurrentYearTable;
+        protected global::System.Web.UI.WebControls.GridView SourceCreateTable;
         
         /// <summary>
         /// CourseCategoryPanel 控件。

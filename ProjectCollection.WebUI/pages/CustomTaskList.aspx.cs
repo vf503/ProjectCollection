@@ -177,6 +177,21 @@ namespace ProjectCollection.WebUI.pages
                     this.gvProject.DataBind();
                 }
             }
+            else if (this.Request["mode"] == "attachment")
+            {
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    var projects = (from p in ProjectModel.BatchProject
+                                    where p.AttachmentSendingDate.HasValue && !p.AttachmentFinishDate.HasValue
+                                    select p);
+                    foreach (var p in projects)
+                    {
+                        p.progress = "等待执行";
+                    }
+                    this.gvProject.DataSource = projects.ToList();
+                    this.gvProject.DataBind();
+                }
+            }
             else
             {
             }

@@ -328,6 +328,51 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.WebControls.TextBox txtTemplateFinishNote;
         
         /// <summary>
+        /// PanelAttachmentFinish 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelAttachmentFinish;
+        
+        /// <summary>
+        /// txtAttachmentMaker 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtAttachmentMaker;
+        
+        /// <summary>
+        /// txtAttachmentSendingDate 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtAttachmentSendingDate;
+        
+        /// <summary>
+        /// txtAttachmentFinishDate 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtAttachmentFinishDate;
+        
+        /// <summary>
+        /// txtAttachmentFinishNote 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtAttachmentFinishNote;
+        
+        /// <summary>
         /// PanelBtn 控件。
         /// </summary>
         /// <remarks>
