@@ -359,4 +359,6 @@
         </asp:GridView>
         <asp:Button ID="btnBack" runat="server" Text="返回任务列表"  OnClick="btnBack_Click"/>
     </asp:Panel>
+    <asp:Label ID="message" runat="server" Text="Label" Visible="false"></asp:Label>
+    
 </asp:Content>

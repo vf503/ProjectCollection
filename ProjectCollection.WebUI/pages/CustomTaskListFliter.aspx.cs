@@ -11,6 +11,7 @@ namespace ProjectCollection.WebUI.pages
     {
         public string range="";
         public string process="";
+        public List<Models.BatchProject> data=new List<Models.BatchProject>();
         #region 事件
 
         protected void Page_Load(object sender, EventArgs e)
@@ -44,7 +45,7 @@ namespace ProjectCollection.WebUI.pages
             List<object> keyValues = axgvProject.GetCurrentPageRowValues(axgvProject.KeyFieldName);
             foreach (object key in keyValues)
             {
-                HyperLink CurrentASelect = (HyperLink)axgvProject.FindRowCellTemplateControlByKey(key, (DevExpress.Web.GridViewDataColumn)axgvProject.Columns["Operate"], "aSelect");
+               HyperLink CurrentASelect = (HyperLink)axgvProject.FindRowCellTemplateControlByKey(key, (DevExpress.Web.GridViewDataColumn)axgvProject.Columns["Operate"], "aSelect");
                 CurrentASelect.NavigateUrl = "~/pages/CustomTaskDetails.aspx?mode=browse" + "&id=" + key.ToString();
             }
         }
@@ -62,21 +63,22 @@ namespace ProjectCollection.WebUI.pages
             else
             { }
         }
-
         #endregion 事件
 
         #region 方法
 
         private void DataBindProjectPlanList(string range,string process)
         {
-            using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
-            {
+            //using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+            //{
+                var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
                 var projects = (from p in ProjectModel.BatchProject
                                 orderby p.CreateDate descending
                                 select p);
-                this.axgvProject.DataSource = projects.ToList();
+                data = projects.ToList();
+                this.axgvProject.DataSource = data;
                 this.axgvProject.DataBind();
-            }
+           //}
             List<object> keyValues = axgvProject.GetCurrentPageRowValues(axgvProject.KeyFieldName);
             foreach (object key in keyValues)
             {

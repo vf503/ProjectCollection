@@ -112,6 +112,15 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.WebControls.Button CourseCategoryBtn;
         
         /// <summary>
+        /// HistoryBtn 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button HistoryBtn;
+        
+        /// <summary>
         /// CustomerPanel 控件。
         /// </summary>
         /// <remarks>
@@ -229,6 +238,24 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.WebControls.GridView SCustomerTypeTable;
         
         /// <summary>
+        /// Label10 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label10;
+        
+        /// <summary>
+        /// CustomerCategoryGV 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView CustomerCategoryGV;
+        
+        /// <summary>
         /// CourseSourcePanel 控件。
         /// </summary>
         /// <remarks>
@@ -254,6 +281,15 @@ namespace ProjectCollection.WebUI.pages {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label NumberOfTimesLB;
+        
+        /// <summary>
+        /// RateLB 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label RateLB;
         
         /// <summary>
         /// Label5 控件。
@@ -290,6 +326,15 @@ namespace ProjectCollection.WebUI.pages {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label NumberOfTimesCurrentYearLB;
+        
+        /// <summary>
+        /// RateCurrentYearLB 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label RateCurrentYearLB;
         
         /// <summary>
         /// Label7 控件。
@@ -355,6 +400,15 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.WebControls.Label NumberOfTimesCategoryLB;
         
         /// <summary>
+        /// RateCategoryLB 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label RateCategoryLB;
+        
+        /// <summary>
         /// Label9 控件。
         /// </summary>
         /// <remarks>
@@ -371,24 +425,6 @@ namespace ProjectCollection.WebUI.pages {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView NumberOfTimesCategoryTable;
-        
-        /// <summary>
-        /// Label10 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label10;
-        
-        /// <summary>
-        /// NumberOfCoursesCategoryTable 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView NumberOfCoursesCategoryTable;
         
         /// <summary>
         /// NumberOfCoursesCategoryCurrentYearLB 控件。
@@ -409,6 +445,15 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.WebControls.Label NumberOfTimesCategoryCurrentYearLB;
         
         /// <summary>
+        /// RateCategoryCurrentYearLB 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label RateCategoryCurrentYearLB;
+        
+        /// <summary>
         /// Label13 控件。
         /// </summary>
         /// <remarks>
@@ -427,6 +472,69 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.WebControls.GridView NumberOfTimesCategoryCurrentYearTable;
         
         /// <summary>
+        /// Label11 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label11;
+        
+        /// <summary>
+        /// CategorySourceGV 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView CategorySourceGV;
+        
+        /// <summary>
+        /// HistoryPanel 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel HistoryPanel;
+        
+        /// <summary>
+        /// Label8 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label8;
+        
+        /// <summary>
+        /// HistoryAllTable 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView HistoryAllTable;
+        
+        /// <summary>
+        /// Label12 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label12;
+        
+        /// <summary>
+        /// HistorySourceGV 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView HistorySourceGV;
+        
+        /// <summary>
         /// Label14 控件。
         /// </summary>
         /// <remarks>
@@ -436,12 +544,12 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.WebControls.Label Label14;
         
         /// <summary>
-        /// NumberOfCoursesCategoryCurrentYearTable 控件。
+        /// HistoryCategoryGV 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView NumberOfCoursesCategoryCurrentYearTable;
+        protected global::System.Web.UI.WebControls.GridView HistoryCategoryGV;
     }
 }

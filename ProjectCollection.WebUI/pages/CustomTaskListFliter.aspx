@@ -37,7 +37,7 @@
                 <Settings />
                 <Settings AllowAutoFilter="False"></Settings>
                 <DataItemTemplate>
-                    <asp:HyperLink ID="aSelect" runat="server" Text="选择"></asp:HyperLink>
+                    <asp:HyperLink ID="aSelect" runat="server" Text="选择" NavigateUrl='~/pages/CustomTaskDetails.aspx?mode=browse&id=<%# Eval("id")%>'></asp:HyperLink>
 <%--                    <dx:ASPxButton ID="btnShowPopup" runat="server" Text="操作" CommandArgument='<%# Eval("CustomProjectId")%>' OnCommand="btnShowPopup_Command">
                           <ClientSideEvents Click="function(s, e) { popup1.Show(); }" />
                     </dx:ASPxButton>--%>

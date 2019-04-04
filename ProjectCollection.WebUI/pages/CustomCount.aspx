@@ -48,6 +48,7 @@
                 <asp:Button ID="CustomerQueryBtn" runat="server" Text="客户统计" OnClick="CustomerQueryBtn_Click" />
                 <asp:Button ID="CourseSourceBtn" runat="server" Text="课件来源分析" OnClick="CourseSourceBtn_Click" />
                 <asp:Button ID="CourseCategoryBtn" runat="server" Text="课件内容分析" OnClick="CourseCategoryBtn_Click" />
+                <asp:Button ID="HistoryBtn" runat="server" Text="历史数据分析" OnClick="HistoryBtn_Click" />
             </div>
             <asp:Panel ID="CustomerPanel" runat="server" Visible="false">
                 <asp:Panel ID="Panel1" runat="server">
@@ -85,11 +86,15 @@
                             <asp:BoundField DataField="count" HeaderText="数量" />
                         </Columns>
                     </asp:GridView>
+                    <asp:Label ID="Label10" runat="server" Text="客户内容偏好分析"></asp:Label>
+                    <asp:GridView ID="CustomerCategoryGV" runat="server" AutoGenerateColumns="False">
+                    </asp:GridView>
                 </asp:Panel>
             </asp:Panel>
             <asp:Panel ID="CourseSourcePanel" runat="server" Visible="false">
-                <asp:Label ID="NumberOfCoursesLB" runat="server" Text="全部课件选课门数(不包括缺失来源的课件)"></asp:Label>
-                <asp:Label ID="NumberOfTimesLB" runat="server" Text="全部课件选课次数(不包括缺失来源的课件)"></asp:Label>
+                <asp:Label ID="NumberOfCoursesLB" runat="server" Text="全部课件选课门数(不包括缺失来源的课件)："></asp:Label>
+                <asp:Label ID="NumberOfTimesLB" runat="server" Text="全部课件选课次数(不包括缺失来源的课件)："></asp:Label>
+                <asp:Label ID="RateLB" runat="server" Text="选课均值："></asp:Label>
                 <br />
                 <br />
                 <asp:Label ID="Label5" runat="server" Text="全部课件来源分析"></asp:Label>
@@ -106,8 +111,9 @@
                     </Columns>
                 </asp:GridView>
                 <br />
-                <asp:Label ID="NumberOfCoursesCurrentYearLB" runat="server" Text="当年新课件选课集数(不包括缺失来源的课件)"></asp:Label>
-                <asp:Label ID="NumberOfTimesCurrentYearLB" runat="server" Text="当年新课件选课次数(不包括缺失来源的课件)"></asp:Label>
+                <asp:Label ID="NumberOfCoursesCurrentYearLB" runat="server" Text="当年新课件选课集数(不包括缺失来源的课件)："></asp:Label>
+                <asp:Label ID="NumberOfTimesCurrentYearLB" runat="server" Text="当年新课件选课次数(不包括缺失来源的课件)："></asp:Label>
+                <asp:Label ID="RateCurrentYearLB" runat="server" Text="选课均值："></asp:Label>
                 <br />
                 <br />
                 <asp:Label ID="Label7" runat="server" Text="当年新课件来源分析"></asp:Label>
@@ -126,53 +132,77 @@
                 <asp:Label ID="Label6" runat="server" Text="当年新课效度分析"></asp:Label>
                 <asp:GridView ID="SourceCreateTable" runat="server" AutoGenerateColumns="False">
                     <Columns>
-                         <asp:BoundField DataField="SourceName" HeaderText="来源" />
-                        <asp:BoundField DataField="CourseCount" HeaderText="选课门/集数" />
-                        <asp:BoundField DataField="CreateCount" HeaderText="开发门/集数" />
-                        <asp:BoundField DataField="ratio" HeaderText="占比" />
+                         <asp:BoundField DataField="type" HeaderText="来源" />
+                        <asp:BoundField DataField="selled" HeaderText="选课门/集数" />
+                        <asp:BoundField DataField="produce" HeaderText="开发门/集数" />
+                        <asp:BoundField DataField="rate" HeaderText="占比" />
                     </Columns>
                 </asp:GridView>
             </asp:Panel>
             <asp:Panel ID="CourseCategoryPanel" runat="server" Visible="false">
                 <asp:Label ID="NumberOfCoursesCategoryLB" runat="server" Text="全部课件选课集数(不包括缺失分类的课件)"></asp:Label>
                 <asp:Label ID="NumberOfTimesCategoryLB" runat="server" Text="全部课件选课次数(不包括缺失分类的课件)"></asp:Label>
+                <asp:Label ID="RateCategoryLB" runat="server" Text="选课均值："></asp:Label>
                  <br />
-                <asp:Label ID="Label9" runat="server" Text="全部课件内容-选课次数分析"></asp:Label>
+                <asp:Label ID="Label9" runat="server" Text="全部课件内容选课分析"></asp:Label>
                 <asp:GridView ID="NumberOfTimesCategoryTable" runat="server" AutoGenerateColumns="False">
                     <Columns>
-                        <asp:BoundField DataField="type" HeaderText="来源" />
-                        <asp:BoundField DataField="count" HeaderText="选课次数" />
-                        <asp:BoundField DataField="ratio" HeaderText="占比" />
+                        <asp:BoundField DataField="TypeTop" HeaderText="一级栏目" />
+                        <asp:BoundField DataField="type" HeaderText="二级栏目" />
+                        <asp:BoundField DataField="times" HeaderText="选课次数" />
+                        <asp:BoundField DataField="TimesRatio" HeaderText="次数占比" />
+                        <asp:BoundField DataField="number" HeaderText="选课集数" />
+                        <asp:BoundField DataField="NumberRatio" HeaderText="集数占比" />
+                        <asp:BoundField DataField="TimesAVG" HeaderText="次数均值" /> 
+                        <asp:BoundField DataField="GroupTimes" HeaderText="选课门数" />
+                        <asp:BoundField DataField="GroupTimesRatio" HeaderText="门数占比" />
                     </Columns>
                 </asp:GridView>
                 <br />
-                <asp:Label ID="Label10" runat="server" Text="全部课件内容-选课门数分析"></asp:Label>
-                <asp:GridView ID="NumberOfCoursesCategoryTable" runat="server" AutoGenerateColumns="False">
-                    <Columns>
-                        <asp:BoundField DataField="type" HeaderText="来源" />
-                        <asp:BoundField DataField="count" HeaderText="选课门数" />
-                        <asp:BoundField DataField="ratio" HeaderText="占比" />
-                    </Columns>
-                </asp:GridView>
                 <asp:Label ID="NumberOfCoursesCategoryCurrentYearLB" runat="server" Text="当年新课件选课门数(不包括缺失来源的课件)"></asp:Label>
                 <asp:Label ID="NumberOfTimesCategoryCurrentYearLB" runat="server" Text="当年新课件选课次数(不包括缺失来源的课件)"></asp:Label>
+                <asp:Label ID="RateCategoryCurrentYearLB" runat="server" Text="选课均值："></asp:Label>
                 <br />
-                <asp:Label ID="Label13" runat="server" Text="当年新课件内容-选课次数分析"></asp:Label>
+                <asp:Label ID="Label13" runat="server" Text="当年新课件内容选课分析"></asp:Label>
                 <asp:GridView ID="NumberOfTimesCategoryCurrentYearTable" runat="server" AutoGenerateColumns="False">
                     <Columns>
-                        <asp:BoundField DataField="type" HeaderText="来源" />
-                        <asp:BoundField DataField="count" HeaderText="选课次数" />
-                        <asp:BoundField DataField="ratio" HeaderText="占比" />
+                        <asp:BoundField DataField="TypeTop" HeaderText="一级栏目" />
+                        <asp:BoundField DataField="type" HeaderText="二级栏目" />
+                        <asp:BoundField DataField="times" HeaderText="选课次数" />
+                        <asp:BoundField DataField="TimesRatio" HeaderText="次数占比" />
+                        <asp:BoundField DataField="number" HeaderText="选课集数" />
+                        <asp:BoundField DataField="NumberRatio" HeaderText="集数占比" />
+                        <asp:BoundField DataField="TimesAVG" HeaderText="次数均值" /> 
+                        <asp:BoundField DataField="GroupTimes" HeaderText="选课门数" />
+                        <asp:BoundField DataField="GroupTimesRatio" HeaderText="门数占比" />
                     </Columns>
                 </asp:GridView>
                 <br />
-                <asp:Label ID="Label14" runat="server" Text="当年新课件内容-选课门数分析"></asp:Label>
-                <asp:GridView ID="NumberOfCoursesCategoryCurrentYearTable" runat="server" AutoGenerateColumns="False">
+                <asp:Label ID="Label11" runat="server" Text="内容-来源选课分析"></asp:Label>
+                <asp:GridView ID="CategorySourceGV" runat="server" AutoGenerateColumns="False">
+                </asp:GridView>
+                <br />
+            </asp:Panel>
+            <asp:Panel ID="HistoryPanel" runat="server" Visible="false">
+                <asp:Label ID="Label8" runat="server" Text="历史选课发布时间（年）分析"></asp:Label>
+                <asp:GridView ID="HistoryAllTable" runat="server" AutoGenerateColumns="False">
                     <Columns>
-                        <asp:BoundField DataField="type" HeaderText="来源" />
-                        <asp:BoundField DataField="count" HeaderText="选课门数" />
-                        <asp:BoundField DataField="ratio" HeaderText="占比" />
+                         <asp:BoundField DataField="year" HeaderText="年" />
+                        <asp:BoundField DataField="times" HeaderText="次" />
+                        <asp:BoundField DataField="TimesRate" HeaderText="次占比" />
+                        <asp:BoundField DataField="count" HeaderText="集" />
+                        <asp:BoundField DataField="CountRate" HeaderText="集占比" />
+                        <asp:BoundField DataField="group" HeaderText="门（自筹）" />
+                        <asp:BoundField DataField="GroupRate" HeaderText="占比" />
                     </Columns>
+                </asp:GridView>
+                <br />
+                <asp:Label ID="Label12" runat="server" Text="时间-来源选课分析"></asp:Label>
+                <asp:GridView ID="HistorySourceGV" runat="server" AutoGenerateColumns="False">
+                </asp:GridView>
+                <br />
+                <asp:Label ID="Label14" runat="server" Text="时间-内容选课分析"></asp:Label>
+                <asp:GridView ID="HistoryCategoryGV" runat="server" AutoGenerateColumns="False">
                 </asp:GridView>
             </asp:Panel>
         </div>

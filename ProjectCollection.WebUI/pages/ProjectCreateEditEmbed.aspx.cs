@@ -1598,6 +1598,16 @@ namespace ProjectCollection.WebUI.pages
             this.rblCanBeSold.SelectedValue = project.CanBeSold.ToString();
             this.ddlEpisodeCount.SelectedValue = project.EpisodeCount.ToString();
             this.txtRecordingDate.Text = ProjectPlan.RecordingDate.ToString("yyyy-MM-dd");
+            using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+            {
+                ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                      where p.ProjectId == project.ProjectId
+                                                                      select p).First();
+                if (ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017") && ThisProject.MakeType == "new")
+                {
+                    this.ddlProjectType.SelectedValue = "00000000-0000-0000-0000-000000000299";
+                }
+            }
         }
         private void InitCaptureData()
         {
