@@ -547,6 +547,20 @@ namespace ProjectCollection.WebUI.pages
                     {
 
                     }
+                    try
+                    {
+                        this.PanelContentReceive.Visible = true;
+                        InitDropDownListContentReceive();
+                        this.InitContentReceiveData();
+                    }
+                    catch
+                    {
+
+                    }
+                    finally
+                    {
+
+                    }
                 }
             }
             #endregion
@@ -1164,7 +1178,7 @@ namespace ProjectCollection.WebUI.pages
             #region create/copy
             if (this.Request["mode"] == "create" || this.Request["mode"] == "copy")
             {
-                //新增
+                //新增 *复制工单在嵌入页执行
                 Guid ProjectPlanId;
                 Guid WorkTypeId = new Guid(this.ddlWorkType.SelectedValue);
                 BLL.Project project = new BLL.Project();
@@ -1718,6 +1732,21 @@ namespace ProjectCollection.WebUI.pages
                     project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000106");
                 }
                 BLL.Project.UpdateContentRecheckFinish(project);
+                if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
+                {
+                    string url = @"http://newpms.cei.cn/JsonDataDataBackup?ProjectNo="
+                        + HttpUtility.UrlEncode(project.ProjectNo);
+                    //
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    request.Method = "GET";
+                    request.ContentType = "text/html;charset=UTF-8";
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    Stream myResponseStream = response.GetResponseStream();
+                    StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                    string retString = myStreamReader.ReadToEnd();
+                    myStreamReader.Close();
+                    myResponseStream.Close();
+                }
                 this.Redirect("~/pages/MyTask.aspx?mode=contentrecheck");
             }
             #endregion
@@ -3057,6 +3086,21 @@ namespace ProjectCollection.WebUI.pages
             project.progress = new Guid("00000000-0000-0000-0000-000000000112");
             project.ContentProgress = new Guid("00000000-0000-0000-0000-000000000112");
             BLL.Project.UpdateContentFinish(project);
+            if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
+            {
+                string url = @"http://newpms.cei.cn/JsonDataDataBackup?ProjectNo="
+                    + HttpUtility.UrlEncode(project.ProjectNo);
+                //
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.Method = "GET";
+                request.ContentType = "text/html;charset=UTF-8";
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Stream myResponseStream = response.GetResponseStream();
+                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                string retString = myStreamReader.ReadToEnd();
+                myStreamReader.Close();
+                myResponseStream.Close();
+            }
         }
         private void UpdateContentCheck(Project project)
         {
@@ -3098,7 +3142,24 @@ namespace ProjectCollection.WebUI.pages
                 ThisProject.ContentCheckScore = this.ddlContentCheckScore.SelectedValue;
                 ProjectModel.SaveChanges();
             }
+            if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
+            {
+                string url = @"http://newpms.cei.cn/JsonDataDataBackup?ProjectNo="
+                    + HttpUtility.UrlEncode(project.ProjectNo);
+                //
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                request.Method = "GET";
+                request.ContentType = "text/html;charset=UTF-8";
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Stream myResponseStream = response.GetResponseStream();
+                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                string retString = myStreamReader.ReadToEnd();
+                myStreamReader.Close();
+                myResponseStream.Close();
+            }
+
         }
+        //
         private void UpdateProductionReceive(Project project)
         {
             project.ProductionPersonInCharge = this.LoginUserInfo.Identity;

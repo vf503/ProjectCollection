@@ -321,7 +321,7 @@ namespace ProjectCollection.WebUI.pages
                                        group o by new { o.TempCourse.CourseId } into oc
                                        select oc.Key.CourseId);
             NumberOfCoursesLB.Text = NumberOfCoursesLB.Text + NumberOfCoursesList.Count();
-            RateLB.Text = RateLB.Text + (NumberOfTimes / Convert.ToDouble(NumberOfCoursesList)).ToString("f2");
+            RateLB.Text = RateLB.Text + (NumberOfTimes / Convert.ToDouble(NumberOfCoursesList.Count())).ToString("f2");
             var SourceTimesList = from o in OrderList
                                   where o.TempCourse.type != ""
                                   group o by new { o.TempCourse.type } into oc
@@ -375,7 +375,7 @@ namespace ProjectCollection.WebUI.pages
                                                   group o by new { o.TempCourse.CourseId } into oc
                                                   select oc.Key.CourseId);
             NumberOfCoursesCurrentYearLB.Text = NumberOfCoursesCurrentYearLB.Text + NumberOfCoursesCurrentYearList.Count();
-            RateCurrentYearLB.Text = RateCurrentYearLB.Text + (NumberOfTimesCurrentYear / Convert.ToDouble(NumberOfCoursesCurrentYearList)).ToString("f2");
+            RateCurrentYearLB.Text = RateCurrentYearLB.Text + (NumberOfTimesCurrentYear / Convert.ToDouble(NumberOfCoursesCurrentYearList.Count())).ToString("f2");
             var SourceTimesCurrentYearList = from o in OrderCurrentYearList
                                              where o.TempCourse.type != ""
                                              group o by new { o.TempCourse.type } into oc
@@ -792,7 +792,7 @@ namespace ProjectCollection.WebUI.pages
             {
                 DateTime StartDate = CurrentYearDate.AddYears(-i);
                 DateTime EndDate = CurrentYearDate.AddYears(-(i - 1));
-                dc = HistorySourceCountData.Columns.Add(StartDate.Year.ToString(), Type.GetType("System.String"));
+                HistorySourcedc = HistorySourceCountData.Columns.Add(StartDate.Year.ToString(), Type.GetType("System.String"));
                 //GridView
                 BoundField ThisColumn = new BoundField();
                 ThisColumn.HeaderText = StartDate.Year.ToString();
@@ -839,7 +839,7 @@ namespace ProjectCollection.WebUI.pages
             {
                 DateTime StartDate = CurrentYearDate.AddYears(-i);
                 DateTime EndDate = CurrentYearDate.AddYears(-(i - 1));
-                dc = HistoryCategoryCountData.Columns.Add(StartDate.Year.ToString(), Type.GetType("System.String"));
+                HistoryCategorydc = HistoryCategoryCountData.Columns.Add(StartDate.Year.ToString(), Type.GetType("System.String"));
                 //GridView
                 BoundField ThisColumn = new BoundField();
                 ThisColumn.HeaderText = StartDate.Year.ToString();
@@ -875,6 +875,202 @@ namespace ProjectCollection.WebUI.pages
             #endregion  Category
         }
 
+        protected void CourseBtn_Click(object sender, EventArgs e)
+        {
+            CoursePanel.Visible = true;
+            DateTime StartTime;
+            DateTime EndTime;
+            if (hidStartDate.Value == "" || hidEndDate.Value == "")
+            {
+                EndTime = DateTime.Now;
+                StartTime = DateTime.Now.AddMonths(-6);
+            }
+            else
+            {
+                StartTime = Convert.ToDateTime(hidStartDate.Value);
+                EndTime = Convert.ToDateTime(hidEndDate.Value);
+            }
+            string CurrentYear = EndTime.Year.ToString();
+            CurrentYear = CurrentYear + "-01-01 00:00:00";
+            DateTime CurrentYearDate = Convert.ToDateTime(CurrentYear);
+            DateTime EndYearDate = CurrentYearDate.AddYears(+1);
+            DateTime StartYearDate = CurrentYearDate.AddYears(-2);
+            var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
+            #region All
+            DataTable HistoryCountData = new DataTable("");
+            DataColumn Historydc = null;
+            Historydc = HistoryCountData.Columns.Add("name", Type.GetType("System.String"));
+            //GridView
+            BoundField HistoryNameColumn = new BoundField();
+            HistoryNameColumn.HeaderText = "表头";
+            HistoryNameColumn.DataField = "name";
+            HistoryCourseGV.Columns.Add(HistoryNameColumn);
+            for (int i = 0; i < 3; i++)
+            {
+                DateTime StartDate = CurrentYearDate.AddYears(-i);
+                DateTime EndDate = CurrentYearDate.AddYears(-(i - 1));
+                Historydc = HistoryCountData.Columns.Add(StartDate.Year.ToString(), Type.GetType("System.String"));
+                //GridView
+                BoundField ThisColumn = new BoundField();
+                ThisColumn.HeaderText = StartDate.Year.ToString();
+                ThisColumn.DataField = StartDate.Year.ToString();
+                HistoryCourseGV.Columns.Add(ThisColumn);
+            }
+            List<string> CourseList = (from o in ProjectModel.TempOrder
+                                where (o.date >= StartTime) && (o.date <= EndTime) && o.TempCourse.type=="自筹"
+                              group o by new { o.TempCourse.title } into oc
+                              orderby oc.Key.title
+                                       select oc.Key.title).Take(50).ToList();
+            DataRow HistorynewRow;
+            foreach (var c in CourseList)
+            {
+                HistorynewRow = HistoryCountData.NewRow();
+                HistorynewRow["name"] = c;
+                for (int i = 0; i < 3; i++)
+                {
+                    DateTime StartDate = CurrentYearDate.AddYears(-i);
+                    DateTime EndDate = CurrentYearDate.AddYears(-(i - 1));
+                    var count = (from o in ProjectModel.TempOrder
+                                 where (o.date >= StartDate) && (o.date <= EndDate) && (o.TempCourse.title == c)
+                                 group o by new { o.TempCourse.title,o.TempCustomer.id } into oc
+                                 select oc);
+                    if (count.Count() > 0)
+                    {
+                        HistorynewRow[StartDate.Year.ToString()] = count.Count();
+                    }
+                    else { HistorynewRow[StartDate.Year.ToString()] = 0; }
+                }
+                HistoryCountData.Rows.Add(HistorynewRow);
+            }
+            HistoryCourseGV.DataSource = HistoryCountData;
+            HistoryCourseGV.DataBind();
+            #endregion  All
+            #region New
+            DataTable NewCountData = new DataTable("");
+            DataColumn Newdc = null;
+            Newdc = NewCountData.Columns.Add("name", Type.GetType("System.String"));
+            //GridView
+            BoundField NewNameColumn = new BoundField();
+            NewNameColumn.HeaderText = "表头";
+            NewNameColumn.DataField = "name";
+            NewCourseGV.Columns.Add(NewNameColumn);
+            for (int i = 0; i <  1; i++)
+            {
+                DateTime StartDate = CurrentYearDate.AddYears(-i);
+                DateTime EndDate = CurrentYearDate.AddYears(-(i - 1));
+                Newdc = NewCountData.Columns.Add(StartDate.Year.ToString(), Type.GetType("System.String"));
+                //GridView
+                BoundField ThisColumn = new BoundField();
+                ThisColumn.HeaderText = StartDate.Year.ToString();
+                ThisColumn.DataField = StartDate.Year.ToString();
+                NewCourseGV.Columns.Add(ThisColumn);
+            }
+            List<string> NewCourseList = (from o in ProjectModel.TempOrder
+                                       where (o.TempCourse.CreateDate>= CurrentYearDate) && o.TempCourse.type == "自筹"
+                                       group o by new { o.TempCourse.title } into oc
+                                       orderby oc.Key.title
+                                       select oc.Key.title).Take(50).ToList();
+            DataRow NewnewRow;
+            foreach (var c in NewCourseList)
+            {
+                NewnewRow = NewCountData.NewRow();
+                NewnewRow["name"] = c;
+                for (int i = 0; i < 1; i++)
+                {
+                    DateTime StartDate = CurrentYearDate.AddYears(-i);
+                    DateTime EndDate = CurrentYearDate.AddYears(-(i - 1));
+                    var count = (from o in ProjectModel.TempOrder
+                                 where (o.TempCourse.title == c)
+                                 group o by new { o.TempCourse.title, o.TempCustomer.id } into oc
+                                 select oc);
+                    if (count.Count() > 0)
+                    {
+                        NewnewRow[StartDate.Year.ToString()] = count.Count();
+                    }
+                    else { NewnewRow[StartDate.Year.ToString()] = 0; }
+                }
+                NewCountData.Rows.Add(NewnewRow);
+            }
+            NewCourseGV.DataSource = NewCountData;
+            NewCourseGV.DataBind();
+            #endregion New
+            #region Customer
+            DataTable CustomerCountData = new DataTable("");
+            DataColumn Customerdc = null;
+            Historydc = CustomerCountData.Columns.Add("name", Type.GetType("System.String"));
+            //GridView
+            BoundField CustomerNameColumn = new BoundField();
+            CustomerNameColumn.HeaderText = "表头";
+            CustomerNameColumn.DataField = "name";
+            CustomerCourseGV.Columns.Add(HistoryNameColumn);
+            List<string> CustomerSortList = (from c in ProjectModel.TempCustomer
+                                             group c by new { c.sort } into oc
+                                             select oc.Key.sort).ToList();
+            foreach (string c in CustomerSortList)
+            {
+                Customerdc = CustomerCountData.Columns.Add(c, Type.GetType("System.String"));
+                //GridView
+                BoundField ThisColumn = new BoundField();
+                ThisColumn.HeaderText = c;
+                ThisColumn.DataField = c;
+                CustomerCourseGV.Columns.Add(ThisColumn);
+            }
+            List<string> CustomerCourseList = (from o in ProjectModel.TempOrder
+                                       where (o.date >= StartTime) && (o.date <= EndTime) && o.TempCourse.type == "自筹"
+                                       group o by new { o.TempCourse.title } into oc
+                                       orderby oc.Key.title
+                                       select oc.Key.title).Take(50).ToList();
+            DataRow CustomernewRow;
+            foreach (var c in CustomerCourseList)
+            {
+                CustomernewRow = CustomerCountData.NewRow();
+                CustomernewRow["name"] = c;
+                foreach (string cs in CustomerSortList)
+                {
+                    var count = (from o in ProjectModel.TempOrder
+                                 where (o.date >= StartTime) && (o.date <= EndTime) && (o.TempCourse.title == c) && (o.TempCustomer.sort == cs)
+                                 group o by new { o.TempCourse.title, o.TempCustomer.id } into oc
+                                 select oc);
+                    if (count.Count() > 0)
+                    {
+                        CustomernewRow[cs] = count.Count();
+                    }
+                    else { CustomernewRow[cs] = 0; }
+                }
+                CustomerCountData.Rows.Add(CustomernewRow);
+            }
+            CustomerCourseGV.DataSource = CustomerCountData;
+            CustomerCourseGV.DataBind();
+            #endregion  Customer
+            #region Group
+            var GroupList = (from o in ProjectModel.TempOrder
+                                where (o.TempCourse.CreateDate >= StartTime) && (o.TempCourse.CreateDate <= EndTime) && o.TempCourse.type=="自筹"
+                                       select o).ToList();
+            var GroupTimes = from o in GroupList
+                             group o by new { o.TempCourse.GroupName, o.TempCourse.SourceCourseId,o.TempCustomer.id } into oc
+                             select oc;
+            var GroupData = from o in GroupList
+                            group o by new { o.TempCourse.GroupName } into od
+                            select new {
+                                title = od.Key.GroupName,
+                                times = (from o in GroupTimes
+                                         where o.Key.GroupName == od.Key.GroupName
+                                         select o).Count(),
+                                groups= (from o in GroupTimes
+                                         where o.Key.GroupName == od.Key.GroupName
+                                         group o by new { o.Key.SourceCourseId } into og
+                                         select og).Count(),
+                                rate = ((from o in GroupTimes
+                                          where o.Key.GroupName == od.Key.GroupName
+                                          select o).Count() / Convert.ToDouble((from o in GroupTimes
+                                                                                where o.Key.GroupName == od.Key.GroupName
+                                                                                group o by new { o.Key.SourceCourseId } into og
+                                                                                select og).Count())).ToString("f2")
+                            };
+            GroupGV.DataSource = GroupData;
+            GroupGV.DataBind();
+            #endregion Group
+        }
     }
 
 }

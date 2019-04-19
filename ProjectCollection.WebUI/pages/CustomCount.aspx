@@ -49,6 +49,7 @@
                 <asp:Button ID="CourseSourceBtn" runat="server" Text="课件来源分析" OnClick="CourseSourceBtn_Click" />
                 <asp:Button ID="CourseCategoryBtn" runat="server" Text="课件内容分析" OnClick="CourseCategoryBtn_Click" />
                 <asp:Button ID="HistoryBtn" runat="server" Text="历史数据分析" OnClick="HistoryBtn_Click" />
+                <asp:Button ID="CourseBtn" runat="server" Text="课件分析" OnClick="CourseBtn_Click" />
             </div>
             <asp:Panel ID="CustomerPanel" runat="server" Visible="false">
                 <asp:Panel ID="Panel1" runat="server">
@@ -203,6 +204,29 @@
                 <br />
                 <asp:Label ID="Label14" runat="server" Text="时间-内容选课分析"></asp:Label>
                 <asp:GridView ID="HistoryCategoryGV" runat="server" AutoGenerateColumns="False">
+                </asp:GridView>
+            </asp:Panel>
+            <asp:Panel ID="CoursePanel" runat="server" Visible="false">
+                <asp:Label ID="Label15" runat="server" Text="历史选课次数"></asp:Label>
+                <asp:GridView ID="HistoryCourseGV" runat="server" AutoGenerateColumns="False">
+                </asp:GridView>
+                <br />
+                <asp:Label ID="Label16" runat="server" Text="当年新课选课次数"></asp:Label>
+                <asp:GridView ID="NewCourseGV" runat="server" AutoGenerateColumns="False">
+                </asp:GridView>
+                <br />
+                <asp:Label ID="Label17" runat="server" Text="客户类型-选课次数"></asp:Label>
+                <asp:GridView ID="CustomerCourseGV" runat="server" AutoGenerateColumns="False">
+                </asp:GridView>
+                <br />
+                <asp:Label ID="Label18" runat="server" Text="专题分析"></asp:Label>
+                <asp:GridView ID="GroupGV" runat="server" AutoGenerateColumns="False">
+                    <Columns>
+                        <asp:BoundField DataField="title" HeaderText="专题" />
+                        <asp:BoundField DataField="times" HeaderText="次" />
+                        <asp:BoundField DataField="groups" HeaderText="门" />
+                        <asp:BoundField DataField="rate" HeaderText="均值" />                 
+                    </Columns>
                 </asp:GridView>
             </asp:Panel>
         </div>

@@ -836,6 +836,18 @@ namespace ProjectCollection.WebUI.pages
                     project.progress = new Guid("00000000-0000-0000-0000-000000000105");
                 }
                 BLL.Project.Insert(project);
+                if (this.ddlProjectType.SelectedValue == "00000000-0000-0000-0000-000000000299")
+                {
+                    using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                    {
+                        ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                              where p.ProjectId == project.ProjectId
+                                                                              select p).First();
+                        ThisProject.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000017");
+                        ThisProject.MakeType = "new";
+                        ProjectModel.SaveChanges();
+                    }
+                }
                 this.Redirect("~/pages/ProjectList.aspx?mode=browse");
             }
             #endregion
