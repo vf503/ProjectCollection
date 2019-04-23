@@ -1591,6 +1591,8 @@ namespace ProjectCollection.WebUI.pages
                     if (SourceProject.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000017" || SourceProject.MakeType == "new")
                     {
                         project.progress = new Guid("00000000-0000-0000-0000-000000000210");
+                        project.ContentProgress = new Guid("00000000-0000-0000-0000-000000000130");
+                        project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000129");
                         string UserName = LoginUserInfo.LoginName;
                         string PassWord = LoginUserInfo.Password;
                         byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
