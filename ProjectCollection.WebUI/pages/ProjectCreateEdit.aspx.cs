@@ -1574,14 +1574,60 @@ namespace ProjectCollection.WebUI.pages
                     }
                 }
                 else { }
-                if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))//STT
+                //STT
+                if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))
                 {
                     project.progress = new Guid("00000000-0000-0000-0000-000000000106");
                     project.ContentProgress = new Guid("00000000-0000-0000-0000-000000000130");
                     project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000106");
                 }
-                BLL.Project.UpdateExecution(project);
-                //
+                //新单转新三
+                if (project.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000199" || project.WorkType.ToString() == "00000000-0000-0000-0000-000000000029")
+                {
+                    var Model = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
+                    ProjectCollection.WebUI.Models.Project SourceProject = (from p in Model.Project
+                                                                            where p.ProjectId.ToString() == project.SourceProjectId.ToString()
+                                                                            select p).First();
+                    if (SourceProject.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000017" || SourceProject.MakeType == "new")
+                    {
+                        project.progress = new Guid("00000000-0000-0000-0000-000000000210");
+                        string UserName = LoginUserInfo.LoginName;
+                        string PassWord = LoginUserInfo.Password;
+                        byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                        string str = Convert.ToBase64String(bytes);
+                        string url = @"http://newpms.cei.cn/FTPVideoUpload/?link="
+                        + str
+                        + "&type=CourseCopy&title="
+                        + HttpUtility.UrlEncode(project.CourseName)
+                        + "&lecturer="
+                        + HttpUtility.UrlEncode(project.lecturer)
+                        + "&src="
+                        + HttpUtility.UrlEncode(SourceProject.ProjectNo)
+                        + "&ProjectNo="
+                        + HttpUtility.UrlEncode(project.ProjectNo);
+                        //
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                        request.Method = "GET";
+                        request.ContentType = "text/html;charset=UTF-8";
+                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                        Stream myResponseStream = response.GetResponseStream();
+                        StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                        string retString = myStreamReader.ReadToEnd();
+                        myStreamReader.Close();
+                        myResponseStream.Close();
+                        //
+                        JObject jo = (JObject)JsonConvert.DeserializeObject(retString);
+                        if (jo["status"].ToString() == "文件完备" && jo["data"].ToString() == "数据添加成功")
+                        {
+                        }
+                        else
+                        {
+                            throw new MyException(jo["status"].ToString());
+                        }
+                    }
+                }
+                    BLL.Project.UpdateExecution(project);
+                //新单视频
                 var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
                 ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
                                                                       where p.ProjectId == project.ProjectId

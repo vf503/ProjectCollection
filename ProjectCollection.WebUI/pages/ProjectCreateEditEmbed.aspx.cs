@@ -1,8 +1,14 @@
-﻿using ProjectCollection.BLL;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using ProjectCollection.BLL;
 using ProjectCollection.WebUI.pages.common;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
+using System.Web;
 
 namespace ProjectCollection.WebUI.pages
 {
@@ -75,6 +81,11 @@ namespace ProjectCollection.WebUI.pages
                 Guid projectId = new Guid(this.Request["ProjectId"]);
                 this.hidProjectId.Value = projectId.ToString();
                 this.InitBrowseData();
+                BLL.Project ThisProject = BLL.Project.GetProject(projectId);
+                this.ContentReceiveLink.NavigateUrl = @"http://newpms.cei.cn/SrtUpload?ProjectNo="
+                + HttpUtility.UrlEncode(ThisProject.ProjectNo)
+                + "&mode=slide";
+                this.ContentReceiveLink.Visible = true;
                 //
                 try
                 {
@@ -834,6 +845,18 @@ namespace ProjectCollection.WebUI.pages
                 else
                 {
                     project.progress = new Guid("00000000-0000-0000-0000-000000000105");
+                }
+                //新单改新三
+                if(this.Request["mode"] == "copy"||this.ddlProjectType.SelectedValue== "00000000-0000-0000-0000-000000000199"|| this.ddlWorkType.SelectedValue== "00000000-0000-0000-0000-000000000029")
+                {
+                    var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
+                    ProjectCollection.WebUI.Models.Project SourceProject = (from p in ProjectModel.Project
+                                                                          where p.ProjectId.ToString() == this.hidProjectId.Value.ToString()
+                                                                          select p).First();
+                    if (SourceProject.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000017"|| SourceProject.MakeType== "new")
+                    {
+                        project.progress = new Guid("00000000-0000-0000-0000-000000000120");
+                    }
                 }
                 BLL.Project.Insert(project);
                 if (this.ddlProjectType.SelectedValue == "00000000-0000-0000-0000-000000000299")

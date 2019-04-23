@@ -163,7 +163,8 @@
         备注：<asp:TextBox ID="txtCreateNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
         特殊要求：<asp:TextBox ID="txtExtraNote" runat="server" TextMode="MultiLine" ForeColor="Red"></asp:TextBox><br />
         拍摄日期：<asp:TextBox ID="txtRecordingDate" runat="server" Text="" ReadOnly="true"></asp:TextBox><br />
-        <asp:Label ID="labelPlanNote" runat="server" Text="任务备注："></asp:Label><asp:TextBox ID="txtPlanNote" runat="server" TextMode="MultiLine"></asp:TextBox>
+        <asp:Label ID="labelPlanNote" runat="server" Text="任务备注："></asp:Label><asp:TextBox ID="txtPlanNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
+        <asp:HyperLink ID="ContentReceiveLink" Font-Size="14" ForeColor="#009900" runat="server" Target="_blank" Visible="false">上传资料</asp:HyperLink><br />
     </asp:Panel>
     <asp:Panel ID="PanelCapture" runat="server" Visible="false">
         <div class="PanelName">采集负责人填写:</div>
