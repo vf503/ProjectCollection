@@ -1582,13 +1582,13 @@ namespace ProjectCollection.WebUI.pages
                     project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000106");
                 }
                 //新单转新三
-                if (project.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000199" || project.WorkType.ToString() == "00000000-0000-0000-0000-000000000029")
+                if (project.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000199" && project.WorkType.ToString() == "00000000-0000-0000-0000-000000000029")
                 {
                     var Model = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
                     ProjectCollection.WebUI.Models.Project SourceProject = (from p in Model.Project
                                                                             where p.ProjectId.ToString() == project.SourceProjectId.ToString()
                                                                             select p).First();
-                    if (SourceProject.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000017" || SourceProject.MakeType == "new")
+                    if (SourceProject.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000017" && SourceProject.MakeType == "new")
                     {
                         project.progress = new Guid("00000000-0000-0000-0000-000000000210");
                         project.ContentProgress = new Guid("00000000-0000-0000-0000-000000000130");

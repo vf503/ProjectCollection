@@ -846,19 +846,20 @@ namespace ProjectCollection.WebUI.pages
                 {
                     project.progress = new Guid("00000000-0000-0000-0000-000000000105");
                 }
-                //新单改新三
-                if(this.Request["mode"] == "copy"||this.ddlProjectType.SelectedValue== "00000000-0000-0000-0000-000000000199"|| this.ddlWorkType.SelectedValue== "00000000-0000-0000-0000-000000000029")
+                //新单改新三（Copy）
+                if(this.Request["mode"] == "copy" && this.ddlProjectType.SelectedValue== "00000000-0000-0000-0000-000000000199" && this.ddlWorkType.SelectedValue== "00000000-0000-0000-0000-000000000029")
                 {
                     var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
                     ProjectCollection.WebUI.Models.Project SourceProject = (from p in ProjectModel.Project
                                                                           where p.ProjectId.ToString() == this.hidProjectId.Value.ToString()
                                                                           select p).First();
-                    if (SourceProject.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000017"|| SourceProject.MakeType== "new")
+                    if (SourceProject.ProjectTypeId.ToString() == "00000000-0000-0000-0000-000000000017" && SourceProject.MakeType== "new")
                     {
                         project.progress = new Guid("00000000-0000-0000-0000-000000000120");
                     }
                 }
                 BLL.Project.Insert(project);
+                //新单视频 
                 if (this.ddlProjectType.SelectedValue == "00000000-0000-0000-0000-000000000299")
                 {
                     using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
