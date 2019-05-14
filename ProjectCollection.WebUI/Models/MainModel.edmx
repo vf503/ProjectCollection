@@ -48,6 +48,7 @@
           <Property Name="AttachmentSendingDate" Type="datetime" />
           <Property Name="AttachmentFinishDate" Type="datetime" />
           <Property Name="AttachmentFinishNote" Type="nvarchar" MaxLength="200" />
+          <Property Name="HelpCourseData" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="CustomProject">
           <Key>
@@ -1190,6 +1191,7 @@
           <Property Name="AttachmentFinishDate" Type="DateTime" Precision="3" />
           <Property Name="AttachmentFinishNote" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="user_info6" Relationship="ProjectCollectionModel.FK_BatchProject_user_info6" FromRole="BatchProject" ToRole="user_info" />
+          <Property Name="HelpCourseData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_BatchProject_user_info">
           <End Type="ProjectCollectionModel.user_info" Role="user_info" Multiplicity="1" />
@@ -1645,6 +1647,7 @@
           <EntitySetMapping Name="BatchProject">
             <EntityTypeMapping TypeName="ProjectCollectionModel.BatchProject">
               <MappingFragment StoreEntitySet="BatchProject">
+                <ScalarProperty Name="HelpCourseData" ColumnName="HelpCourseData" />
                 <ScalarProperty Name="AttachmentFinishNote" ColumnName="AttachmentFinishNote" />
                 <ScalarProperty Name="AttachmentFinishDate" ColumnName="AttachmentFinishDate" />
                 <ScalarProperty Name="AttachmentSendingDate" ColumnName="AttachmentSendingDate" />

@@ -153,6 +153,9 @@ namespace ProjectCollection.WebUI.pages
                     PanelHelpFinish.Visible = true;
                     this.InitCheckData(ThisProject);
                     this.txtHelpSendingDate.Text = ThisProject.HelpSendingDate.ToString();
+                    byte[] bytes = Encoding.UTF8.GetBytes(this.LoginUserInfo.LoginName + "_" + this.LoginUserInfo.Password);
+                    string encode = HttpUtility.UrlEncode(Convert.ToBase64String(bytes), Encoding.UTF8);
+                    this.aCourseList.NavigateUrl = "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=browse&olddata=help&project=" + ThisProject.id + "&login=" + encode; 
                     this.btnPass.Visible = true;
                     this.btnPass.Text = "完成";
                 }
@@ -366,7 +369,7 @@ namespace ProjectCollection.WebUI.pages
             string encode = string.Empty;
             byte[] bytes = Encoding.UTF8.GetBytes(this.LoginUserInfo.LoginName + "_" + this.LoginUserInfo.Password);
             encode = HttpUtility.UrlEncode(Convert.ToBase64String(bytes), Encoding.UTF8);
-            this.aCourseList.NavigateUrl = "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=browse&project=" + ThisProject.id + "&login=" + encode; ;
+            this.aCourseList.NavigateUrl = "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=browse&project=" + ThisProject.id + "&login=" + encode;
             if (ThisProject.progress != null)
             {
             }

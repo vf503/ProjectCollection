@@ -20,7 +20,7 @@
         <EntityTypeShape EntityType="ProjectCollectionModel.Project" Width="1.5" PointX="7.875" PointY="0.625" />
         <EntityTypeShape EntityType="ProjectCollectionModel.ProjectPlanRecord" Width="1.5" PointX="10.375" PointY="9.75" />
         <EntityTypeShape EntityType="ProjectCollectionModel.ProjectRecord" Width="1.5" PointX="12.375" PointY="9.75" />
-        <EntityTypeShape EntityType="ProjectCollectionModel.BatchProject" Width="1.5" PointX="4.75" PointY="9.625" />
+        <EntityTypeShape EntityType="ProjectCollectionModel.BatchProject" Width="2.875" PointX="4.75" PointY="9.625" />
         <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info" />
         <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info1" />
         <AssociationConnector Association="ProjectCollectionModel.FK_BatchProject_user_info2" />

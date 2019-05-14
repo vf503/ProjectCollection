@@ -96,6 +96,15 @@ namespace ProjectCollection.WebUI.InterFace
                     ProjectCollection.WebUI.Models.user_info ThisUser = (from u in ProjectModel.user_info
                                                                          where u.user_identity == ThisProject.CreatorId
                                                                          select u).First();
+                    object OldData;
+                    if (ThisProject.HelpCourseData is null)
+                    {
+                        OldData = "";
+                    }
+                    else
+                    {
+                        OldData = JsonConvert.DeserializeObject(ThisProject.HelpCourseData);
+                    }
                     JObject rss = new JObject();
                     rss = new JObject(
                         new JProperty("id", ThisProject.id),
@@ -117,8 +126,10 @@ namespace ProjectCollection.WebUI.InterFace
                         new JProperty("AttachmentSendingDate", ThisProject.AttachmentSendingDate.ToString()),
                         new JProperty("AttachmentFinishDate", ThisProject.AttachmentFinishDate.ToString()),
                         new JProperty("FinishDate", ThisProject.FinishDate.ToString()),
-                        new JProperty("CourseData", JsonConvert.DeserializeObject(ThisProject.CourseData))
+                        new JProperty("CourseData", JsonConvert.DeserializeObject(ThisProject.CourseData)),
+                        new JProperty ("HelpCourseData", OldData)
                         );
+
                     context.Response.ContentType = "text/plain";
                     context.Response.StatusCode = 200;
                     context.Response.Write(rss.ToString());
@@ -167,6 +178,8 @@ namespace ProjectCollection.WebUI.InterFace
                     if (type == "help")
                     {
                         ThisProject.HelpSendingDate = DateTime.Now;
+                        string HelpCourseData = (string)o["HelpCourseData"].ToString();
+                        ThisProject.HelpCourseData = HelpCourseData;
                     }
                     else if (type == "pic")
                     {
