@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="LoginMain.aspx.cs" Inherits="ProjectCollection.WebUI.pages.LoginMain"  EnableViewState="false" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="LoginMain.aspx.cs" Inherits="ProjectCollection.WebUI.pages.LoginMain"  
+EnableViewState="false" %>
 
 <!DOCTYPE html>
 
@@ -20,17 +21,17 @@
             margin: 0 auto 0 auto;
             padding: 0;
         }
-        #UserName {
+        #FuckScannerN {
             top:288px;
             left:460px;
             position: relative;
         }
-        #Password {
-            top:303px;
+        #FuckScannerP {
+            top:297px;
             left:460px;
             position: relative;
         }
-        #Login {
+        #FuckScanner {
             top:340px;
             left:386px;
             position: relative;
@@ -56,17 +57,29 @@
             }
         }
     </style>
+    <script  type="text/javascript">
+    function submitThis()
+    {
+        console.log(document.getElementById('txtFuckScannerN').value);
+        document.getElementById('HiddenFieldN').value=document.getElementById('txtFuckScannerN').value;
+        document.getElementById('HiddenFieldP').value = document.getElementById('txtFuckScannerP').value;
+        document.getElementById('txtFuckScannerP').value = "";
+    }
+</script>
 </head>
 <body>
     <form id="form1" runat="server">
         <div id="main">
-            <div id="UserName">
-                <asp:TextBox ID="txtFuckScannerN" runat="server" BorderWidth="0"></asp:TextBox></div>
-            <div id="Password">
-                <asp:TextBox ID="txtFuckScannerP" runat="server" TextMode="Password" BorderWidth="0"></asp:TextBox></div>
-            <div id="Login">
-                <asp:Button ID="btnFuckScanner" runat="server" Text="" OnClick="btnLogin_Click" CssClass="LoginBtn" BorderWidth="0" /></div>
+            <div id="FuckScannerN">
+                <input ID="txtFuckScannerN" style="border:none;" size="16" /></div>
+            <div id="FuckScannerP">
+                <asp:TextBox ID="txtFuckScannerP" runat="server" TextMode="Password" BorderWidth="0" size="16"></asp:TextBox></div>
+            <div id="FuckScanner">
+                <asp:Button ID="btnFuckScanner" runat="server" Text="" OnClick="btnLogin_Click" OnClientClick="submitThis()" CssClass="LoginBtn" BorderWidth="0" 
+/></div>
         </div>
+        <asp:HiddenField ID="HiddenFieldN" runat="server" />
+        <asp:HiddenField ID="HiddenFieldP" runat="server" />
     </form>
 </body>
 </html>

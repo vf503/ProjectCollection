@@ -54,6 +54,7 @@ namespace ProjectCollection.WebUI.Models
         public Nullable<System.DateTime> AttachmentFinishDate { get; set; }
         public string AttachmentFinishNote { get; set; }
         public string HelpCourseData { get; set; }
+        public string MidCustomer { get; set; }
     
         public virtual user_info user_info { get; set; }
         public virtual user_info user_info1 { get; set; }

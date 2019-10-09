@@ -49,6 +49,7 @@
           <Property Name="AttachmentFinishDate" Type="datetime" />
           <Property Name="AttachmentFinishNote" Type="nvarchar" MaxLength="200" />
           <Property Name="HelpCourseData" Type="nvarchar(max)" />
+          <Property Name="MidCustomer" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="CustomProject">
           <Key>
@@ -242,6 +243,10 @@
           <Property Name="VideoEncodeFinishDate" Type="datetime" />
           <Property Name="ContentCheckScore" Type="nvarchar" MaxLength="50" />
           <Property Name="MakeType" Type="nvarchar" MaxLength="50" />
+          <Property Name="duration" Type="int" />
+          <Property Name="LecturerNote" Type="nvarchar" MaxLength="500" />
+          <Property Name="ContentCheckSlideScore" Type="nvarchar" MaxLength="50" />
+          <Property Name="STTType" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="ProjectPlan">
           <Key>
@@ -1111,6 +1116,10 @@
           <Property Name="VideoEncodeFinishDate" Type="DateTime" Precision="3" />
           <Property Name="ContentCheckScore" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="MakeType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="duration" Type="Int32" />
+          <Property Name="LecturerNote" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ContentCheckSlideScore" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="STTType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ProjectPlanRecord">
           <Key>
@@ -1192,6 +1201,7 @@
           <Property Name="AttachmentFinishNote" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="user_info6" Relationship="ProjectCollectionModel.FK_BatchProject_user_info6" FromRole="BatchProject" ToRole="user_info" />
           <Property Name="HelpCourseData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MidCustomer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_BatchProject_user_info">
           <End Type="ProjectCollectionModel.user_info" Role="user_info" Multiplicity="1" />
@@ -1473,6 +1483,10 @@
           <EntitySetMapping Name="Project">
             <EntityTypeMapping TypeName="ProjectCollectionModel.Project">
               <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="STTType" ColumnName="STTType" />
+                <ScalarProperty Name="ContentCheckSlideScore" ColumnName="ContentCheckSlideScore" />
+                <ScalarProperty Name="LecturerNote" ColumnName="LecturerNote" />
+                <ScalarProperty Name="duration" ColumnName="duration" />
                 <ScalarProperty Name="MakeType" ColumnName="MakeType" />
                 <ScalarProperty Name="ContentCheckScore" ColumnName="ContentCheckScore" />
                 <ScalarProperty Name="VideoEncodeFinishDate" ColumnName="VideoEncodeFinishDate" />
@@ -1647,6 +1661,7 @@
           <EntitySetMapping Name="BatchProject">
             <EntityTypeMapping TypeName="ProjectCollectionModel.BatchProject">
               <MappingFragment StoreEntitySet="BatchProject">
+                <ScalarProperty Name="MidCustomer" ColumnName="MidCustomer" />
                 <ScalarProperty Name="HelpCourseData" ColumnName="HelpCourseData" />
                 <ScalarProperty Name="AttachmentFinishNote" ColumnName="AttachmentFinishNote" />
                 <ScalarProperty Name="AttachmentFinishDate" ColumnName="AttachmentFinishDate" />

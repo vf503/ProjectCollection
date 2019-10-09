@@ -130,6 +130,15 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.WebControls.DropDownList ddlWorkType;
         
         /// <summary>
+        /// ddlSTTType 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlSTTType;
+        
+        /// <summary>
         /// txtInCharge 控件。
         /// </summary>
         /// <remarks>
@@ -886,6 +895,24 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.WebControls.DropDownList ddlContentCheckScore;
         
         /// <summary>
+        /// ddlContentCheckSlideScore 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlContentCheckSlideScore;
+        
+        /// <summary>
+        /// txtLecturerNote 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtLecturerNote;
+        
+        /// <summary>
         /// ddlContentIsTimely 控件。
         /// </summary>
         /// <remarks>
@@ -1154,6 +1181,33 @@ namespace ProjectCollection.WebUI.pages {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel PanelProductionOperator;
+        
+        /// <summary>
+        /// ChromakeyR 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox ChromakeyR;
+        
+        /// <summary>
+        /// ChromakeyG 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox ChromakeyG;
+        
+        /// <summary>
+        /// ChromakeyB 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox ChromakeyB;
         
         /// <summary>
         /// ddlProductionVideoQuality 控件。

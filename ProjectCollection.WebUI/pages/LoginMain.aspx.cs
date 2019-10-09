@@ -26,9 +26,11 @@ namespace ProjectCollection.WebUI.pages
         /// <param name="e"></param>
         protected void btnLogin_Click(object sender, EventArgs e)
         {
+            if (this.txtFuckScannerP.Text != "")
+            { this.Redirect("~/pages/login.aspx"); }
             //判断用户身份进行跳转
             BLL.UserInfo userInfo;
-            if (Login(this.txtFuckScannerN.Text, this.txtFuckScannerP.Text, out userInfo))
+            if (Login(this.HiddenFieldN.Value, this.HiddenFieldP.Value, out userInfo))
             {
                 // 登录成功
                 //if (LoginUserInfo.Authority.Contains("manage"))
@@ -43,6 +45,7 @@ namespace ProjectCollection.WebUI.pages
             else
             {
                 // 登录失败
+                this.Redirect("~/pages/LoginMain.aspx");
             }
         }
 

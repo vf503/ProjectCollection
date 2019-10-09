@@ -22,15 +22,6 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// txtFuckScannerN 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFuckScannerN;
-        
-        /// <summary>
         /// txtFuckScannerP 控件。
         /// </summary>
         /// <remarks>
@@ -47,5 +38,23 @@ namespace ProjectCollection.WebUI.pages {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnFuckScanner;
+        
+        /// <summary>
+        /// HiddenFieldN 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HiddenFieldN;
+        
+        /// <summary>
+        /// HiddenFieldP 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField HiddenFieldP;
     }
 }

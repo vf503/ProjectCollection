@@ -127,6 +127,7 @@ namespace ProjectCollection.WebUI.pages
                 {
                     var projects = (from p in ProjectModel.BatchProject
                                     where p.progress == "等待执行"
+                                    orderby p.CreateDate
                                     select p);
                     this.gvProject.DataSource = projects.ToList();
                     this.gvProject.DataBind();

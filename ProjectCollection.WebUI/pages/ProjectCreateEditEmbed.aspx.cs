@@ -1736,6 +1736,8 @@ namespace ProjectCollection.WebUI.pages
                                                                       where p.ProjectId.ToString() == this.hidProjectId.Value.ToString()
                                                                       select p).First();
                 this.ddlContentCheckScore.SelectedValue = ThisProject.ContentCheckScore;
+                this.ddlContentCheckSlideScore.SelectedValue = ThisProject.ContentCheckSlideScore;
+                this.txtLecturerNote.Text = ThisProject.LecturerNote;
             }
         }
         private void InitContentRecheckData()

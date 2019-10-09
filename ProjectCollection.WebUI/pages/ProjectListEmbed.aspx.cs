@@ -224,16 +224,16 @@ namespace ProjectCollection.WebUI.pages
                 List<Project> Projects = BLL.Project.GetDictionaryProductionIdProject(new Guid("00000000-0000-0000-0000-000000000106"), new Guid("00000000-0000-0000-0000-000000000132"));
                 this.gvProject.DataSource = Projects;
                 this.gvProject.DataBind();
-                int count = gvProject.Rows.Count;
-                for (int i = 0; i < count; i++)
-                {
-                    if (Projects[i+(gvProject.PageSize*gvProject.PageIndex)].emergency.ToString() == "00000000-0000-0000-0000-000000000030")
-                    { }
-                    else
-                    {
-                        gvProject.Rows[i].ForeColor = System.Drawing.Color.OrangeRed;
-                    }
-                }
+                //int count = gvProject.Rows.Count;
+                //for (int i = 0; i < count; i++)
+                //{
+                //    if (Projects[i+(gvProject.PageSize*gvProject.PageIndex)].emergency.ToString() == "00000000-0000-0000-0000-000000000030")
+                //    { }
+                //    else
+                //    {
+                //        gvProject.Rows[i].ForeColor = System.Drawing.Color.OrangeRed;
+                //    }
+                //}
             }
             else if (this.Request["mode"] == "productionfinish")
             {
@@ -259,6 +259,28 @@ namespace ProjectCollection.WebUI.pages
             {
                 this.gvProject.DataSource = BLL.Project.GetAllProject();
                 this.gvProject.DataBind();
+            }
+            //
+            int count = gvProject.Rows.Count;
+            for (int i = 0; i < count; i++)
+            {
+                var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
+                string ThisId = gvProject.Rows[i].Cells[1].Text;
+                ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                          where p.ProjectNo.ToString() == ThisId
+                                                                      select p).First();
+                if (ThisProject.emergency.ToString() == "00000000-0000-0000-0000-000000000031")
+                {
+                    gvProject.Rows[i].ForeColor = System.Drawing.Color.Orange;
+                }
+                else if (ThisProject.emergency.ToString() == "00000000-0000-0000-0000-000000000032")
+                {
+                    gvProject.Rows[i].ForeColor = System.Drawing.Color.Red;
+                }
+                else
+                {
+                    
+                }
             }
         }
         //
@@ -400,7 +422,8 @@ namespace ProjectCollection.WebUI.pages
                 }
                 if (this.Request["mode"] == "contentreceive")
                 {
-                    aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=contentreceivebatchhandle&BatchId=" + hidBatchId.Value;
+                    //aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=contentreceivebatchhandle&BatchId=" + hidBatchId.Value;
+                    aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=contentreceivebatchhandle";
                 }
                 else if (this.Request["mode"] == "contentfinish")
                 {

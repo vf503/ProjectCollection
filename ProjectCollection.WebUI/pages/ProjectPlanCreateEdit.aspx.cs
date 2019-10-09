@@ -124,7 +124,7 @@ namespace ProjectCollection.WebUI.pages
                 //新增
                 BLL.ProjectPlan projectPlan = new BLL.ProjectPlan();
                 projectPlan.ProjectPlanId = Guid.NewGuid();
-                projectPlan.ProjectPlanNo = this.txtProjectPlanNo.Text;
+                projectPlan.ProjectPlanNo = this.txtProjectPlanNo.Text.Replace(" ", "");
                 projectPlan.PlanDate = Convert.ToDateTime(this.hidPlanDate.Value);
                 projectPlan.MakingDate = DateTime.Now;
                 projectPlan.ProjectPlanTypeId = new Guid(this.ddlProjectPlanType.SelectedValue);

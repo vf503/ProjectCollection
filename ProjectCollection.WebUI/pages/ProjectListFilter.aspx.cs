@@ -761,7 +761,13 @@ namespace ProjectCollection.WebUI.pages
             {
                 this.NewProgressSTTState.Text = "等待制作";
                 NewProgressSTT.BackColor = System.Drawing.ColorTranslator.FromHtml("#e29e4b");
-                this.NewProgressSTTDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ProductionCheckDate) + ")";
+                if (project.ProductionCheckDate > project.ExecutionDate) //无技术部环节
+                {
+                    this.NewProgressSTTDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ProductionCheckDate) + ")";
+                }
+                else {
+                    this.NewProgressSTTDuration.Text = "(" + DateTimeHandle.DateDiffHour(DateTime.Now, project.ExecutionDate) + ")";
+                }
             }
             else if (project.ShorthandFinishDate != new DateTime(0001, 1, 1, 00, 00, 00))
             {

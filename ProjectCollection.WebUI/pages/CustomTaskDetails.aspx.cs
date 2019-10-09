@@ -68,7 +68,7 @@ namespace ProjectCollection.WebUI.pages
                     {
                         PanelHelpFinish.Visible = true;
                         this.txtHelpSendingDate.Text = ThisProject.HelpSendingDate.ToString();
-                        this.txtHelper.Text = ThisProject.user_info5.real_name.ToString();
+                        this.txtHelper.Text = ThisProject.user_info5.real_name;
                         this.txtHelperFinishDate.Text = ThisProject.HelperFinishDate.ToString();
                         this.txtHelperFinishNote.Text = ThisProject.HelperFinishNote.ToString();
                     }
@@ -86,7 +86,7 @@ namespace ProjectCollection.WebUI.pages
                     {
                         PanelPicFinish.Visible = true;
                         this.txtPicSendingDate.Text = ThisProject.PicSendingDate.ToString();
-                        this.txtPicMaker.Text = ThisProject.user_info3.real_name.ToString();
+                        this.txtPicMaker.Text = ThisProject.user_info3.real_name;
                         this.txtPicFinishDate.Text = ThisProject.PicFinishDate.ToString();
                         this.txtPicFinishNote.Text = ThisProject.PicFinishNote.ToString();
                     }
@@ -103,9 +103,26 @@ namespace ProjectCollection.WebUI.pages
                     {
                         PanelTemplateFinish.Visible = true;
                         this.txtTemplateSendingDate.Text = ThisProject.TemplateSendingDate.ToString();
-                        this.txtTemplateMaker.Text= ThisProject.user_info4.real_name.ToString();
+                        this.txtTemplateMaker.Text= ThisProject.user_info4.real_name;
                         this.txtTemplateFinishDate.Text = ThisProject.TemplateFinishDate.ToString();
                         this.txtTemplateFinishNote.Text = ThisProject.TemplateFinishNote.ToString();
+                    }
+                    catch
+                    {
+
+                    }
+                    finally
+                    {
+
+                    }
+                    //
+                    try
+                    {
+                        PanelAttachmentFinish.Visible = true;
+                        this.txtAttachmentSendingDate.Text = ThisProject.AttachmentSendingDate.ToString();
+                        this.txtAttachmentMaker.Text = ThisProject.user_info6.real_name;
+                        this.txtAttachmentFinishDate.Text = ThisProject.AttachmentFinishDate.ToString();
+                        this.txtAttachmentFinishNote.Text = ThisProject.AttachmentFinishNote.ToString();
                     }
                     catch
                     {

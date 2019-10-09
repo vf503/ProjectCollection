@@ -129,6 +129,11 @@
             <asp:ListItem Value="00000000-0000-0000-0000-000000000043">否</asp:ListItem>
         </asp:RadioButtonList>
         记录单用途：<asp:DropDownList ID="ddlWorkType" runat="server"></asp:DropDownList><br />
+        语音转换方式：<asp:DropDownList ID="ddlSTTType" runat="server">
+            <asp:ListItem Value="high">人工</asp:ListItem>
+            <asp:ListItem Value="low">机器</asp:ListItem>
+            <asp:ListItem Value="none">无</asp:ListItem>
+        </asp:DropDownList><br />
         派单人：<asp:TextBox ID="txtInCharge" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         时限要求：<asp:DropDownList ID="ddlemergency" runat="server"></asp:DropDownList><br />
         <%--完成期限：<asp:TextBox ID="DeadLine" ClientIDMode="Static" Style="width: 160px" runat="server" ReadOnly="true"></asp:TextBox><br />
@@ -239,11 +244,17 @@
         PPT质量：<asp:DropDownList ID="ddlContentPPTQuality" runat="server"></asp:DropDownList><br />
         考题质量：<asp:DropDownList ID="ddlContentExercisesQuality" runat="server"></asp:DropDownList><br />
         文稿整理质量：<asp:DropDownList ID="ddlContentTextQuality" runat="server"></asp:DropDownList><br />
-        整体打分：<asp:DropDownList ID="ddlContentCheckScore" runat="server">
+        学生制作评价：<asp:DropDownList ID="ddlContentCheckScore" runat="server">
             <asp:ListItem>A</asp:ListItem>
             <asp:ListItem>B</asp:ListItem>
             <asp:ListItem>C</asp:ListItem>
         </asp:DropDownList><br />
+         PPT美化打分：<asp:DropDownList ID="ddlContentCheckSlideScore" runat="server">
+            <asp:ListItem>A</asp:ListItem>
+            <asp:ListItem>B</asp:ListItem>
+            <asp:ListItem>C</asp:ListItem>
+        </asp:DropDownList><br />
+        授课评价 ：<asp:TextBox ID="txtLecturerNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
         是否及时：<asp:DropDownList ID="ddlContentIsTimely" runat="server"></asp:DropDownList><br />
         审核时间：<asp:TextBox ID="txtContentCheckDate" runat="server" Text="自动填充"></asp:TextBox><br />
         备注：<asp:TextBox ID="txtContentCheckNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
@@ -291,6 +302,10 @@
         <button onclick="$.RedirectUrl('<%= RedirectUrl%>','<%= UserName%>','<%= PassWord%>');">上传视频</button><br />
         asp:Button ID="BtnUploadVideo" runat="server" Text="上传视频" OnClick="BtnUploadVideo_Click" />--%>
         <!--NewPMS-->
+        红(R):<asp:TextBox ID="ChromakeyR" runat="server" Width="30px" Text="0"></asp:TextBox>
+        绿(G):<asp:TextBox ID="ChromakeyG" runat="server" Width="30px" Text="0"></asp:TextBox>
+        蓝(B):<asp:TextBox ID="ChromakeyB" runat="server" Width="30px" Text="0"></asp:TextBox>
+         (不需要抠像全填0)<br />
         画面质量：<asp:DropDownList ID="ddlProductionVideoQuality" runat="server"></asp:DropDownList><br />
         声音质量：<asp:DropDownList ID="ddlProductionAudioQuality" runat="server"></asp:DropDownList><br />
         备份：<asp:DropDownList ID="ddlProductionFileBackUp" runat="server"></asp:DropDownList><br />

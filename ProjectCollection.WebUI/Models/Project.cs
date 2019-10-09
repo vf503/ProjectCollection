@@ -159,5 +159,9 @@ namespace ProjectCollection.WebUI.Models
         public Nullable<System.DateTime> VideoEncodeFinishDate { get; set; }
         public string ContentCheckScore { get; set; }
         public string MakeType { get; set; }
+        public Nullable<int> duration { get; set; }
+        public string LecturerNote { get; set; }
+        public string ContentCheckSlideScore { get; set; }
+        public string STTType { get; set; }
     }
 }
