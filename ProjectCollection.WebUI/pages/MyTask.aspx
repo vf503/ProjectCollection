@@ -238,6 +238,11 @@
             <iframe id="IframeCustomHelpExecute" runat="server"></iframe>
             <asp:Label ID="LabelAmountCustomHelpExecute" runat="server" Visible="false" Text=""></asp:Label>
         </asp:Panel>
+        <asp:Panel ID="PanelCustomMcHelpExecute" runat="server" Visible="false">
+            <asp:Label ID="LabelCustomMcHelpExecute" runat="server" Text="输出任务执行(微课辅助)"></asp:Label>
+            <iframe id="IframeCustomMcHelpExecute" runat="server"></iframe>
+            <asp:Label ID="LabelAmountCustomMcHelpExecute" runat="server" Visible="false" Text=""></asp:Label>
+        </asp:Panel>
         <asp:Panel ID="PanelCustomPic" runat="server" Visible="false">
             <asp:Label ID="LabelCustomPic" runat="server" Text="制作课件图片"></asp:Label>
             <iframe id="IframeCustomPic" runat="server"></iframe>

@@ -10,6 +10,8 @@ using System.Web;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Drawing;
+using System.Net.Mail;
 
 namespace ProjectCollection.WebUI.pages
 {
@@ -84,6 +86,7 @@ namespace ProjectCollection.WebUI.pages
             else if (this.Request["mode"] == "browse")
             {
                 Guid projectId = new Guid(this.Request["ProjectId"]);
+                BLL.Project project = BLL.Project.GetProject(projectId);
                 this.hidProjectId.Value = projectId.ToString();
                 this.InitBrowseData();
                 //
@@ -198,7 +201,7 @@ namespace ProjectCollection.WebUI.pages
                 try
                 {
                     this.PanelProductionReceive.Visible = true;
-                    InitDropDownListProductionReceive();
+                    InitDropDownListProductionReceive(project.CourseType);
                     this.InitProductionReceiveData();
                 }
                 catch
@@ -461,11 +464,23 @@ namespace ProjectCollection.WebUI.pages
                 PassWord = LoginUserInfo.Password;
                 byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
                 string str = Convert.ToBase64String(bytes);
-                this.ContentReceiveEditLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
-                    + HttpUtility.UrlEncode(project.ProjectNo)
-                    + "&link="
-                    + str;
-            }
+                if (string.IsNullOrEmpty(project.CourseType) == false && project.CourseType == "elite")
+                {
+                    this.ContentReceiveEditLink.NavigateUrl = @"http://newpms.cei.cn/CourseUpload?ProjectNo="
+               + HttpUtility.UrlEncode(project.ProjectNo)
+               + "&link="
+               + HttpUtility.UrlEncode(str)
+               + "&type=elite";
+                }
+                else
+                {
+                    this.ContentReceiveEditLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
+               + HttpUtility.UrlEncode(project.ProjectNo)
+               + "&link="
+               + HttpUtility.UrlEncode(str)
+               + "&type=a";
+                }
+             }
             #endregion
             #region contentreceivebatchhandle
             else if (this.Request["mode"] == "contentreceivebatchhandle")
@@ -517,11 +532,21 @@ namespace ProjectCollection.WebUI.pages
                     byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
                     string str = Convert.ToBase64String(bytes);
                     BLL.Project project = BLL.Project.GetProject(projectId);
-                    this.ContentOperatLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
-                    + HttpUtility.UrlEncode(project.ProjectNo)
-                    + "&link="
-                    + HttpUtility.UrlEncode(str)
-                    + "&type=a";
+                    if (string.IsNullOrEmpty(project.CourseType) == false && project.CourseType == "elite")
+                    {
+                        this.ContentOperatLink.NavigateUrl = @"http://newpms.cei.cn/CourseUpload?ProjectNo="
+                   + HttpUtility.UrlEncode(project.ProjectNo)
+                   + "&link="
+                   + HttpUtility.UrlEncode(str)
+                   + "&type=elite";
+                    }
+                    else {
+                        this.ContentOperatLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
+                   + HttpUtility.UrlEncode(project.ProjectNo)
+                   + "&link="
+                   + HttpUtility.UrlEncode(str)
+                   + "&type=a";
+                    }
                     //
                     try
                     {
@@ -635,11 +660,22 @@ namespace ProjectCollection.WebUI.pages
                 byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
                 string str = Convert.ToBase64String(bytes);
                 BLL.Project project = BLL.Project.GetProject(projectId);
-                this.ContentCheckLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
-                + HttpUtility.UrlEncode(project.ProjectNo)
-                + "&type=a"
-                + "&link="
-                + str;
+                if (string.IsNullOrEmpty(project.CourseType) == false && project.CourseType == "elite")
+                {
+                    this.ContentCheckLink.NavigateUrl = @"http://newpms.cei.cn/CourseUpload?ProjectNo="
+               + HttpUtility.UrlEncode(project.ProjectNo)
+               + "&link="
+               + HttpUtility.UrlEncode(str)
+               + "&type=elite";
+                }
+                else
+                {
+                    this.ContentCheckLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
+               + HttpUtility.UrlEncode(project.ProjectNo)
+               + "&link="
+               + HttpUtility.UrlEncode(str)
+               + "&type=a";
+                }
                 //
                 if (!IsPostBack)
                 {
@@ -686,7 +722,7 @@ namespace ProjectCollection.WebUI.pages
                     List<Guid> BatchProjectId = new List<Guid>();
                     //BatchProjectId = this.PreviousPage.BatchProjectId;
                     //hidBatchProjectId.Value = ProjectCollection.Common.SerializeObj.Serialize(BatchProjectId);
-                    hidBatchProjectId.Value = this.Request["BatchId"].Replace(' ', '+');
+                    hidBatchProjectId.Value = Session["BatchId"].ToString();
                     BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
                     this.hidProjectId.Value = BatchProjectId[0].ToString();
                 }
@@ -724,7 +760,7 @@ namespace ProjectCollection.WebUI.pages
                     List<Guid> BatchProjectId = new List<Guid>();
                     //BatchProjectId = this.PreviousPage.BatchProjectId;
                     //hidBatchProjectId.Value = ProjectCollection.Common.SerializeObj.Serialize(BatchProjectId);
-                    hidBatchProjectId.Value = this.Request["BatchId"].Replace(' ', '+');
+                    hidBatchProjectId.Value = Session["BatchId"].ToString();
                     BatchProjectId = ProjectCollection.Common.SerializeObj.Desrialize(BatchProjectId, hidBatchProjectId.Value);
                     this.hidProjectId.Value = BatchProjectId[0].ToString();
                 }
@@ -773,11 +809,22 @@ namespace ProjectCollection.WebUI.pages
                 byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
                 string str = Convert.ToBase64String(bytes);
                 BLL.Project project = BLL.Project.GetProject(projectId);
-                this.ContentReCheckLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
-                + HttpUtility.UrlEncode(project.ProjectNo)
-                + "&type=a"
-                + "&link="
-                + str;
+                if (string.IsNullOrEmpty(project.CourseType) == false && project.CourseType == "elite")
+                {
+                    this.ContentReCheckLink.NavigateUrl = @"http://newpms.cei.cn/CourseUpload?ProjectNo="
+               + HttpUtility.UrlEncode(project.ProjectNo)
+               + "&link="
+               + HttpUtility.UrlEncode(str)
+               + "&type=elite";
+                }
+                else
+                {
+                    this.ContentReCheckLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
+               + HttpUtility.UrlEncode(project.ProjectNo)
+               + "&link="
+               + HttpUtility.UrlEncode(str)
+               + "&type=a";
+                }
                 //
                 if (!IsPostBack)
                 {
@@ -826,11 +873,31 @@ namespace ProjectCollection.WebUI.pages
                 Guid projectId = new Guid(this.Request["ProjectId"]);
                 this.hidProjectId.Value = projectId.ToString();
                 BLL.Project Project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
+                UserName = LoginUserInfo.LoginName;
+                PassWord = LoginUserInfo.Password;
+                byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                string str = Convert.ToBase64String(bytes);
                 LoadProductionReceivePageDate(Project);
                 try
                 {
                     this.PanelCaptureCheck.Visible = true;
                     this.InitCaptureCheckData();
+                    if (string.IsNullOrEmpty(Project.CourseType) == false && Project.CourseType == "elite")
+                    {
+                        this.ContentOperatLink.NavigateUrl = @"http://newpms.cei.cn/CourseUpload?ProjectNo="
+                   + HttpUtility.UrlEncode(Project.ProjectNo)
+                   + "&link="
+                   + HttpUtility.UrlEncode(str)
+                   + "&type=elite";
+                    }
+                    else
+                    {
+                        this.ContentOperatLink.NavigateUrl = @"http://newpms.cei.cn/SlideEdit?ProjectNo="
+                   + HttpUtility.UrlEncode(Project.ProjectNo)
+                   + "&link="
+                   + HttpUtility.UrlEncode(str)
+                   + "&type=a";
+                    }
                 }
                 catch
                 {
@@ -897,11 +964,41 @@ namespace ProjectCollection.WebUI.pages
                 this.btnSentBack.Text = "退回";
                 this.btnOk.Visible = true;
                 this.btnOk.Text = "制作完成";
+                UserName = LoginUserInfo.LoginName;
+                PassWord = LoginUserInfo.Password;
+                byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                string str = Convert.ToBase64String(bytes);
                 LoadProductionFinishPageDate(project);
                 try
                 {
                     this.PanelCaptureCheck.Visible = true;
                     this.InitCaptureCheckData();
+                    if (string.IsNullOrEmpty(project.CourseType) == false && project.CourseType == "elite")
+                    {
+                        this.PlayVideoLink.Text = "查看资料";
+                        this.PlayVideoLink.NavigateUrl = @"http://newpms.cei.cn/CourseUpload?ProjectNo="
+                   + HttpUtility.UrlEncode(project.ProjectNo)
+                   + "&link="
+                   + HttpUtility.UrlEncode(str)
+                   + "&type=elite";
+                    }
+                    else
+                    {
+                    }
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+
+                }
+                try
+                {
+                    this.PanelProductionCheck.Visible = true;
+                    this.InitProductionCheckData();
+                    this.txtProductionCheckNote.ForeColor= Color.FromArgb(255, 255, 0, 0);
                 }
                 catch
                 {
@@ -1328,6 +1425,23 @@ namespace ProjectCollection.WebUI.pages
                                                                           where p.ProjectId == project.ProjectId
                                                                           select p).First();
                     ThisProject.STTType = this.ddlSTTType.SelectedValue;
+                    //mc
+                    if (this.ddlProjectType.SelectedValue== "00000000-0000-0000-0000-000000000298")
+                    {
+                        ThisProject.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000019");
+                        ThisProject.ContentNeeds = new Guid("00000000-0000-0000-0000-000000000043");
+                        ThisProject.MakeType = "new";
+                        ThisProject.CourseType = "micro";
+                    }
+                    //
+                    if (this.ddlProjectType.SelectedValue == "00000000-0000-0000-0000-000000000297")
+                    {
+                        ThisProject.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000018");
+                        ThisProject.ContentNeeds = new Guid("00000000-0000-0000-0000-000000000042");
+                        //ThisProject.PublishNeeds = new Guid("00000000-0000-0000-0000-000000000043");
+                        ThisProject.MakeType = "new";
+                        ThisProject.CourseType = "elite";
+                    }
                     ProjectModel.SaveChanges();
                 }
                 if (this.Request["mode"] == "create")
@@ -1349,7 +1463,7 @@ namespace ProjectCollection.WebUI.pages
                                                                       where p.ProjectId == ThisId
                                                                       select p).First();
                 //新单视频
-                if (ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017") && ThisProject.MakeType == "new")
+                if ((ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017") && ThisProject.MakeType == "new")|| ThisProject.CourseType== "elite")
                 {
                     //List OP
                     DataTable tblDatas = new DataTable("Datas");
@@ -1374,6 +1488,20 @@ namespace ProjectCollection.WebUI.pages
                         + "&type=NoSlideAudio"
                         + "&link="
                         + str;
+                    if (ThisProject.CourseType == "elite")
+                    {
+                        url = @"http://newpms.cei.cn/FTPVideoUpload?ProjectNo="
+                                                + HttpUtility.UrlEncode(ThisProject.ProjectNo)
+                                                + "&title="
+                                                + HttpUtility.UrlEncode(ThisProject.CourseName)
+                                                + "&lecturer="
+                                                + HttpUtility.UrlEncode(ThisProject.lecturer)
+                                                + "&post="
+                                                + HttpUtility.UrlEncode(ThisProject.LecturerJob)
+                                                + "&type=EliteAudio"
+                                                + "&link="
+                                                + str;
+                    }
                     //
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                     request.Method = "GET";
@@ -1388,6 +1516,9 @@ namespace ProjectCollection.WebUI.pages
                     JObject jo = (JObject)JsonConvert.DeserializeObject(retString);
                     if (jo["status"].ToString() == "文件完备" && jo["data"].ToString() == "数据添加成功")
                     {
+                        //
+                       
+                        //
                         DataRow newRow;
                         newRow = tblDatas.NewRow();
                         newRow["id"] = ThisProject.ProjectNo;
@@ -1479,7 +1610,7 @@ namespace ProjectCollection.WebUI.pages
                                                   where p.ProjectId == ThisId
                                                   select p).First();
                     //新单视频
-                    if (ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017") && ThisProject.MakeType == "new")
+                    if ((ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017") && ThisProject.MakeType == "new") || ThisProject.CourseType == "elite")
                     {
                         BLL.Project project = BLL.Project.GetProject(BatchProjectId[i]);
                         project.CaptureDuration = Convert.ToInt16(this.txtCaptureDuration.Text.ToString());
@@ -1508,6 +1639,20 @@ namespace ProjectCollection.WebUI.pages
                             + "&type=NoSlideAudio"
                             + "&link="
                             + str;
+                        if (ThisProject.CourseType == "elite")
+                        {
+                            url = @"http://newpms.cei.cn/FTPVideoUpload?ProjectNo="
+                                                    + HttpUtility.UrlEncode(ThisProject.ProjectNo)
+                                                    + "&title="
+                                                    + HttpUtility.UrlEncode(ThisProject.CourseName)
+                                                    + "&lecturer="
+                                                    + HttpUtility.UrlEncode(ThisProject.lecturer)
+                                                    + "&post="
+                                                    + HttpUtility.UrlEncode(ThisProject.LecturerJob)
+                                                    + "&type=EliteAudio"
+                                                    + "&link="
+                                                    + str;
+                        }
                         //
                         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
                         request.Method = "GET";
@@ -1522,6 +1667,9 @@ namespace ProjectCollection.WebUI.pages
                         JObject jo = (JObject)JsonConvert.DeserializeObject(retString);
                         if (jo["status"].ToString() == "文件完备" && jo["data"].ToString() == "数据添加成功")
                         {
+                            //
+                            
+                            //
                             project.progress = new Guid("00000000-0000-0000-0000-000000000120");
                             BLL.Project.UpdateCaptureFinish(project);
                             DataRow newRow;
@@ -1753,6 +1901,31 @@ namespace ProjectCollection.WebUI.pages
                     ThisProject.MakeType = "new";
                 }
                 else { ThisProject.MakeType = ""; }
+                if (ThisProject.CourseType == "elite")
+                {
+                    MailMessage message = new MailMessage();
+                    //设置发件人,发件人需要与设置的邮件发送服务器的邮箱一致
+                    MailAddress fromAddr = new MailAddress("chench@cei.cn");
+                    message.From = fromAddr;
+                    //设置收件人,可添加多个,添加方法与下面的一样
+                    message.To.Add("gaowq@cei.cn");
+                    //设置抄送人
+                    message.CC.Add("15510466762@163.com");
+                    //设置邮件标题
+                    message.Subject = "STT_中经网速记任务_" + ThisProject.ProjectNo;
+                    //设置邮件内容
+                    message.IsBodyHtml = true;
+                    message.Body = "标题:" + ThisProject.CourseName + "<br />";
+                    message.Body += "<a href=\"http://newpms.cei.cn/AudioFile/" + ThisProject.ProjectNo + ".mp3\">下载音频</a><br />";
+                    //资料
+                    message.Body += "<a href=\"http://203.207.118.112/CourseFile/TempUpload/" + ThisProject.ProjectNo + ".zip\">相关资料(无法下载则表示无资料)</a><br />";
+                    message.Body += "<a href=\"http://newpms.cei.cn/SrtUpload?mode=text&ProjectNo=" + ThisProject.ProjectNo + "\">上传字幕</a>";
+                    //设置邮件发送服务器,服务器根据你使用的邮箱而不同,可以到相应的邮箱管理后台查看
+                    SmtpClient client = new SmtpClient("smtp.cei.cn", 25);
+                    //设置发送人的邮箱账号和密码
+                    client.Credentials = new NetworkCredential("chench@cei.cn", "A1b2c3d4");
+                    client.Send(message);
+                }
                 ProjectModel.SaveChanges();
                 //
                 this.Redirect("~/pages/MyTask.aspx?mode=execution");
@@ -1871,6 +2044,7 @@ namespace ProjectCollection.WebUI.pages
                 if (//单视频
                        project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017")
                        || project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000019")
+                       || project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000299")
                        )
                 {
                     if (project.ProductionProgress == new Guid("00000000-0000-0000-0000-000000000116"))
@@ -1930,7 +2104,7 @@ namespace ProjectCollection.WebUI.pages
                                               where p.ProjectId == ThisId
                                               select p).First();
                 //新单视频
-                if (ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017") && ThisProject.MakeType == "new")
+                if ((ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017") || ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000019")) && ThisProject.MakeType == "new")
                 {
                     BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
                     //
@@ -1940,11 +2114,16 @@ namespace ProjectCollection.WebUI.pages
                     dc = tblDatas.Columns.Add("title", Type.GetType("System.String"));
                     dc = tblDatas.Columns.Add("result", Type.GetType("System.String"));
                     //
-                        UserName = LoginUserInfo.LoginName;
-                        PassWord = LoginUserInfo.Password;
-                        byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
-                        string str = Convert.ToBase64String(bytes);
-                        string url = @"http://newpms.cei.cn/FTPVideoUpload?ProjectNo="
+                    UserName = LoginUserInfo.LoginName;
+                    PassWord = LoginUserInfo.Password;
+                    byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                    string str = Convert.ToBase64String(bytes);
+                    string CourseType = "";
+                    if (ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017"))
+                    { CourseType = "NoSlideVideo"; }
+                    else if (ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000019"))
+                    { CourseType = "NoSlideVideoMicro"; }
+                    string url = @"http://newpms.cei.cn/FTPVideoUpload?ProjectNo="
                             + HttpUtility.UrlEncode(ThisProject.ProjectNo)
                             + "&title="
                             + HttpUtility.UrlEncode(ThisProject.CourseName)
@@ -1952,41 +2131,103 @@ namespace ProjectCollection.WebUI.pages
                             + HttpUtility.UrlEncode(ThisProject.lecturer)
                             + "&post="
                             + HttpUtility.UrlEncode(ThisProject.LecturerJob)
-                            + "&type=NoSlideVideo"
+                            + "&type=" + CourseType
                             + "&link="
                             + str;
+                    //
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    request.Method = "GET";
+                    request.ContentType = "text/html;charset=UTF-8";
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    Stream myResponseStream = response.GetResponseStream();
+                    StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                    string retString = myStreamReader.ReadToEnd();
+                    myStreamReader.Close();
+                    myResponseStream.Close();
+                    //
+                    JObject jo = (JObject)JsonConvert.DeserializeObject(retString);
+                    DataRow newRow;
+                    newRow = tblDatas.NewRow();
+                    newRow["id"] = ThisProject.ProjectNo;
+                    newRow["title"] = ThisProject.CourseName;
+                    if (jo["status"].ToString() == "文件完备")
+                    {
+                        UpdateProductionFinish(project);
+                        newRow["result"] = "成功";
+                        tblDatas.Rows.Add(newRow);
+                        this.Redirect("~/pages/MyTask.aspx?mode=productionfinish");
+                    }
+                    else
+                    {
+                        newRow["result"] = "失败";
+                        tblDatas.Rows.Add(newRow);
+                        btnOk.Visible = false;
+                        PanelResult.Visible = true;
+                        TableResult.DataSource = tblDatas;
+                        TableResult.DataBind();
+                    }
+                }
+                else if (ThisProject.CourseType== "elite")
+                {
+                    BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
+                    //
+                    DataTable tblDatas = new DataTable("Datas");
+                    DataColumn dc = null;
+                    dc = tblDatas.Columns.Add("id", Type.GetType("System.String"));
+                    dc = tblDatas.Columns.Add("title", Type.GetType("System.String"));
+                    dc = tblDatas.Columns.Add("result", Type.GetType("System.String"));
+                    //
+                    UserName = LoginUserInfo.LoginName;
+                    PassWord = LoginUserInfo.Password;
+                    byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                    string str = Convert.ToBase64String(bytes);
+                    string CourseType = "NoSlideVideoElite";
+                    string url = @"http://newpms.cei.cn/FTPVideoUpload?ProjectNo="
+                            + HttpUtility.UrlEncode(ThisProject.ProjectNo)
+                            + "&title="
+                            + HttpUtility.UrlEncode(ThisProject.CourseName)
+                            + "&lecturer="
+                            + HttpUtility.UrlEncode(ThisProject.lecturer)
+                            + "&post="
+                            + HttpUtility.UrlEncode(ThisProject.LecturerJob)
+                            + "&type=" + CourseType
+                            + "&link="
+                            + str;
+                    //
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    request.Method = "GET";
+                    request.ContentType = "text/html;charset=UTF-8";
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    Stream myResponseStream = response.GetResponseStream();
+                    StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                    string retString = myStreamReader.ReadToEnd();
+                    myStreamReader.Close();
+                    myResponseStream.Close();
+                    //
+                    JObject jo = (JObject)JsonConvert.DeserializeObject(retString);
+                    DataRow newRow;
+                    newRow = tblDatas.NewRow();
+                    newRow["id"] = ThisProject.ProjectNo;
+                    newRow["title"] = ThisProject.CourseName;
+                    if (jo["status"].ToString() == "文件完备")
+                    {
+                        UpdateProductionFinish(project);
                         //
-                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-                        request.Method = "GET";
-                        request.ContentType = "text/html;charset=UTF-8";
-                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                        Stream myResponseStream = response.GetResponseStream();
-                        StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
-                        string retString = myStreamReader.ReadToEnd();
-                        myStreamReader.Close();
-                        myResponseStream.Close();
+
                         //
-                        JObject jo = (JObject)JsonConvert.DeserializeObject(retString);
-                        DataRow newRow;
-                        newRow = tblDatas.NewRow();
-                        newRow["id"] = ThisProject.ProjectNo;
-                        newRow["title"] = ThisProject.CourseName;
-                        if (jo["status"].ToString() == "文件完备")
-                        {
-                            UpdateProductionFinish(project);
-                            newRow["result"] = "成功";
-                            tblDatas.Rows.Add(newRow);
-                            this.Redirect("~/pages/MyTask.aspx?mode=productionfinish");
-                        }
-                        else
-                        {
-                            newRow["result"] = "失败";
-                            tblDatas.Rows.Add(newRow);
-                            btnOk.Visible = false;
-                            PanelResult.Visible = true;
-                            TableResult.DataSource = tblDatas;
-                            TableResult.DataBind();
-                        }
+                        newRow["result"] = "成功";
+                        tblDatas.Rows.Add(newRow);
+                        this.Redirect("~/pages/MyTask.aspx?mode=productionfinish");
+                    }
+                    else
+                    {
+                        newRow["result"] = "失败";
+                        tblDatas.Rows.Add(newRow);
+                        btnOk.Visible = false;
+                        PanelResult.Visible = true;
+                        TableResult.DataSource = tblDatas;
+                        TableResult.DataBind();
+                    }
                 }
                 else
                 {
@@ -1997,13 +2238,13 @@ namespace ProjectCollection.WebUI.pages
                         int G = Convert.ToInt16(ChromakeyG.Text);
                         int B = Convert.ToInt16(ChromakeyB.Text);
                         string ChromaKey = System.Drawing.ColorTranslator.ToHtml(System.Drawing.Color.FromArgb(R, G, B));
-                        UpdateProductionFinish(project,ChromaKey);
+                        UpdateProductionFinish(project, ChromaKey);
                     }
                     else
                     {
                         UpdateProductionFinish(project);
                     }
-                    
+
                     this.Redirect("~/pages/MyTask.aspx?mode=productionfinish");
                 }
             }
@@ -2080,7 +2321,18 @@ namespace ProjectCollection.WebUI.pages
                     else
                     {
                         BLL.Project project = BLL.Project.GetProject(BatchProjectId[i]);
-                        UpdateProductionFinish(project);
+                        if (ChromakeyR.Text != "0" && ChromakeyG.Text != "0" && ChromakeyB.Text != "0")
+                        {
+                            int R = Convert.ToInt16(ChromakeyR.Text);
+                            int G = Convert.ToInt16(ChromakeyG.Text);
+                            int B = Convert.ToInt16(ChromakeyB.Text);
+                            string ChromaKey = System.Drawing.ColorTranslator.ToHtml(System.Drawing.Color.FromArgb(R, G, B));
+                            UpdateProductionFinish(project, ChromaKey);
+                        }
+                        else
+                        {
+                            UpdateProductionFinish(project);
+                        }
                     }
                 }
                 if (!hasFailed)
@@ -2792,16 +3044,29 @@ namespace ProjectCollection.WebUI.pages
             this.ddlContentIsTimely.DataValueField = "dictionary_identity";
             this.ddlContentIsTimely.DataBind();
         }
-        private void InitDropDownListProductionReceive()
+        private void InitDropDownListProductionReceive(string type)
         {
             //this.ddlProductionOperator.DataSource = BLL.UserInfo.GetDataByRole(new Guid("00000000-0000-0000-0000-000000000009"));
             //
-            DataTable dt1= BLL.UserInfo.GetDataByRole(new Guid("00000000-0000-0000-0000-000000000009"));
-            DataTable dt2 = BLL.UserInfo.GetDataByRole(new Guid("00000000-0000-0000-0000-000000000002"));
-            DataTable newDataTable = dt1.Copy();
-            foreach (DataRow dr in dt2.Rows)
+            DataTable newDataTable = new DataTable();
+            if (type == "elite" || type == "micro")
             {
-                newDataTable.ImportRow(dr);
+                DataTable dt1 = BLL.UserInfo.GetDataByRole(new Guid("00000000-0000-0000-0000-000000000027"));
+                DataTable dt2 = BLL.UserInfo.GetDataByRole(new Guid("00000000-0000-0000-0000-000000000031"));
+                newDataTable = dt1.Copy();
+                foreach (DataRow dr in dt2.Rows)
+                {
+                    newDataTable.ImportRow(dr);
+                }
+            }
+            else {
+                DataTable dt1 = BLL.UserInfo.GetDataByRole(new Guid("00000000-0000-0000-0000-000000000009"));
+                DataTable dt2 = BLL.UserInfo.GetDataByRole(new Guid("00000000-0000-0000-0000-000000000002"));
+                newDataTable = dt1.Copy();
+                foreach (DataRow dr in dt2.Rows)
+                {
+                    newDataTable.ImportRow(dr);
+                }
             }
             this.ddlProductionOperator.DataSource = newDataTable;
             //
@@ -2892,7 +3157,7 @@ namespace ProjectCollection.WebUI.pages
             this.txtProjectNo.Text = project.ProjectNo;
             this.txtSendingDate.Text = project.SendingDate.ToString("yyyy-MM-dd");
             //
-            this.ddlProjectType.SelectedValue = project.ProjectTypeId.ToString();
+            this.ddlProjectType.SelectedIndex = ddlProjectType.Items.IndexOf(ddlProjectType.Items.FindByValue(project.ProjectTypeId.ToString()));
             //
             this.ddlWorkType.SelectedValue = project.WorkType.ToString();
             this.txtInCharge.Text = BLL.UserInfo.GetRealNameByID(project.InCharge);
@@ -2924,6 +3189,14 @@ namespace ProjectCollection.WebUI.pages
                 if (ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017") && ThisProject.MakeType == "new")
                 {
                     this.ddlProjectType.SelectedValue = "00000000-0000-0000-0000-000000000299";
+                }
+                if (ThisProject.CourseType == "micro")
+                {
+                    this.ddlProjectType.SelectedValue = "00000000-0000-0000-0000-000000000298";
+                }
+                if (ThisProject.CourseType == "elite")
+                {
+                    this.ddlProjectType.SelectedValue = "00000000-0000-0000-0000-000000000297";
                 }
             }
             this.rblCanBeSold.SelectedValue = project.CanBeSold.ToString();
@@ -3123,7 +3396,7 @@ namespace ProjectCollection.WebUI.pages
             this.InitBrowseData();
             if (!IsPostBack)
             {
-                this.InitDropDownListProductionReceive();
+                this.InitDropDownListProductionReceive(project.CourseType);
             }
             else { }
             try
@@ -3309,6 +3582,7 @@ namespace ProjectCollection.WebUI.pages
             if (//单视频
                        project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017")
                        || project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000019")
+                       || project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000299")
                        )
             {
                 if (project.ProductionProgress == new Guid("00000000-0000-0000-0000-000000000116"))
@@ -3411,6 +3685,41 @@ namespace ProjectCollection.WebUI.pages
             }
             BLL.Project.UpdateProductionCheck(project);
         }
+        private void UpdateProductionCheckAuto(Project project)
+        {
+            project.ProductionVideoEditCheck = new Guid("00000000-0000-0000-0000-000000000044");
+            project.ProductionAudioEditCheck = new Guid("00000000-0000-0000-0000-000000000044");
+            project.ProductionProductCheck = new Guid("00000000-0000-0000-0000-000000000044");
+            project.ProductionIsTimely = new Guid("00000000-0000-0000-0000-000000000042");
+            project.ProductionCheckDate = DateTime.Now;
+            project.ProductionCheckNote = this.txtProductionCheckNote.Text.ToString();
+            project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000116");
+            if (project.IsSingleScreen() == true)
+            {
+                if (project.ContentProgress == new Guid("00000000-0000-0000-0000-000000000113"))
+                {
+                    if (project.PublishNeeds == new Guid("00000000-0000-0000-0000-000000000043"))
+                    { project.progress = new Guid("00000000-0000-0000-0000-000000000119"); }
+                    else { project.progress = new Guid("00000000-0000-0000-0000-000000000117"); }
+                }
+                else
+                {
+                    project.progress = new Guid("00000000-0000-0000-0000-000000000116");
+                }
+            }
+            else if (project.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000199"))//STT
+            {
+                project.progress = new Guid("00000000-0000-0000-0000-000000000197");
+                //project.ContentProgress= new Guid("00000000-0000-0000-0000-000000000107"); 
+            }
+            else
+            {
+                if (project.PublishNeeds == new Guid("00000000-0000-0000-0000-000000000043"))
+                { project.progress = new Guid("00000000-0000-0000-0000-000000000119"); }
+                else { project.progress = new Guid("00000000-0000-0000-0000-000000000117"); }
+            }
+            BLL.Project.UpdateProductionCheck(project);
+        }
         private void UpdateProductionFinish(Project project,string ChromaKey="none")
         {
             //新
@@ -3421,7 +3730,11 @@ namespace ProjectCollection.WebUI.pages
                 byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
                 string str = Convert.ToBase64String(bytes);
                 string type = "";
-                if (project.WorkType.ToString() == "00000000-0000-0000-0000-000000000209")
+                var Model = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
+                ProjectCollection.WebUI.Models.Project ThisProject = (from p in Model.Project
+                                                                  where p.ProjectId.ToString() == project.ProjectId.ToString()
+                                                                  select p).First();
+                if (project.WorkType.ToString() == "00000000-0000-0000-0000-000000000209" || ThisProject.STTType=="low")
                 {
                     type = "NoSTT";
                 }
@@ -3483,6 +3796,9 @@ namespace ProjectCollection.WebUI.pages
                 project.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000198");
             }
             BLL.Project.UpdateProductionFinish(project);
+            if (project.CourseType == "elite") {
+                UpdateProductionCheckAuto(project);
+            }
         }
 
         #endregion 方法

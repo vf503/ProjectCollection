@@ -872,6 +872,45 @@ namespace ProjectCollection.WebUI.pages
                         ProjectModel.SaveChanges();
                     }
                 }
+                //
+                if (this.ddlProjectType.SelectedValue == "00000000-0000-0000-0000-000000000298")
+                {
+                    using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                    {
+                        ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                              where p.ProjectId == project.ProjectId
+                                                                              select p).First();
+                        ThisProject.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000019");
+                        ThisProject.MakeType = "new";
+                        ThisProject.ContentNeeds = new Guid("00000000-0000-0000-0000-000000000043");
+                        ThisProject.CourseType = "micro";
+                        ProjectModel.SaveChanges();
+                    }
+                }
+                if (this.ddlProjectType.SelectedValue == "00000000-0000-0000-0000-000000000297")
+                {
+                    using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                    {
+                        ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                              where p.ProjectId == project.ProjectId
+                                                                              select p).First();
+                        ThisProject.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000018");
+                        ThisProject.MakeType = "new";
+                        ThisProject.ContentNeeds = new Guid("00000000-0000-0000-0000-000000000042");
+                        //ThisProject.PublishNeeds = new Guid("00000000-0000-0000-0000-000000000043");
+                        ThisProject.CourseType = "elite";
+                        ProjectModel.SaveChanges();
+                    }
+                }
+                //
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                          where p.ProjectId == project.ProjectId
+                                                                          select p).First();
+                    ThisProject.STTType = this.ddlSTTType.SelectedValue;
+                    ProjectModel.SaveChanges();
+                }
                 this.Redirect("~/pages/ProjectList.aspx?mode=browse");
             }
             #endregion
@@ -1643,6 +1682,15 @@ namespace ProjectCollection.WebUI.pages
                 {
                     this.ddlProjectType.SelectedValue = "00000000-0000-0000-0000-000000000299";
                 }
+                if (ThisProject.CourseType == "micro")
+                {
+                    this.ddlProjectType.SelectedValue = "00000000-0000-0000-0000-000000000298";
+                }
+                if (ThisProject.CourseType == "elite")
+                {
+                    this.ddlProjectType.SelectedValue = "00000000-0000-0000-0000-000000000297";
+                }
+                this.ddlSTTType.SelectedValue = ThisProject.STTType;
             }
         }
         private void InitCaptureData()

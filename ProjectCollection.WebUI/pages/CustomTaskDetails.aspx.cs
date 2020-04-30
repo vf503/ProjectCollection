@@ -177,6 +177,20 @@ namespace ProjectCollection.WebUI.pages
                     this.btnPass.Text = "完成";
                 }
                 #endregion helpexecute
+                #region mchelpexecute
+                else if (this.Request["mode"] == "mchelpexecute")
+                {
+                    PanelCheck.Visible = true;
+                    PanelMcHelpFinish.Visible = true;
+                    this.InitCheckData(ThisProject);
+                    this.txtHelpSendingDate.Text = ThisProject.McHelpSendingDate.ToString();
+                    //byte[] bytes = Encoding.UTF8.GetBytes(this.LoginUserInfo.LoginName + "_" + this.LoginUserInfo.Password);
+                    //string encode = HttpUtility.UrlEncode(Convert.ToBase64String(bytes), Encoding.UTF8);
+                    //this.aCourseList.NavigateUrl = "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=browse&olddata=help&project=" + ThisProject.id + "&login=" + encode;
+                    this.btnPass.Visible = true;
+                    this.btnPass.Text = "完成";
+                }
+                #endregion mchelpexecute
                 #region pic
                 else if (this.Request["mode"] == "pic")
                 {
@@ -281,6 +295,12 @@ namespace ProjectCollection.WebUI.pages
                     ThisProject.AttachmentFinishDate = DateTime.Now;
                     ThisProject.AttachmentFinishNote = this.txtAttachmentFinishNote.Text;
                 }
+                else if (this.Request["mode"] == "mchelpexecute")
+                {
+                    ThisProject.McHelper = this.LoginUserInfo.Identity;
+                    ThisProject.McHelperFinishDate = DateTime.Now;
+                    //ThisProject.AttachmentFinishNote = this.txtAttachmentFinishNote.Text;
+                }
                 ProjectModel.SaveChanges();
             }
             this.Redirect("~/pages/MyTask.aspx?mode=manufacture&range=now");
@@ -337,6 +357,26 @@ namespace ProjectCollection.WebUI.pages
                                 select (string)t["name"]).First();
                     TaskRequireStr += "下载套模板：" + name + "\r\n";
                 }
+            }
+            if (!(TaskRequireJson["SlideVideo"] is null) && TaskRequireJson["SlideVideo"].ToString() != "none")
+            {
+                TaskRequireStr += "混剪MP4：需要; " + TaskRequireJson["SlideVideo"] + ";";
+            }
+            if (!(TaskRequireJson["SlideVideoOP"] is null))
+            {
+                if (TaskRequireJson["SlideVideoOP"].ToString() == "")
+                {
+                    TaskRequireStr += "有片头片尾; \r\n";
+                }
+                else if (TaskRequireJson["SlideVideoOP"].ToString() == "none")
+                {
+                    TaskRequireStr += "无片头片尾; \r\n";
+                }
+                else { }
+            }
+            else
+            {
+                TaskRequireStr += "\r\n";
             }
             if (TaskRequireJson["DisplaySize"].ToString() != "")
             {

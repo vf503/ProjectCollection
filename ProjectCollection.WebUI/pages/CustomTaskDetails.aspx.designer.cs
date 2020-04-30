@@ -238,6 +238,42 @@ namespace ProjectCollection.WebUI.pages {
         protected global::System.Web.UI.WebControls.TextBox txtHelperFinishNote;
         
         /// <summary>
+        /// PanelMcHelpFinish 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel PanelMcHelpFinish;
+        
+        /// <summary>
+        /// txtMcHelper 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMcHelper;
+        
+        /// <summary>
+        /// txtMcHelpSendingDate 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMcHelpSendingDate;
+        
+        /// <summary>
+        /// txtMcHelperFinishDate 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMcHelperFinishDate;
+        
+        /// <summary>
         /// PanelPicFinish 控件。
         /// </summary>
         /// <remarks>

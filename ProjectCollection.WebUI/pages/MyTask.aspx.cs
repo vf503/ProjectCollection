@@ -285,6 +285,21 @@ namespace ProjectCollection.WebUI.pages
                         else { }
                         //HidPanelFilterGrid(CurrentAuthority);
                     }
+                    else if (CurrentAuthority == "CustomMcHelpExecute")
+                    {
+                        CurrentPage.FindControl("Panel" + CurrentAuthority).Visible = true;
+                        if (ModeRange == "now")
+                        {
+                            IframeCustomMcHelpExecute.Visible = true;
+                            IframeCustomMcHelpExecute.Attributes["src"] = "~/pages/CustomTaskList.aspx?mode=mchelpexecute";
+                        }
+                        else if (ModeRange == "all")
+                        {
+                            //ShowAmountData(CurrentAuthority);
+                        }
+                        else { }
+                        //HidPanelFilterGrid(CurrentAuthority);
+                    }
                     else if (CurrentAuthority == "CustomPic")
                     {
                         CurrentPage.FindControl("Panel" + CurrentAuthority).Visible = true;

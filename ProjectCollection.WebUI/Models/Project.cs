@@ -163,5 +163,6 @@ namespace ProjectCollection.WebUI.Models
         public string LecturerNote { get; set; }
         public string ContentCheckSlideScore { get; set; }
         public string STTType { get; set; }
+        public string CourseType { get; set; }
     }
 }

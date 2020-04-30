@@ -179,6 +179,7 @@ ProjectId
 ,ProductionReceiveNote
 ,CanBeSold
 ,EpisodeCount
+,CourseType
 ,dd1.text as WorkTypeText,dd2.text as ProgressText,pl.title as ProjectPlanName,pl.ProjectPlanTypeId as PlanTypeId 
 ,ROW_NUMBER() OVER (order by ProjectNo) as RowNo
 from Project 

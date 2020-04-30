@@ -130,7 +130,7 @@
         </asp:RadioButtonList>
         记录单用途：<asp:DropDownList ID="ddlWorkType" runat="server"></asp:DropDownList><br />
         语音转换方式：<asp:DropDownList ID="ddlSTTType" runat="server">
-            <asp:ListItem Value="high">人工</asp:ListItem>
+            <asp:ListItem Value="high" Selected="True">人工</asp:ListItem>
             <asp:ListItem Value="low">机器</asp:ListItem>
             <asp:ListItem Value="none">无</asp:ListItem>
         </asp:DropDownList><br />

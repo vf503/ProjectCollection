@@ -148,6 +148,21 @@ namespace ProjectCollection.WebUI.pages
                     this.gvProject.DataBind();
                 }
             }
+            else if (this.Request["mode"] == "mchelpexecute")
+            {
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    var projects = (from p in ProjectModel.BatchProject
+                                    where p.McHelpSendingDate.HasValue && !p.McHelperFinishDate.HasValue
+                                    select p);
+                    foreach (var p in projects)
+                    {
+                        p.progress = "等待执行";
+                    }
+                    this.gvProject.DataSource = projects.ToList();
+                    this.gvProject.DataBind();
+                }
+            }
             else if (this.Request["mode"] == "pic")
             {
                 using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
@@ -225,6 +240,10 @@ namespace ProjectCollection.WebUI.pages
                         CurrentLink.NavigateUrl = "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=disposal&project=" + ThisProject.id + "&login=" + encode;
                     }
                     else if (this.Request["mode"] == "helpexecute")
+                    {
+                        CurrentLink.NavigateUrl = "~/pages/CustomTaskDetails.aspx?mode=" + this.Request["mode"] + "&id=" + ID;
+                    }
+                    else if (this.Request["mode"] == "mchelpexecute")
                     {
                         CurrentLink.NavigateUrl = "~/pages/CustomTaskDetails.aspx?mode=" + this.Request["mode"] + "&id=" + ID;
                     }

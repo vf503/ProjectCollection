@@ -443,8 +443,10 @@ namespace ProjectCollection.BLL
 
         [TableAttribute.Column("EpisodeCount")]
         public int EpisodeCount { get; set; }
-        
 
+        [TableAttribute.Column("CourseType")]
+        public string CourseType { get; set; }
+        
         //Select
         [TableAttribute.Column("WorkTypeText")]
         public string WorkTypeText { get; set; }

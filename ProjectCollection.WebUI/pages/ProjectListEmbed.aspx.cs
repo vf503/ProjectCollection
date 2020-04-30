@@ -28,6 +28,11 @@ namespace ProjectCollection.WebUI.pages
         protected void Page_Load(object sender, EventArgs e)
         {
             CurrentUserId = new Guid(this.Request["userid"]);
+            var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
+            ProjectCollection.WebUI.Models.user_info ThisUser = (from p in ProjectModel.user_info
+                                                                 where p.user_identity == CurrentUserId
+                                                                 select p).First();
+
             if (!IsPostBack)
             {
                 if (this.Request["mode"] == "browse")
@@ -36,7 +41,7 @@ namespace ProjectCollection.WebUI.pages
                 }
                 else
                 {
-                    SearchProjectList();
+                    SearchProjectList(ThisUser.SupervisorRole.ToString());
                 }
             }
             else
@@ -149,7 +154,12 @@ namespace ProjectCollection.WebUI.pages
             }
             else
             {
-                SearchProjectList();
+                CurrentUserId = new Guid(this.Request["userid"]);
+                var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
+                ProjectCollection.WebUI.Models.user_info ThisUser = (from p in ProjectModel.user_info
+                                                                     where p.user_identity == CurrentUserId
+                                                                     select p).First();
+                SearchProjectList(ThisUser.SupervisorRole.ToString());
             }
         }
         //
@@ -172,7 +182,7 @@ namespace ProjectCollection.WebUI.pages
 
         #region 方法
         //Bind
-        private void SearchProjectList()
+        private void SearchProjectList(string group="")
         {
             if (this.Request["mode"] == "browse")
             {
@@ -222,6 +232,15 @@ namespace ProjectCollection.WebUI.pages
             else if (this.Request["mode"] == "productionreceive")
             {
                 List<Project> Projects = BLL.Project.GetDictionaryProductionIdProject(new Guid("00000000-0000-0000-0000-000000000106"), new Guid("00000000-0000-0000-0000-000000000132"));
+                //
+                if (group== "00000000-0000-0000-0000-000000000008") {
+                    Projects = Projects.Where(a => a.CourseType != "elite" && a.CourseType != "micro").ToList();
+                }
+                else if (group == "00000000-0000-0000-0000-000000000031")
+                {
+                    Projects = Projects.Where(a => a.CourseType == "elite" || a.CourseType == "micro").ToList();
+                }
+                //
                 this.gvProject.DataSource = Projects;
                 this.gvProject.DataBind();
                 //int count = gvProject.Rows.Count;
@@ -242,7 +261,20 @@ namespace ProjectCollection.WebUI.pages
             }
             else if (this.Request["mode"] == "productioncheck")
             {
-                this.gvProject.DataSource = BLL.Project.GetDictionaryProductionIdProject(new Guid("00000000-0000-0000-0000-000000000115"));
+                List<Project> Projects = BLL.Project.GetDictionaryProductionIdProject(new Guid("00000000-0000-0000-0000-000000000115"));
+                //this.gvProject.DataSource = BLL.Project.GetDictionaryProductionIdProject(new Guid("00000000-0000-0000-0000-000000000115"));
+
+                //
+                if (group == "00000000-0000-0000-0000-000000000008")
+                {
+                    Projects = Projects.Where(a => a.CourseType != "elite" && a.CourseType != "micro").ToList();
+                }
+                else if (group == "00000000-0000-0000-0000-000000000031")
+                {
+                    Projects = Projects.Where(a => a.CourseType == "elite" || a.CourseType == "micro").ToList();
+                }
+                //
+                this.gvProject.DataSource = Projects;
                 this.gvProject.DataBind();
             }
             else if (this.Request["mode"] == "publish")
@@ -290,7 +322,8 @@ namespace ProjectCollection.WebUI.pages
             {
 
             }
-            else if (this.Request["mode"] == "contentfinish" || this.Request["mode"] == "contentcheck" || this.Request["mode"] == "contentrecheck")
+            //else if (this.Request["mode"] == "contentfinish" || this.Request["mode"] == "contentcheck" || this.Request["mode"] == "contentrecheck")
+            else if (this.Request["mode"] == "contentfinish")
             {
                 string LecturerName = "";
                 string PageIndex = gvProject.PageIndex.ToString();
@@ -431,8 +464,8 @@ namespace ProjectCollection.WebUI.pages
                 }
                 else if (this.Request["mode"] == "contentcheck")
                 {
-                    aBatchSave.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=contentcheckbatchsave&BatchId=" + hidBatchId.Value;
-                    aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=contentcheckbatchhandle&BatchId=" + hidBatchId.Value;
+                    aBatchSave.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=contentcheckbatchsave";
+                    aBatchHandle.NavigateUrl = "~/pages/ProjectCreateEdit.aspx?mode=contentcheckbatchhandle";
                 }
                 if (this.Request["mode"] == "productionreceive")
                 {

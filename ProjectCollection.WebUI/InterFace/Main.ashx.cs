@@ -6,6 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using ProjectCollection.BLL;
+using System.Text;
+using System.Net;
+using ProjectCollection.WebUI.pages.common;
 
 namespace ProjectCollection.WebUI.WebService
 {
@@ -116,7 +119,7 @@ namespace ProjectCollection.WebUI.WebService
                         if (CurrentAuthority == "recond")
                         {
                             List<ProjectPlan> Recond = BLL.ProjectPlan.GetRecondProjectPlan();
-                            JObject JRecond = 
+                            JObject JRecond =
                                 new JObject(
                                     new JProperty("Recond",
                                         new JArray(
@@ -273,7 +276,7 @@ namespace ProjectCollection.WebUI.WebService
                             }
                             );
                         }
-                    }  
+                    }
                 }
                 JObject ResRss = new JObject(
                     new JProperty("method", "mytask"),
@@ -314,16 +317,16 @@ namespace ProjectCollection.WebUI.WebService
                                 //new JProperty("ProjectPlanTypeId", p.ProjectPlanTypeId)
                                 from System.Reflection.PropertyInfo PlanProperty in p.GetType().GetProperties()
                                 select new JProperty(
-                                    PlanProperty.Name,PlanProperty.GetValue(p)
+                                    PlanProperty.Name, PlanProperty.GetValue(p)
                                     )
                                 )
                                 )
                                 )
                                 );
                 rss.Merge(JPlan, new JsonMergeSettings
-                            {
-                                MergeArrayHandling = MergeArrayHandling.Concat
-                            }
+                {
+                    MergeArrayHandling = MergeArrayHandling.Concat
+                }
                             );
                 context.Response.ContentType = "text/plain";
                 context.Response.Write(rss.ToString());
@@ -467,8 +470,8 @@ namespace ProjectCollection.WebUI.WebService
                 using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
                 {
                     ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
-                                           where p.ProjectNo == id
-                                           select p).First();
+                                                                          where p.ProjectNo == id
+                                                                          select p).First();
                     ThisProject.progress = new Guid(value);
                     ThisProject.ContentProgress = new Guid(value);
                     ThisProject.ShorthandFinishDate = DateTime.Now;
@@ -477,7 +480,131 @@ namespace ProjectCollection.WebUI.WebService
                 context.Response.ContentType = "text/plain";
                 context.Response.Write("success");
             }
-        #endregion Project
+            else if (HttpContext.Current.Request["method"] == "NewProjectWithoutVideo") {
+                string name = HttpContext.Current.Request["name"];
+                string lecturer = HttpContext.Current.Request["lecturer"];
+                string LecturerJob = HttpContext.Current.Request["lecturerjob"];
+                string STTType = HttpContext.Current.Request["stttype"];
+                string user = HttpContext.Current.Request["user"];
+                string projectid = HttpContext.Current.Request["projectid"];
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    ProjectCollection.WebUI.Models.user_info User = (from p in ProjectModel.user_info
+                                                                where p.login_name == user
+                                                                select p).First();
+                    ProjectCollection.WebUI.Models.Project project = new Models.Project();
+
+                    project.ProjectId = Guid.NewGuid();
+                    project.ProjectPlanId = new Guid("f48c8eeb-e321-4f6c-9d08-c4fa5703834e");
+                    //
+                    project.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000199");
+                    project.ProjectNo = "S-"+DateTime.Now.ToString("yyyyMMdd-HHmmss");
+                    project.emergency = new Guid("00000000-0000-0000-0000-000000000030");
+                    project.WorkType = new Guid("00000000-0000-0000-0000-000000000027");
+                    project.CourseName = name;
+                    project.notice = new Guid("00000000-0000-0000-0000-000000000034");
+                    project.headline = new Guid("00000000-0000-0000-0000-000000000036");
+                    project.TextCategory = "";
+                    project.lecturer = lecturer;
+                    project.LecturerJob = LecturerJob;
+                    project.InCharge = User.user_identity;
+                    project.CreateNote = "自动生成工单，需上传高清视频";
+                    project.ExtraNote = "";
+                    project.ContentNeeds = new Guid("00000000-0000-0000-0000-000000000042");
+                    project.PublishNeeds = new Guid("00000000-0000-0000-0000-000000000042");
+                    project.CanBeSold = new Guid("00000000-0000-0000-0000-000000000043");
+                    project.EpisodeCount = 1;
+                    //
+                    project.progress= new Guid("00000000-0000-0000-0000-000000000120");
+                    project.STTType = STTType;
+                    project.MakeType = "new";
+                    ProjectModel.SaveChanges();
+                }
+            }
+            else if (HttpContext.Current.Request["method"] == "NewProjectWithVideo")
+            {
+                string name = HttpContext.Current.Request["name"];
+                string lecturer = HttpContext.Current.Request["lecturer"];
+                string LecturerJob = HttpContext.Current.Request["lecturerjob"];
+                string STTType = HttpContext.Current.Request["stttype"];
+                string user = HttpContext.Current.Request["user"];
+                string projectid = HttpContext.Current.Request["projectid"];
+                string logstr = HttpContext.Current.Request["str"];
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    ProjectCollection.WebUI.Models.user_info User = (from p in ProjectModel.user_info
+                                                                     where p.login_name == user
+                                                                     select p).First();
+                    ProjectCollection.WebUI.Models.Project project = new Models.Project();
+
+                    project.ProjectId = Guid.NewGuid();
+                    project.ProjectPlanId = new Guid("f48c8eeb-e321-4f6c-9d08-c4fa5703834e");
+                    //
+                    project.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000199");
+                    project.ProjectNo = "S-" + DateTime.Now.ToString("yyyyMMdd-HHmmss");
+                    project.emergency = new Guid("00000000-0000-0000-0000-000000000030");
+                    project.WorkType = new Guid("00000000-0000-0000-0000-000000000027");
+                    project.CourseName = name;
+                    project.notice = new Guid("00000000-0000-0000-0000-000000000034");
+                    project.headline = new Guid("00000000-0000-0000-0000-000000000036");
+                    project.TextCategory = "";
+                    project.lecturer = lecturer;
+                    project.LecturerJob = LecturerJob;
+                    project.InCharge = User.user_identity;
+                    project.CreateNote = "自动生成工单";
+                    project.ExtraNote = "";
+                    project.ContentNeeds = new Guid("00000000-0000-0000-0000-000000000042");
+                    project.PublishNeeds = new Guid("00000000-0000-0000-0000-000000000042");
+                    project.CanBeSold = new Guid("00000000-0000-0000-0000-000000000043");
+                    project.EpisodeCount = 1;
+                    //
+                    project.progress = new Guid("00000000-0000-0000-0000-000000000210");
+                    project.STTType = STTType;
+                    project.MakeType = "new";
+                    ProjectModel.SaveChanges();
+                    //
+                    string CourseWorkType = "";
+                    if (STTType == "low")
+                    {
+                        CourseWorkType = "OldVideoCopyNoSTT";
+                    }
+                    else { CourseWorkType = "OldVideoCopy"; }
+                    string url = @"http://newpms.cei.cn/FTPVideoUpload/?link="
+                    + logstr
+                    + "&type="
+                    + CourseWorkType
+                    + "&title="
+                    + HttpUtility.UrlEncode(project.CourseName)
+                    + "&lecturer="
+                    + HttpUtility.UrlEncode(project.lecturer)
+                    + "&post="
+                    + HttpUtility.UrlEncode(project.LecturerJob)
+                    + "&src="
+                    + HttpUtility.UrlEncode(projectid)
+                    + "&ProjectNo="
+                    + HttpUtility.UrlEncode(project.ProjectNo);
+                    //
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    request.Method = "GET";
+                    request.ContentType = "text/html;charset=UTF-8";
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    Stream myResponseStream = response.GetResponseStream();
+                    StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                    string retString = myStreamReader.ReadToEnd();
+                    myStreamReader.Close();
+                    myResponseStream.Close();
+                    //
+                    JObject jo = (JObject)JsonConvert.DeserializeObject(retString);
+                    if (jo["data"].ToString() == "数据添加成功")
+                    {
+                    }
+                    else
+                    {
+                        throw new MyException(jo["status"].ToString());
+                    }
+                }
+            }
+            #endregion Project
             else { }
         }
 

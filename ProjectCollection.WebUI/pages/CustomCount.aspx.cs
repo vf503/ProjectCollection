@@ -77,101 +77,106 @@ namespace ProjectCollection.WebUI.pages
                                                           select o).ToList();
                 foreach (Models.BatchProject o in OrderList)
                 {
-                    List<JObject> CourseList = JsonConvert.DeserializeObject<List<JObject>>(o.CourseData.ToString());
-                    if (CourseList is null) { continue; }
-                    String CustomerId = o.customer;
-                    foreach (JObject jc in CourseList)
+                    try
                     {
-                        //course
-                        string cid = jc["CourseId"].ToString();
-                        int count = (from c in ProjectModel.TempCourse
-                                     where c.CourseId == cid
-                                     select c).Count();
-                        if (count == 0)
+                        List<JObject> CourseList = JsonConvert.DeserializeObject<List<JObject>>(o.CourseData.ToString());
+                        if (CourseList is null) { continue; }
+                        String CustomerId = o.customer;
+                        foreach (JObject jc in CourseList)
                         {
-                            Models.TempCourse ThisCourse = new Models.TempCourse();
-                            ThisCourse.CourseId = jc["CourseId"].ToString();
-                            ThisCourse.title = jc["title"].ToString();
-                            ThisCourse.CreateDate = Convert.ToDateTime(jc["CreateDate"].ToString());
-                            ThisCourse.GroupName = jc["GroupName"].ToString();
-                            ThisCourse.type = jc["type"].ToString();
-                            ThisCourse.TempletType = jc["TempletType"].ToString();
-                            ThisCourse.lecturer_name = jc["lecturer_name"].ToString();
-                            ThisCourse.lecturer_post = jc["lecturer_post"].ToString();
-                            ThisCourse.InternalCategoryTop = jc["InternalCategoryTop"].ToString();
-                            ThisCourse.InternalCategory = jc["InternalCategory"].ToString();
-                            if (ThisCourse.type == "自筹组织")
-                            { ThisCourse.type = "自筹"; }
-                            if (ThisCourse.type == "b")
-                            { ThisCourse.type = "外出拍摄"; }
-                            if (ThisCourse.type == "s")
-                            { ThisCourse.type = "单改三"; }
-                            if (ThisCourse.type == "NorthOnly")
-                            { ThisCourse.type = "客户项目"; }
-                            if (ThisCourse.InternalCategoryTop == "文化素养")
+                            //course
+                            string cid = jc["CourseId"].ToString();
+                            int count = (from c in ProjectModel.TempCourse
+                                         where c.CourseId == cid
+                                         select c).Count();
+                            if (count == 0)
                             {
-                                ThisCourse.InternalCategoryTop = "文化修养";
+                                Models.TempCourse ThisCourse = new Models.TempCourse();
+                                ThisCourse.CourseId = jc["CourseId"].ToString();
+                                ThisCourse.title = jc["title"].ToString();
+                                ThisCourse.CreateDate = Convert.ToDateTime(jc["CreateDate"].ToString());
+                                ThisCourse.GroupName = jc["GroupName"].ToString();
+                                ThisCourse.type = jc["type"].ToString();
+                                ThisCourse.TempletType = jc["TempletType"].ToString();
+                                ThisCourse.lecturer_name = jc["lecturer_name"].ToString();
+                                ThisCourse.lecturer_post = jc["lecturer_post"].ToString();
+                                ThisCourse.InternalCategoryTop = jc["InternalCategoryTop"].ToString();
+                                ThisCourse.InternalCategory = jc["InternalCategory"].ToString();
+                                if (ThisCourse.type == "自筹组织")
+                                { ThisCourse.type = "自筹"; }
+                                if (ThisCourse.type == "b")
+                                { ThisCourse.type = "外出拍摄"; }
+                                if (ThisCourse.type == "s")
+                                { ThisCourse.type = "单改三"; }
+                                if (ThisCourse.type == "NorthOnly")
+                                { ThisCourse.type = "客户项目"; }
+                                if (ThisCourse.InternalCategoryTop == "文化素养")
+                                {
+                                    ThisCourse.InternalCategoryTop = "文化修养";
+                                }
+                                if (jc["SourceCourseId"] is null)
+                                { }
+                                else
+                                {
+                                    ThisCourse.SourceCourseId = jc["SourceCourseId"].ToString();
+                                }
+                                ProjectModel.TempCourse.Add(ThisCourse);
                             }
-                            if (jc["SourceCourseId"] is null)
-                            { }
                             else
                             {
-                                ThisCourse.SourceCourseId = jc["SourceCourseId"].ToString();
+                                Models.TempCourse ThisCourse = (from c in ProjectModel.TempCourse
+                                                                where c.CourseId == cid
+                                                                select c).First();
+                                ThisCourse.title = jc["title"].ToString();
+                                ThisCourse.CreateDate = Convert.ToDateTime(jc["CreateDate"].ToString());
+                                ThisCourse.GroupName = jc["GroupName"].ToString();
+                                ThisCourse.type = jc["type"].ToString();
+                                ThisCourse.TempletType = jc["TempletType"].ToString();
+                                ThisCourse.lecturer_name = jc["lecturer_name"].ToString();
+                                ThisCourse.lecturer_post = jc["lecturer_post"].ToString();
+                                ThisCourse.InternalCategoryTop = jc["InternalCategoryTop"].ToString();
+                                ThisCourse.InternalCategory = jc["InternalCategory"].ToString();
+                                if (ThisCourse.type == "自筹组织")
+                                { ThisCourse.type = "自筹"; }
+                                if (ThisCourse.type == "b")
+                                { ThisCourse.type = "外出拍摄"; }
+                                if (ThisCourse.type == "s")
+                                { ThisCourse.type = "单改三"; }
+                                if (ThisCourse.type == "NorthOnly")
+                                { ThisCourse.type = "客户项目"; }
+                                if (ThisCourse.InternalCategoryTop == "文化素养")
+                                {
+                                    ThisCourse.InternalCategoryTop = "文化修养";
+                                }
+                                if (jc["SourceCourseId"] is null)
+                                { }
+                                else
+                                {
+                                    ThisCourse.SourceCourseId = jc["SourceCourseId"].ToString();
+                                }
                             }
-                            ProjectModel.TempCourse.Add(ThisCourse);
-                        }
-                        else
-                        {
-                            Models.TempCourse ThisCourse = (from c in ProjectModel.TempCourse
-                                                            where c.CourseId == cid
-                                                            select c).First();
-                            ThisCourse.title = jc["title"].ToString();
-                            ThisCourse.CreateDate = Convert.ToDateTime(jc["CreateDate"].ToString());
-                            ThisCourse.GroupName = jc["GroupName"].ToString();
-                            ThisCourse.type = jc["type"].ToString();
-                            ThisCourse.TempletType = jc["TempletType"].ToString();
-                            ThisCourse.lecturer_name = jc["lecturer_name"].ToString();
-                            ThisCourse.lecturer_post = jc["lecturer_post"].ToString();
-                            ThisCourse.InternalCategoryTop = jc["InternalCategoryTop"].ToString();
-                            ThisCourse.InternalCategory = jc["InternalCategory"].ToString();
-                            if (ThisCourse.type == "自筹组织")
-                            { ThisCourse.type = "自筹"; }
-                            if (ThisCourse.type == "b")
-                            { ThisCourse.type = "外出拍摄"; }
-                            if (ThisCourse.type == "s")
-                            { ThisCourse.type = "单改三"; }
-                            if (ThisCourse.type == "NorthOnly")
-                            { ThisCourse.type = "客户项目"; }
-                            if (ThisCourse.InternalCategoryTop == "文化素养")
-                            {
-                                ThisCourse.InternalCategoryTop = "文化修养";
-                            }
-                            if (jc["SourceCourseId"] is null)
-                            { }
-                            else
-                            {
-                                ThisCourse.SourceCourseId = jc["SourceCourseId"].ToString();
-                            }
-                        }
-                        ProjectModel.SaveChanges();
-                        //order
-                        int OrderCount = (from to in ProjectModel.TempOrder
-                                          where (to.CourseId == cid) && (to.CustomerId == CustomerId)
-                                          select to).Count();
-                        if (OrderCount == 0)
-                        {
-                            Models.TempOrder ThisOrder = new Models.TempOrder();
-                            ThisOrder.CourseId = cid;
-                            ThisOrder.CustomerId = CustomerId;
-                            ThisOrder.date = Convert.ToDateTime(o.CreateDate);
-                            ThisOrder.SellerId = o.user_info.login_name;
-                            ProjectModel.TempOrder.Add(ThisOrder);
                             ProjectModel.SaveChanges();
-                        }
-                        else
-                        {
+                            //order
+                            int OrderCount = (from to in ProjectModel.TempOrder
+                                              where (to.CourseId == cid) && (to.CustomerId == CustomerId)
+                                              select to).Count();
+                            if (OrderCount == 0)
+                            {
+                                Models.TempOrder ThisOrder = new Models.TempOrder();
+                                ThisOrder.CourseId = cid;
+                                ThisOrder.CustomerId = CustomerId;
+                                ThisOrder.date = Convert.ToDateTime(o.CreateDate);
+                                ThisOrder.SellerId = o.user_info.login_name;
+                                ProjectModel.TempOrder.Add(ThisOrder);
+                                ProjectModel.SaveChanges();
+                            }
+                            else
+                            {
+                            }
                         }
                     }
+                    catch (Exception ex) { }
+                    finally { }
                 }
             }
             #endregion course order   

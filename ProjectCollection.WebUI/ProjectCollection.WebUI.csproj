@@ -229,6 +229,7 @@
     <Content Include="pages\BackUp\ProjectCreateEdit_backup.aspx" />
     <Content Include="pages\ChartTest.html" />
     <Content Include="pages\CustomCount.aspx" />
+    <Content Include="pages\CustomCountNew.aspx" />
     <Content Include="pages\CustomProjectListEmbed.aspx" />
     <Content Include="pages\CustomProjectCreateEdit.aspx" />
     <Content Include="pages\CustomProjectList.aspx" />
@@ -403,6 +404,13 @@
     </Compile>
     <Compile Include="pages\CustomCount.aspx.designer.cs">
       <DependentUpon>CustomCount.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pages\CustomCountNew.aspx.cs">
+      <DependentUpon>CustomCountNew.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="pages\CustomCountNew.aspx.designer.cs">
+      <DependentUpon>CustomCountNew.aspx</DependentUpon>
     </Compile>
     <Compile Include="pages\CustomProjectListEmbed.aspx.cs">
       <DependentUpon>CustomProjectListEmbed.aspx</DependentUpon>

@@ -50,6 +50,9 @@
           <Property Name="AttachmentFinishNote" Type="nvarchar" MaxLength="200" />
           <Property Name="HelpCourseData" Type="nvarchar(max)" />
           <Property Name="MidCustomer" Type="nvarchar" MaxLength="50" />
+          <Property Name="McHelper" Type="uniqueidentifier" />
+          <Property Name="McHelpSendingDate" Type="datetime" />
+          <Property Name="McHelperFinishDate" Type="datetime" />
         </EntityType>
         <EntityType Name="CustomProject">
           <Key>
@@ -247,6 +250,7 @@
           <Property Name="LecturerNote" Type="nvarchar" MaxLength="500" />
           <Property Name="ContentCheckSlideScore" Type="nvarchar" MaxLength="50" />
           <Property Name="STTType" Type="nvarchar" MaxLength="10" />
+          <Property Name="CourseType" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="ProjectPlan">
           <Key>
@@ -354,6 +358,7 @@
           <Property Name="InternalCategoryTop" Type="nvarchar" MaxLength="50" />
           <Property Name="InternalCategory" Type="nvarchar" MaxLength="50" />
           <Property Name="SourceCourseId" Type="nchar" MaxLength="100" />
+          <Property Name="duration" Type="int" />
         </EntityType>
         <EntityType Name="TempCustomer">
           <Key>
@@ -1120,6 +1125,7 @@
           <Property Name="LecturerNote" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="ContentCheckSlideScore" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="STTType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CourseType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ProjectPlanRecord">
           <Key>
@@ -1202,6 +1208,9 @@
           <NavigationProperty Name="user_info6" Relationship="ProjectCollectionModel.FK_BatchProject_user_info6" FromRole="BatchProject" ToRole="user_info" />
           <Property Name="HelpCourseData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="MidCustomer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="McHelper" Type="Guid" />
+          <Property Name="McHelpSendingDate" Type="DateTime" Precision="3" />
+          <Property Name="McHelperFinishDate" Type="DateTime" Precision="3" />
         </EntityType>
         <Association Name="FK_BatchProject_user_info">
           <End Type="ProjectCollectionModel.user_info" Role="user_info" Multiplicity="1" />
@@ -1303,6 +1312,7 @@
           <Property Name="InternalCategory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="TempOrder" Relationship="ProjectCollectionModel.FK_TempOrder_TempOrder1" FromRole="TempCourse" ToRole="TempOrder" />
           <Property Name="SourceCourseId" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="duration" Type="Int32" />
         </EntityType>
         <EntityType Name="TempCustomer">
           <Key>
@@ -1483,6 +1493,7 @@
           <EntitySetMapping Name="Project">
             <EntityTypeMapping TypeName="ProjectCollectionModel.Project">
               <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="CourseType" ColumnName="CourseType" />
                 <ScalarProperty Name="STTType" ColumnName="STTType" />
                 <ScalarProperty Name="ContentCheckSlideScore" ColumnName="ContentCheckSlideScore" />
                 <ScalarProperty Name="LecturerNote" ColumnName="LecturerNote" />
@@ -1661,6 +1672,9 @@
           <EntitySetMapping Name="BatchProject">
             <EntityTypeMapping TypeName="ProjectCollectionModel.BatchProject">
               <MappingFragment StoreEntitySet="BatchProject">
+                <ScalarProperty Name="McHelperFinishDate" ColumnName="McHelperFinishDate" />
+                <ScalarProperty Name="McHelpSendingDate" ColumnName="McHelpSendingDate" />
+                <ScalarProperty Name="McHelper" ColumnName="McHelper" />
                 <ScalarProperty Name="MidCustomer" ColumnName="MidCustomer" />
                 <ScalarProperty Name="HelpCourseData" ColumnName="HelpCourseData" />
                 <ScalarProperty Name="AttachmentFinishNote" ColumnName="AttachmentFinishNote" />
@@ -1719,6 +1733,7 @@
           <EntitySetMapping Name="TempCourse">
             <EntityTypeMapping TypeName="ProjectCollectionModel.TempCourse">
               <MappingFragment StoreEntitySet="TempCourse">
+                <ScalarProperty Name="duration" ColumnName="duration" />
                 <ScalarProperty Name="SourceCourseId" ColumnName="SourceCourseId" />
                 <ScalarProperty Name="InternalCategory" ColumnName="InternalCategory" />
                 <ScalarProperty Name="InternalCategoryTop" ColumnName="InternalCategoryTop" />

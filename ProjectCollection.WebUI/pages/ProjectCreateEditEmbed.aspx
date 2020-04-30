@@ -141,6 +141,11 @@
             <asp:ListItem Value="00000000-0000-0000-0000-000000000043">否</asp:ListItem>
         </asp:RadioButtonList>
         记录单用途：<asp:DropDownList ID="ddlWorkType" runat="server"></asp:DropDownList><br />
+        语音转换方式：<asp:DropDownList ID="ddlSTTType" runat="server">
+            <asp:ListItem Value="high" Selected="True">人工</asp:ListItem>
+            <asp:ListItem Value="low">机器</asp:ListItem>
+            <asp:ListItem Value="none">无</asp:ListItem>
+        </asp:DropDownList><br />
         派单人：<asp:TextBox ID="txtInCharge" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         时限要求：<asp:DropDownList ID="ddlemergency" runat="server"></asp:DropDownList><br />
         <%--完成期限：<asp:TextBox ID="DeadLine" ClientIDMode="Static" Style="width: 160px" runat="server" ReadOnly="true"></asp:TextBox><br />

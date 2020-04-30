@@ -55,6 +55,9 @@ namespace ProjectCollection.WebUI.Models
         public string AttachmentFinishNote { get; set; }
         public string HelpCourseData { get; set; }
         public string MidCustomer { get; set; }
+        public Nullable<System.Guid> McHelper { get; set; }
+        public Nullable<System.DateTime> McHelpSendingDate { get; set; }
+        public Nullable<System.DateTime> McHelperFinishDate { get; set; }
     
         public virtual user_info user_info { get; set; }
         public virtual user_info user_info1 { get; set; }

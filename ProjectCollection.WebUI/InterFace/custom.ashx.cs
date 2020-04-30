@@ -122,6 +122,8 @@ namespace ProjectCollection.WebUI.InterFace
                         new JProperty("CheckNote", ThisProject.CheckNote),
                         new JProperty("HelpSendingDate", ThisProject.HelpSendingDate.ToString()),
                         new JProperty("HelperFinishDate", ThisProject.HelperFinishDate.ToString()),
+                         new JProperty("McHelpSendingDate", ThisProject.McHelpSendingDate.ToString()),
+                        new JProperty("McHelperFinishDate", ThisProject.McHelperFinishDate.ToString()),
                         new JProperty("PicSendingDate", ThisProject.PicSendingDate.ToString()),
                         new JProperty("PicFinishDate", ThisProject.PicFinishDate.ToString()),
                         new JProperty("TemplateSendingDate", ThisProject.TemplateSendingDate.ToString()),
@@ -130,7 +132,48 @@ namespace ProjectCollection.WebUI.InterFace
                         new JProperty("AttachmentFinishDate", ThisProject.AttachmentFinishDate.ToString()),
                         new JProperty("FinishDate", ThisProject.FinishDate.ToString()),
                         new JProperty("CourseData", JsonConvert.DeserializeObject(ThisProject.CourseData)),
-                        new JProperty ("HelpCourseData", OldData)
+                        new JProperty("HelpCourseData", OldData)
+                        );
+
+                    context.Response.ContentType = "text/plain";
+                    context.Response.StatusCode = 200;
+                    context.Response.Write(rss.ToString());
+                }
+            }
+            else if (HttpContext.Current.Request["method"] == "OldHelpQuery")
+            {
+                string id = HttpContext.Current.Request["id"];
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    int ProjectCount = (from p in ProjectModel.BatchProject
+                                        where p.id == id
+                                        select p).Count();
+                    if (ProjectCount == 0)
+                    {
+                        context.Response.ContentType = "text/plain";
+                        context.Response.StatusCode = 404;
+                        context.Response.Write("Not Found Project");
+                        return;
+                    }
+                    ProjectCollection.WebUI.Models.BatchProject ThisProject = (from p in ProjectModel.BatchProject
+                                                                               where p.id == id
+                                                                               select p).First();
+                    ProjectCollection.WebUI.Models.user_info ThisUser = (from u in ProjectModel.user_info
+                                                                         where u.user_identity == ThisProject.CreatorId
+                                                                         select u).First();
+                    object OldData;
+                    if (ThisProject.HelpCourseData is null)
+                    {
+                        OldData = "";
+                    }
+                    else
+                    {
+                        OldData = JsonConvert.DeserializeObject(ThisProject.HelpCourseData);
+                    }
+                    JObject rss = new JObject();
+                    rss = new JObject(
+                        new JProperty("id", ThisProject.id),
+                        new JProperty("HelpCourseData", OldData)
                         );
 
                     context.Response.ContentType = "text/plain";
@@ -158,7 +201,7 @@ namespace ProjectCollection.WebUI.InterFace
                                                                          select u).First();
                     ThisProject.transactor = ThisUser.user_identity;
                     //ThisProject.TaskRequire = TaskRequire;
-                    ThisProject.CourseData = CourseData;
+                    //ThisProject.CourseData = CourseData;
                     ThisProject.progress = "已完成";
                     ThisProject.FinishDate = DateTime.Now;
                     ThisProject.FinishNote = note;
@@ -184,6 +227,10 @@ namespace ProjectCollection.WebUI.InterFace
                         string HelpCourseData = (string)o["HelpCourseData"].ToString();
                         ThisProject.HelpCourseData = HelpCourseData;
                     }
+                    else if (type == "mchelp")
+                    {
+                        ThisProject.McHelpSendingDate = DateTime.Now;
+                    }
                     else if (type == "pic")
                     {
                         ThisProject.PicSendingDate = DateTime.Now;
@@ -204,6 +251,142 @@ namespace ProjectCollection.WebUI.InterFace
                 context.Response.Write("success");
             }
             #endregion Update
+            #region Count
+            else if (HttpContext.Current.Request["method"] == "YearProjectCount")
+            {
+                string year = HttpContext.Current.Request["year"];
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    int AllProjectCount = (from p in ProjectModel.Project
+                                           where p.ProjectNo.Contains("A-" + year) && p.progress.ToString() != "00000000-0000-0000-0000-000000000128"
+                                           select p).Count();
+                    int FinProjectCount = (from p in ProjectModel.Project
+                                           where p.ProjectNo.Contains("A-" + year) && p.progress.ToString() == "00000000-0000-0000-0000-000000000119"
+                                           select p).Count();
+                    JObject rss = new JObject();
+                    rss = new JObject(
+                        new JProperty("all", AllProjectCount),
+                        new JProperty("fin", FinProjectCount)
+                        );
+                    context.Response.ContentType = "text/plain";
+                    context.Response.StatusCode = 200;
+                    context.Response.Write(rss.ToString());
+                }
+            }
+            else if (HttpContext.Current.Request["method"] == "CourseDistributionRate")
+            {
+                string start = HttpContext.Current.Request["start"];
+                string end = HttpContext.Current.Request["end"];
+                string area= HttpContext.Current.Request["area"];
+                DateTime StartTime;
+                DateTime EndTime;
+                StartTime = Convert.ToDateTime(start);
+                EndTime = Convert.ToDateTime(end);
+                var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
+                var AllOrder = (from o in ProjectModel.TempOrder
+                                join c in ProjectModel.TempCourse on o.CourseId equals c.CourseId
+                                where (c.type == "自筹") && (!string.IsNullOrEmpty(c.SourceCourseId))
+                                && (c.SourceCourseId != "") && (c.CreateDate >= StartTime) && (c.CreateDate <= EndTime)
+                                && o.TempCustomer.area == area
+                                select new
+                                {
+                                    name = c.title,
+                                    sourceid = c.SourceCourseId,
+                                    customid = o.CustomerId
+                                });
+                var DistinctOrder = AllOrder.GroupBy(o => new { o.customid, o.sourceid })
+                    .Select(g => g.FirstOrDefault());
+                var OrderCount = from o in DistinctOrder
+                                 group o by new { o.sourceid } into oc
+                                 select new
+                                 {
+                                     id = oc.Key.sourceid,
+                                     count = oc.Count()
+                                 };
+                //int AllCount = (from c in  DistinctOrder
+                //               group c by new { c.sourceid } into oc
+                //               select oc).Count();
+                int AllCount = (from p in ProjectModel.Project
+                                where p.ProjectNo.Contains("A-" + StartTime.Year.ToString()) && p.progress.ToString() == "00000000-0000-0000-0000-000000000119"
+                                && p.CheckTaskCheckDate >= StartTime && p.CheckTaskCheckDate <= EndTime
+                                select p).Count();
+                int Count5 = (from o in OrderCount
+                              where o.count < 5
+                              select o).Count();
+                string count5rate = (Count5 / (Convert.ToDouble(AllCount)) * 100).ToString("f2");
+                int Count6_10 = (from o in OrderCount
+                                 where o.count > 5 && o.count <= 10
+                                 select o).Count();
+                string count6_10rate = (Count6_10 / (Convert.ToDouble(AllCount)) * 100).ToString("f2");
+                int Count11_15 = (from o in OrderCount
+                                  where o.count > 10 && o.count <= 15
+                                  select o).Count();
+                string count11_15rate = (Count11_15 / (Convert.ToDouble(AllCount)) * 100).ToString("f2");
+                int Count16 = (from o in OrderCount
+                               where o.count > 15
+                               select o).Count();
+                string count16rate = (Count16 / (Convert.ToDouble(AllCount)) * 100).ToString("f2");
+                JObject rss = new JObject();
+                rss = new JObject(
+                    new JProperty("none", AllCount - Count5 - Count6_10 - Count11_15 - Count16),
+                    new JProperty("count5", Count5),
+                    new JProperty("count5rate", count5rate),
+                    new JProperty("count6_10", Count6_10),
+                    new JProperty("count6_10rate", count6_10rate),
+                    new JProperty("count11_15", Count11_15),
+                    new JProperty("count11_15rate", count11_15rate),
+                    new JProperty("count16", Count16),
+                    new JProperty("count16rate", count16rate)
+                    );
+                context.Response.ContentType = "text/plain";
+                context.Response.StatusCode = 200;
+                context.Response.Write(rss.ToString());
+            }
+            else if (HttpContext.Current.Request["method"] == "CourseTimesList")
+            {
+                string start = HttpContext.Current.Request["start"];
+                string end = HttpContext.Current.Request["end"];
+                DateTime StartTime;
+                DateTime EndTime;
+                StartTime = Convert.ToDateTime(start);
+                EndTime = Convert.ToDateTime(end);
+                var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
+                var AllOrder = (from o in ProjectModel.TempOrder
+                                join c in ProjectModel.TempCourse on o.CourseId equals c.CourseId
+                                where (c.type == "自筹") && (!string.IsNullOrEmpty(c.SourceCourseId))
+                                && (c.SourceCourseId != "") && (c.CreateDate >= StartTime) && (c.CreateDate <= EndTime)
+                                select new
+                                {
+                                    name = c.title,
+                                    sourceid = c.SourceCourseId,
+                                    customid = o.CustomerId
+                                });
+                var DistinctOrder = AllOrder.GroupBy(o => new { o.customid, o.sourceid })
+                    .Select(g => g.FirstOrDefault());
+                var OrderCount = from o in DistinctOrder
+                                 group o by new { o.sourceid } into oc
+                                 orderby oc.Count() descending
+                                 select new
+                                 {
+                                     id = oc.Key.sourceid,
+                                     //title =(from c in ProjectModel.TempCourse where c.SourceCourseId == oc.Key.sourceid select c.title).Take(1),
+                                     count = oc.Count()
+                                 };
+                var OrderGroup = from o in OrderCount
+                                 group o by new { o.count } into oc
+                                 orderby oc.Count() descending
+                                 select new
+                                 {
+                                     count = oc.Key.count,
+                                     CourseCount = oc.Count()
+                                 };
+                string rss= JsonConvert.SerializeObject(OrderGroup);
+                context.Response.ContentType = "text/plain";
+                context.Response.StatusCode = 200;
+                context.Response.Write(rss);
+
+            }
+            #endregion Count
             else { }
         }
 

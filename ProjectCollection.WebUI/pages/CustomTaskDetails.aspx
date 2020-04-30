@@ -36,6 +36,12 @@
         完成时间：<asp:TextBox ID="txtHelperFinishDate" runat="server" ReadOnly="true"></asp:TextBox><br />
         执行备注：<asp:TextBox ID="txtHelperFinishNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
     </asp:Panel>
+    <asp:Panel ID="PanelMcHelpFinish" runat="server" Visible="false">
+        <div class="PanelName" style="color:green">辅助执行人填写:</div>
+        执行人：<asp:TextBox ID="txtMcHelper" runat="server" ReadOnly="true"></asp:TextBox><br />
+        派发时间：<asp:TextBox ID="txtMcHelpSendingDate" runat="server" ReadOnly="true"></asp:TextBox><br />
+        完成时间：<asp:TextBox ID="txtMcHelperFinishDate" runat="server" ReadOnly="true"></asp:TextBox><br />
+    </asp:Panel>
     <asp:Panel ID="PanelPicFinish" runat="server" Visible="false">
         <div class="PanelName" style="color:green">图片制作:</div>
         执行人：<asp:TextBox ID="txtPicMaker" runat="server" ReadOnly="true"></asp:TextBox><br />
