@@ -371,6 +371,23 @@ namespace ProjectCollection.WebUI.pages
                 }
                 else { }
             }
+            if (CurrentUserInfo.Identity.ToString() == "00000000-0000-0000-0000-000000000131")
+            {
+                Panel CurrentPanel = (Panel)CurrentPage.FindControl("Panel" + "shorthand");
+                CurrentPanel.Visible = true;
+                System.Web.UI.HtmlControls.HtmlIframe CurrentIframe = (System.Web.UI.HtmlControls.HtmlIframe)CurrentPage.FindControl("Iframe" + "shorthand");
+                if (ModeRange == "now")
+                {
+                    CurrentIframe.Visible = true;
+                    CurrentIframe.Attributes["src"] = "~/pages/ProjectListEmbed.aspx?mode=" + "shorthand" + "&userid=" + CurrentUserInfo.Identity;
+                }
+                else if (ModeRange == "all")
+                {
+                    CurrentIframe.Visible = false;
+                    ShowAmountData("shorthand");
+                }
+                else { }
+            }
         }
 
         private void ShowAmountData(string stages)

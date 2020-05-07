@@ -416,7 +416,7 @@ namespace ProjectCollection.WebUI.pages
             {
                 Guid projectId = new Guid(this.Request["ProjectId"]);
                 this.hidProjectId.Value = projectId.ToString();
-                this.btnOk.Text = "速记完成";
+                this.btnOk.Text = "完成";
                 this.btnOk.Visible = true;
                 this.PanelShorthand.Visible = true;
                 this.InitBrowseData();
@@ -907,6 +907,22 @@ namespace ProjectCollection.WebUI.pages
                 {
 
                 }
+                //
+                try
+                {
+                    this.PanelShorthand.Visible = true;
+                    InitDropDownListShorthand();
+                    this.InitShorthandData();
+                }
+                catch
+                {
+
+                }
+                finally
+                {
+
+                }
+                //
                 if (Project.ProductionProgress.ToString() == "00000000-0000-0000-0000-000000000106")//初次接收 
                 {
                     this.btnSentBack.Visible = true;
@@ -916,6 +932,7 @@ namespace ProjectCollection.WebUI.pages
                 {
                     if (!IsPostBack)
                     {
+                        //                     
                         try
                         {
                             this.InitProductionReceiveData();
@@ -1428,8 +1445,9 @@ namespace ProjectCollection.WebUI.pages
                     //mc
                     if (this.ddlProjectType.SelectedValue== "00000000-0000-0000-0000-000000000298")
                     {
-                        ThisProject.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000019");
-                        ThisProject.ContentNeeds = new Guid("00000000-0000-0000-0000-000000000043");
+                        ThisProject.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000018");
+                        ThisProject.ContentNeeds = new Guid("00000000-0000-0000-0000-000000000042");
+                        ThisProject.progress = new Guid("00000000-0000-0000-0000-000000000120");
                         ThisProject.MakeType = "new";
                         ThisProject.CourseType = "micro";
                     }
@@ -1900,6 +1918,11 @@ namespace ProjectCollection.WebUI.pages
                     ThisProject.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000017");
                     ThisProject.MakeType = "new";
                 }
+                else if (this.ddlProjectType.SelectedValue == "00000000-0000-0000-0000-000000000298")
+                {
+                    ThisProject.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000018");
+                    ThisProject.MakeType = "new";
+                }
                 else { ThisProject.MakeType = ""; }
                 if (ThisProject.CourseType == "elite")
                 {
@@ -1937,13 +1960,24 @@ namespace ProjectCollection.WebUI.pages
                 BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
                 project.ShorthandPersonInCharge = this.LoginUserInfo.Identity;
                 project.ShorthandFinishDate = DateTime.Now;
-                project.ShorthandAudioReceiveDate = Convert.ToDateTime(this.hidShorthandAudioReceiveDate.Value);
+                //project.ShorthandAudioReceiveDate = Convert.ToDateTime(this.hidShorthandAudioReceiveDate.Value);
+                project.ShorthandAudioReceiveDate = DateTime.Now; ;
                 project.ShorthandPurveyor = this.txtShorthandPurveyor.Text.ToString();
                 project.ShorthandQuality = new Guid(this.ddlShorthandQuality.SelectedValue);
                 project.ShorthandNote = this.txtShorthandNote.Text.ToString();
                 project.progress = new Guid("00000000-0000-0000-0000-000000000107");
                 project.ContentProgress = new Guid("00000000-0000-0000-0000-000000000107");
+
+               
                 BLL.Project.UpdateShorthandFinish(project);
+                using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+                {
+                    ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                          where p.ProjectId == project.ProjectId
+                                                                          select p).First();
+                    ThisProject.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000106");
+                    ProjectModel.SaveChanges();
+                }
                 this.Redirect("~/pages/MyTask.aspx?mode=shorthand");
             }
             else if (this.Request["mode"] == "shorthandbatchhandle")
@@ -2104,7 +2138,7 @@ namespace ProjectCollection.WebUI.pages
                                               where p.ProjectId == ThisId
                                               select p).First();
                 //新单视频
-                if ((ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017") || ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000019")) && ThisProject.MakeType == "new")
+                if ((ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017") || ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000018")) && ThisProject.MakeType == "new")
                 {
                     BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
                     //
@@ -2121,7 +2155,7 @@ namespace ProjectCollection.WebUI.pages
                     string CourseType = "";
                     if (ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000017"))
                     { CourseType = "NoSlideVideo"; }
-                    else if (ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000019"))
+                    else if (ThisProject.ProjectTypeId == new Guid("00000000-0000-0000-0000-000000000018"))
                     { CourseType = "NoSlideVideoMicro"; }
                     string url = @"http://newpms.cei.cn/FTPVideoUpload?ProjectNo="
                             + HttpUtility.UrlEncode(ThisProject.ProjectNo)
@@ -3241,12 +3275,19 @@ namespace ProjectCollection.WebUI.pages
         {
             BLL.Project project = BLL.Project.GetProject(new Guid(this.hidProjectId.Value.ToString()));
             this.txtShorthandPersonInCharge.Text = BLL.UserInfo.GetRealNameByID(project.ShorthandPersonInCharge);
+            this.txtShorthandNote.Text = project.ShorthandNote.ToString();
             this.txtShorthandReceiveDate.Text = project.ShorthandReceiveDate.ToString("yyyy-MM-dd HH:mm");
             this.hidShorthandAudioReceiveDate.Value = project.ShorthandAudioReceiveDate.ToString("yyyy-MM-dd HH:mm");
             this.txtShorthandFinishDate.Text = project.ShorthandFinishDate.ToString("yyyy-MM-dd HH:mm");
             this.txtShorthandPurveyor.Text = project.ShorthandPurveyor;
             this.ddlShorthandQuality.SelectedValue = project.ShorthandQuality.ToString();
-            this.txtShorthandNote.Text = project.ShorthandNote.ToString();
+            using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
+            {
+                ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                      where p.ProjectId == project.ProjectId
+                                                                      select p).First();
+                this.txtShorthandNote.Text= ThisProject.ShorthandNote.ToString();
+            }
         }
         private void InitContentReceiveData()
         {

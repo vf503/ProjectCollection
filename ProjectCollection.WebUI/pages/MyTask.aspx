@@ -152,7 +152,7 @@
             <asp:Label ID="LabelAmountexecution" runat="server" Visible="false" Text=""></asp:Label>
         </asp:Panel>
         <asp:Panel ID="Panelshorthand" runat="server" Visible="false">
-            <asp:Label ID="Labelshorthand" runat="server" Text="速记"></asp:Label>
+            <asp:Label ID="Labelshorthand" runat="server" Text="微课编导"></asp:Label>
             <iframe id="Iframeshorthand" runat="server"></iframe>
             <asp:Label ID="LabelAmountshorthand" runat="server" Visible="false" Text=""></asp:Label>
         </asp:Panel>

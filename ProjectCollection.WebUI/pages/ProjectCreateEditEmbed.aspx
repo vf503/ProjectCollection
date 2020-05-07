@@ -199,17 +199,19 @@
         反馈意见：<asp:TextBox ID="txtCaptureCheckNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
     </asp:Panel>
     <asp:Panel ID="PanelShorthand" runat="server" Visible="false">
-        <div class="PanelName">速记负责人填写:</div>
-        速记负责人：<asp:TextBox ID="txtShorthandPersonInCharge" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
+        <div class="PanelName">微课编导填写:</div>
+        负责人：<asp:TextBox ID="txtShorthandPersonInCharge" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
+        完成时间：<asp:TextBox ID="txtShorthandFinishDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
+        备注：<asp:TextBox ID="txtShorthandNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
+        <div style="display:none;">
         接收时间：<asp:TextBox ID="txtShorthandReceiveDate" runat="server" Visible="false"></asp:TextBox><br />
         音频给出时间：<asp:TextBox ID="ShorthandAudioReceiveDate" ClientIDMode="Static" Style="width: 160px" runat="server" ReadOnly="true"></asp:TextBox>
         <asp:HiddenField ID="hidShorthandAudioReceiveDate" runat="server" ClientIDMode="Static" />
         <asp:RequiredFieldValidator ID="RequiredFieldValidator1" Style="color: red" runat="server" ErrorMessage="RequiredFieldValidator" ControlToValidate="ShorthandAudioReceiveDate">请选择日期</asp:RequiredFieldValidator>
         <br />
-        速记返回时间：<asp:TextBox ID="txtShorthandFinishDate" runat="server" Text="自动填充" ReadOnly="true"></asp:TextBox><br />
         速记承接单位：<asp:TextBox ID="txtShorthandPurveyor" runat="server"></asp:TextBox><br />
         速记质量评价：<asp:DropDownList ID="ddlShorthandQuality" runat="server"></asp:DropDownList><br />
-        速记备注：<asp:TextBox ID="txtShorthandNote" runat="server" TextMode="MultiLine"></asp:TextBox><br />
+        </div>
     </asp:Panel>
      <asp:Panel ID="PanelSTT" runat="server" Visible="false">
         <div class="PanelName">第三方字幕:</div>

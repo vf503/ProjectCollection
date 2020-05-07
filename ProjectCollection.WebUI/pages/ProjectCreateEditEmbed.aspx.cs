@@ -880,10 +880,11 @@ namespace ProjectCollection.WebUI.pages
                         ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
                                                                               where p.ProjectId == project.ProjectId
                                                                               select p).First();
-                        ThisProject.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000019");
+                        ThisProject.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000018");
                         ThisProject.MakeType = "new";
-                        ThisProject.ContentNeeds = new Guid("00000000-0000-0000-0000-000000000043");
+                        ThisProject.ContentNeeds = new Guid("00000000-0000-0000-0000-000000000042");
                         ThisProject.CourseType = "micro";
+                        ThisProject.progress = new Guid("00000000-0000-0000-0000-000000000120");
                         ProjectModel.SaveChanges();
                     }
                 }
