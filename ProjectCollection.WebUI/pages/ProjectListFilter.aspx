@@ -85,7 +85,7 @@
             <asp:Label ID="CaptureCheckState" runat="server" Text=""></asp:Label>
         </asp:Panel>
         <asp:Panel ID="ProgressShorthand" runat="server" BackColor="#e3f0f6" CssClass="ProgressBox">
-            <asp:Label ID="ShorthandInfo" runat="server" Text="速记"></asp:Label>
+            <asp:Label ID="ShorthandInfo" runat="server" Text="编导"></asp:Label>
             <br />
             <asp:Label ID="ShorthandDuration" runat="server" Text=""></asp:Label>
             <br />

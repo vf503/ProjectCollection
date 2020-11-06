@@ -206,7 +206,11 @@ namespace ProjectCollection.WebUI.pages
             }
             else if (this.Request["mode"] == "shorthand")
             {
-                this.gvProject.DataSource = BLL.Project.GetDictionaryIdProject(new Guid("00000000-0000-0000-0000-000000000109"));
+                List<Project> Projects = BLL.Project.GetDictionaryIdProject(new Guid("00000000-0000-0000-0000-000000000109"));
+                Projects = Projects.Where(a => a.CourseType == "micro").ToList();
+                //
+                //this.gvProject.DataSource = BLL.Project.GetDictionaryIdProject(new Guid("00000000-0000-0000-0000-000000000109"));
+                this.gvProject.DataSource = Projects;
                 this.gvProject.DataBind();
             }
             else if (this.Request["mode"] == "contentreceive")

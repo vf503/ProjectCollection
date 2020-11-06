@@ -172,7 +172,8 @@ namespace ProjectCollection.WebUI.pages
                     this.txtHelpSendingDate.Text = ThisProject.HelpSendingDate.ToString();
                     byte[] bytes = Encoding.UTF8.GetBytes(this.LoginUserInfo.LoginName + "_" + this.LoginUserInfo.Password);
                     string encode = HttpUtility.UrlEncode(Convert.ToBase64String(bytes), Encoding.UTF8);
-                    this.aCourseList.NavigateUrl = "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=browse&olddata=help&project=" + ThisProject.id + "&login=" + encode; 
+                    this.aCourseList.NavigateUrl = "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=browse&olddata=help&project=" + ThisProject.id + "&login=" + encode;
+                    this.aHelpCourseList.NavigateUrl= "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=browse&olddata=help&project=" + ThisProject.id + "&login=" + encode;
                     this.btnPass.Visible = true;
                     this.btnPass.Text = "完成";
                 }
@@ -315,7 +316,8 @@ namespace ProjectCollection.WebUI.pages
                                                                            select p).First();
                 if (ThisProject != null)
                 {
-                    ProjectModel.BatchProject.Remove(ThisProject);
+                    //ProjectModel.BatchProject.Remove(ThisProject);
+                    ThisProject.progress = "作废";
                 }
                 var i = ProjectModel.SaveChanges();
             }
@@ -427,6 +429,7 @@ namespace ProjectCollection.WebUI.pages
             byte[] bytes = Encoding.UTF8.GetBytes(this.LoginUserInfo.LoginName + "_" + this.LoginUserInfo.Password);
             encode = HttpUtility.UrlEncode(Convert.ToBase64String(bytes), Encoding.UTF8);
             this.aCourseList.NavigateUrl = "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=browse&project=" + ThisProject.id + "&login=" + encode;
+            this.aHelpCourseList.NavigateUrl = "http://newpms.cei.cn/webpages/V2/index.html#/HomePage?mode=browse&olddata=help&project=" + ThisProject.id + "&login=" + encode;
             if (ThisProject.progress != null)
             {
             }

@@ -903,6 +903,54 @@ namespace ProjectCollection.WebUI.pages
                         ProjectModel.SaveChanges();
                     }
                 }
+                if (this.ddlWorkType.SelectedValue == "00000000-0000-0000-0000-000000000300")
+                {
+                    var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities();
+                    ProjectCollection.WebUI.Models.Project ThisProject = (from p in ProjectModel.Project
+                                                                          where p.ProjectId == project.ProjectId
+                                                                          select p).First();
+                    ProjectCollection.WebUI.Models.Project SourceProject = (from p in ProjectModel.Project
+                                                                            where p.ProjectId.ToString() == this.hidProjectId.Value.ToString()
+                                                                            select p).First();
+                    //
+                    string UserName = LoginUserInfo.LoginName;
+                    string PassWord = LoginUserInfo.Password;
+                    byte[] bytes = Encoding.Default.GetBytes(UserName + "_" + PassWord);
+                    string str = Convert.ToBase64String(bytes);
+                    string url = @"http://newpms.cei.cn/FTPVideoUpload/?link="
+                    + str
+                    + "&type="
+                    + "EliteCourseCopy"
+                    + "&title="
+                    + HttpUtility.UrlEncode(project.CourseName)
+                    + "&lecturer="
+                    + HttpUtility.UrlEncode(project.lecturer)
+                    + "&post="
+                    + HttpUtility.UrlEncode(project.LecturerJob)
+                    + "&src="
+                    + HttpUtility.UrlEncode(SourceProject.ProjectNo)
+                    + "&ProjectNo="
+                    + HttpUtility.UrlEncode(project.ProjectNo);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+                    request.Method = "GET";
+                    request.ContentType = "text/html;charset=UTF-8";
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    Stream myResponseStream = response.GetResponseStream();
+                    StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                    string retString = myStreamReader.ReadToEnd();
+                    myStreamReader.Close();
+                    myResponseStream.Close();
+                    //
+                    ThisProject.ProjectTypeId = new Guid("00000000-0000-0000-0000-000000000018");
+                    ThisProject.ContentNeeds = new Guid("00000000-0000-0000-0000-000000000042");
+                    ThisProject.PublishNeeds = new Guid("00000000-0000-0000-0000-000000000043");
+                    ThisProject.progress = new Guid("00000000-0000-0000-0000-000000000107");
+                    ThisProject.ProductionProgress = new Guid("00000000-0000-0000-0000-000000000116");
+                    ThisProject.ContentProgress = new Guid("00000000-0000-0000-0000-000000000107");
+                    ThisProject.MakeType = "new";
+                    ThisProject.CourseType = "elite";
+                    ProjectModel.SaveChanges();
+                }
                 //
                 using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
                 {

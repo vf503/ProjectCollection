@@ -199,17 +199,34 @@ namespace ProjectCollection.WebUI.InterFace
                     ProjectCollection.WebUI.Models.user_info ThisUser = (from u in ProjectModel.user_info
                                                                          where u.login_name == transactor
                                                                          select u).First();
-                    ThisProject.transactor = ThisUser.user_identity;
-                    //ThisProject.TaskRequire = TaskRequire;
-                    //ThisProject.CourseData = CourseData;
-                    ThisProject.progress = "已完成";
-                    ThisProject.FinishDate = DateTime.Now;
-                    ThisProject.FinishNote = note;
-                    ProjectModel.SaveChanges();
+                    if ((ThisProject.AttachmentSendingDate is null || !(ThisProject.AttachmentFinishDate is null))
+                        && (ThisProject.HelpSendingDate is null || !(ThisProject.HelperFinishDate is null))
+                        && (ThisProject.McHelpSendingDate is null || !(ThisProject.McHelperFinishDate is null))
+                        && (ThisProject.PicSendingDate is null || !(ThisProject.PicFinishDate is null))
+                        && (ThisProject.TemplateSendingDate is null || !(ThisProject.TemplateFinishDate is null)))
+                    {
+                        ThisProject.transactor = ThisUser.user_identity;
+                        //ThisProject.TaskRequire = TaskRequire;
+                        //ThisProject.CourseData = CourseData;
+                        ThisProject.progress = "已完成";
+                        ThisProject.FinishDate = DateTime.Now;
+                        ThisProject.FinishNote = note;
+                        ProjectModel.SaveChanges();
+                        context.Response.ContentType = "text/plain";
+                        context.Response.StatusCode = 200;
+                        context.Response.Write("完成");
+                    }
+                    else {
+                        //ThisProject.transactor = ThisUser.user_identity;
+                        //ThisProject.progress = "已完成";
+                        //ThisProject.FinishDate = DateTime.Now;
+                        //ThisProject.FinishNote = note;
+                        //ProjectModel.SaveChanges();
+                        context.Response.ContentType = "text/plain";
+                        context.Response.StatusCode = 200;
+                        context.Response.Write("请确认所有分项任务已完成");
+                    }
                 }
-                context.Response.ContentType = "text/plain";
-                context.Response.StatusCode = 200;
-                context.Response.Write("success");
             }
             else if (HttpContext.Current.Request["method"] == "UpdateSending")
             {

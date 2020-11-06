@@ -31,6 +31,7 @@
     </asp:Panel>
     <asp:Panel ID="PanelHelpFinish" runat="server" Visible="false">
         <div class="PanelName" style="color:green">辅助执行人填写:</div>
+         <span style="color:red; font-size:16px;">课件列表：</span><asp:HyperLink ID="aHelpCourseList" runat="server" Target="_blank" Text=">>查看<<" ></asp:HyperLink><br />
         执行人：<asp:TextBox ID="txtHelper" runat="server" ReadOnly="true"></asp:TextBox><br />
         派发时间：<asp:TextBox ID="txtHelpSendingDate" runat="server" ReadOnly="true"></asp:TextBox><br />
         完成时间：<asp:TextBox ID="txtHelperFinishDate" runat="server" ReadOnly="true"></asp:TextBox><br />

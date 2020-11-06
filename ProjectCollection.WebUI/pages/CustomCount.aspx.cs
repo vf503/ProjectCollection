@@ -69,7 +69,7 @@ namespace ProjectCollection.WebUI.pages
             }
             #endregion Customer
             #region course order   
-            DateTime QueryStartTime = DateTime.Now.AddMonths(-18);
+            DateTime QueryStartTime = DateTime.Now.AddMonths(-13);
             using (var ProjectModel = new ProjectCollection.WebUI.Models.ProjectCollectionEntities())
             {
                 List<Models.BatchProject> OrderList = (from o in ProjectModel.BatchProject

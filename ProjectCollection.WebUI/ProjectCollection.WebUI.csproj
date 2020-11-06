@@ -245,6 +245,7 @@
     <Content Include="pages\CustomTaskDetails.aspx" />
     <Content Include="pages\CustomTaskList.aspx" />
     <Content Include="pages\CustomTaskListFliter.aspx" />
+    <Content Include="pages\FileError.html" />
     <Content Include="pages\MyTask.aspx" />
     <Content Include="pages\ProjectCreateEditEmbed.aspx" />
     <Content Include="pages\ProjectListEmbed.aspx" />

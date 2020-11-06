@@ -142,7 +142,7 @@ namespace ProjectCollection.WebUI.pages
                 {
                     projectPlan.progress = new Guid("00000000-0000-0000-0000-000000000102");
                 }
-                else if (projectPlan.ProjectPlanTypeId.ToString() == "00000000-0000-0000-0000-000000000202") 
+                else if (projectPlan.ProjectPlanTypeId.ToString() == "00000000-0000-0000-0000-000000000202" || projectPlan.ProjectPlanTypeId.ToString() =="00000000-0000-0000-0000-000000000211") 
                 {
                     projectPlan.progress = new Guid("00000000-0000-0000-0000-000000000102");
                 }
